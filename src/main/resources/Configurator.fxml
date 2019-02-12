@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PAL2.GUI.Configurator.ConfiguratorController">
+   <children>
+      <AnchorPane fx:id="step1" prefHeight="400.0" prefWidth="600.0" visible="false">
+         <children>
+            <Text fill="WHITE" layoutX="14.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PAL: Configurator">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="12.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to PAL, we need some info from you before we can start.&#10;&#10;Note: if some info has been filled out check for it to be accurate, this was generated automatically." wrappingWidth="575.3828125">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <TextField fx:id="tempDownFolder" layoutX="12.0" layoutY="187.0" prefHeight="25.0" prefWidth="510.0" />
+            <TextField fx:id="addonInstallFolder" layoutX="12.0" layoutY="234.0" prefHeight="25.0" prefWidth="510.0" />
+            <TextField fx:id="poeFolder" layoutX="12.0" layoutY="282.0" prefHeight="25.0" prefWidth="510.0" />
+            <Text fill="WHITE" layoutX="12.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(temp) Download Folder: ">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="14.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Default Addon Install Folder:">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="11.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path of Exile game folder:">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </Text>
+            <Button fx:id="bBrowseForTempDownloads" layoutX="532.0" layoutY="187.0" mnemonicParsing="false" onAction="#browseTempDown" text="Browse" />
+            <Button fx:id="bBrowseForAddons" layoutX="532.0" layoutY="234.0" mnemonicParsing="false" onAction="#browseForAddonFolder" text="Browse" />
+            <Button fx:id="bBrowseForPOE" layoutX="532.0" layoutY="282.0" mnemonicParsing="false" onAction="#browseForPOE" text="Browse" />
+            <TextField fx:id="ahk_folder" layoutX="12.0" layoutY="323.0" prefHeight="25.0" prefWidth="510.0" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AutoHotKey Folder:">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </Text>
+            <Button fx:id="bAHK" layoutX="532.0" layoutY="323.0" mnemonicParsing="false" onAction="#browseForAHK" text="Browse" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="page2" prefHeight="400.0" prefWidth="600.0" visible="false">
+         <children>
+            <Text fill="WHITE" layoutX="14.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GitHub related info and flags">
+               <font>
+                  <Font size="39.0" />
+               </font>
+            </Text>
+            <TextField fx:id="api_token" layoutX="14.0" layoutY="89.0" prefHeight="25.0" prefWidth="200.0" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GitHub API Token:" />
+            <Text fx:id="txtValidToken" fill="#04ff00" layoutX="228.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valid Token!" visible="false">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <CheckBox fx:id="checkmarkLaunchPOEPAL" layoutX="14.0" layoutY="128.0" mnemonicParsing="false" text="Launch Path of Exile when PAL Launches" />
+            <CheckBox fx:id="checkBoxGithubAPI" layoutX="14.0" layoutY="155.0" mnemonicParsing="false" selected="true" text="Enable GitHub API (Strongly Reccomended)" />
+            <CheckBox fx:id="checkShowUpdateNotes" layoutX="14.0" layoutY="183.0" mnemonicParsing="false" selected="true" text="Show update notes after an update (Only shows once)" />
+            <Hyperlink fx:id="howToGetAPIToken" layoutX="365.0" layoutY="90.0" onAction="#openWebsite" text="How do I get a github api token?" />
+            <Text fx:id="txtInValidToken" fill="RED" layoutX="228.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid Token" visible="false">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+             <Text fx:id="txtcheckingToken" fill="WHITE" layoutX="228.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Checking Token..." visible="false">
+                 <font>
+                     <Font name="System Bold" size="12.0" />
+                 </font>
+             </Text>
+            <Text fx:id="txtWarn" fill="WHITE" layoutX="89.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By not using a github API token you will receive updates to addons a lot slower, and thus is not reccomended, however, you can continue without setting one if you want" wrappingWidth="430.4140625">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Text>
+            <CheckBox fx:id="steamPoE" layoutX="14.0" layoutY="210.0" mnemonicParsing="false" text="Use Steam to launch Path of Exile" />
+         </children>
+      </AnchorPane>
+      <ProgressBar fx:id="totalProgress" layoutX="15.0" layoutY="375.0" prefWidth="525.0" progress="0.0" />
+      <Button fx:id="bNext" defaultButton="true" layoutX="550.0" layoutY="370.0" mnemonicParsing="false" onAction="#continueConfig" text="Next" />
+   </children>
+</AnchorPane>

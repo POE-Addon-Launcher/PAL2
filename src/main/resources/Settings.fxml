@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller_Settings">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="200.0">
+         <children>
+            <ListView fx:id="settings_listView" prefHeight="400.0" prefWidth="200.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="main_settings_anchorpane" layoutX="207.0" prefHeight="400.0" prefWidth="400.0">
+         <children>
+            <AnchorPane fx:id="settings_a_repo" disable="true" prefHeight="400.0" prefWidth="400.0" visible="false">
+               <children>
+                  <AnchorPane layoutX="151.0" layoutY="165.0" prefHeight="192.0" prefWidth="236.0">
+                     <children>
+                        <TextField layoutX="1.0" layoutY="74.0" prefHeight="25.0" prefWidth="235.0" />
+                        <Text fill="#2b91af" layoutX="59.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon.json location" textAlignment="CENTER" wrappingWidth="118.0000048391521">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <TextField layoutX="1.0" layoutY="130.0" prefHeight="25.0" prefWidth="235.0" />
+                        <Text fill="#2b91af" layoutX="59.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter.json location" textAlignment="CENTER" wrappingWidth="118.0000048391521">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Button layoutX="59.0" layoutY="163.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="+" />
+                        <Button layoutX="151.0" layoutY="163.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="-" />
+                        <TextField layoutX="51.0" layoutY="21.0" prefHeight="25.0" prefWidth="135.0" />
+                        <Text fill="#2b91af" layoutX="59.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repository Name" textAlignment="CENTER" wrappingWidth="118.0000048391521">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+                  <Text fill="#2b91af" layoutX="13.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add or remove repositories">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="14.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repositories contain big lists of addons, while a repository may take some time to update they are great for when APIs are not available." wrappingWidth="374.9999910593033">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="14.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WARNING: software downloaded from unnofficial repositories could put you at a greater risk for computer inffections." wrappingWidth="374.9999910593033">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="14.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WARNING: Using a third party repository that contains an error might cause the program to no longer work." wrappingWidth="374.9999910593033">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <ListView layoutX="14.0" layoutY="166.0" prefHeight="230.0" prefWidth="135.0" />
+                  <Text fill="#2b91af" layoutX="22.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repository:" textAlignment="CENTER" wrappingWidth="118.0000048391521">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#d02d2d" layoutX="22.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Adding Custom Repositories is currently not enabled for this version of PAL." textAlignment="CENTER" wrappingWidth="118.00000710040331">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="settings_a_api" prefHeight="400.0" prefWidth="400.0" visible="false">
+               <children>
+                  <Text fill="#2b91af" layoutX="12.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="API Settings">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="12.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="APIs provide near-instant notifiying of updates, and as such are quite useful if you would like to be up to date as often as you can!" wrappingWidth="375.0000089406967">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="12.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Right now we don't support community APIs, but we might in the future! Stay tuned." wrappingWidth="375.0000089406967">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <CheckBox fx:id="github_api_checkbox" disable="true" layoutX="12.0" layoutY="110.0" mnemonicParsing="false" selected="true" text="GitHub API">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <CheckBox fx:id="filterblastCheckBox" disable="true" layoutX="10.0" layoutY="66.0" mnemonicParsing="false" selected="true" text="FilterBlast API">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <Text fill="#2b91af" layoutX="135.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The GitHub API is used for getting updates to most addons that are hosted on GitHub." wrappingWidth="256.0000089406967" />
+                  <Text fill="#2b91af" layoutX="135.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The FilterBlast API is used for getting updates to all filters listed under this API." wrappingWidth="256.0000089406967" />
+                  <Text fill="#2b91af" layoutX="12.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GitHub limits API requests to 10 per minute for users without an API token, if you would like more calls to the GitHub API (50/Minute), please provide this application with an API Token." wrappingWidth="374.9999910593033" />
+                  <TextField fx:id="github_api_token" layoutX="44.0" layoutY="221.0" prefHeight="25.0" prefWidth="338.0" />
+                  <Text fill="#2b91af" layoutX="45.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GitHub API Token:" wrappingWidth="148.99999648332596">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <CheckBox fx:id="enableAPItoken" layoutX="14.0" layoutY="225.0" mnemonicParsing="false" />
+                  <Button fx:id="bGetGitHubAPIToken" layoutX="215.0" layoutY="221.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="How do I get a token?" visible="false" />
+                  <Text fill="#2b91af" layoutX="12.0" layoutY="308.0" strokeType="OUTSIDE" strokeWidth="0.0" text="How do I get a Github API Token? Go to this URL:" wrappingWidth="375.0000089406967">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="12.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="And click &quot;Generate new token&quot; Then paste the token in the box above" wrappingWidth="375.0000089406967">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <Hyperlink fx:id="github_token_url" layoutX="9.0" layoutY="309.0" onMouseClicked="#visit" prefHeight="23.0" prefWidth="382.0" style="-fx-text-fill: white;" text="https://github.com/settings/tokens" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="settings_a_paths" prefHeight="400.0" prefWidth="400.0" visible="false">
+               <children>
+                  <TextField fx:id="ADDONS_FOLDER" disable="true" layoutX="13.0" layoutY="102.0" prefHeight="25.0" prefWidth="312.0" />
+                  <Text fill="WHITE" layoutX="14.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addons Folder:" wrappingWidth="311.99998903274536" />
+                  <Button fx:id="bBrowseAddons" disable="true" layoutX="333.0" layoutY="102.0" mnemonicParsing="false" onAction="#BrowseAddons" text="Browse" />
+                  <TextField fx:id="LOOTFILTER_FOLDER" layoutX="13.0" layoutY="160.0" prefHeight="25.0" prefWidth="312.0" />
+                  <Text fill="WHITE" layoutX="13.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loot Filter Folder:   (documents/My Games/Path of Exile)" wrappingWidth="311.99998903274536" />
+                  <Button fx:id="bBrowseLootFilter" layoutX="333.0" layoutY="160.0" mnemonicParsing="false" onAction="#BrowseLootFilter" text="Browse" />
+                  <TextField fx:id="POE_STEAM" disable="true" layoutX="13.0" layoutY="214.0" prefHeight="25.0" prefWidth="312.0" visible="false" />
+                  <Text fill="#2b91af" layoutX="14.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PoE Steam Version: (steamapps/common/Path of Exile)" visible="false" wrappingWidth="311.99998903274536" />
+                  <Button fx:id="bBrowseSteam" disable="true" layoutX="333.0" layoutY="214.0" mnemonicParsing="false" onAction="#BrowseSteam" text="Browse" visible="false" />
+                  <TextField fx:id="POE_STANDALONE" disable="true" layoutX="13.0" layoutY="273.0" prefHeight="25.0" prefWidth="312.0" visible="false" />
+                  <Text fill="#2b91af" layoutX="14.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PoE Stand Alone:" visible="false" wrappingWidth="311.99998903274536" />
+                  <Button fx:id="bBrowseSA" disable="true" layoutX="333.0" layoutY="273.0" mnemonicParsing="false" onAction="#BrowseSA" text="Browse" visible="false" />
+                  <TextField fx:id="POE_BETA" disable="true" layoutX="13.0" layoutY="332.0" prefHeight="25.0" prefWidth="312.0" visible="false" />
+                  <Text fill="#2b91af" layoutX="14.0" layoutY="328.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PoE Beta Version:" visible="false" wrappingWidth="311.99998903274536" />
+                  <Button fx:id="bBrowseBeta" disable="true" layoutX="333.0" layoutY="332.0" mnemonicParsing="false" onAction="#BrowseBeta" text="Browse" visible="false" />
+
+                  <Text fill="WHITE" layoutX="13.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="System Paths:" wrappingWidth="311.99998903274536">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Important system locations that this program needs to function properly, note that client.txt is automatically derived from your PoE locations." wrappingWidth="374.99998542666435">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <ListView fx:id="listPoEInstalls" layoutX="14.0" layoutY="213.0" prefHeight="180.0" prefWidth="293.0" />
+                  <Text fill="WHITE" layoutX="14.0" layoutY="209.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path of Exile Locations:" wrappingWidth="292.9999975860119" />
+                  <Button fx:id="bAddPoELocation" layoutX="313.0" layoutY="214.0" mnemonicParsing="false" onAction="#AddPoEFolder" text="+" />
+                  <Button fx:id="bRemoveSelectedPoEFolder" layoutX="313.0" layoutY="244.0" mnemonicParsing="false" onAction="#RemoveSelectedPoEVersion" prefHeight="25.0" prefWidth="25.0" text="-" />
+                  <Button fx:id="bDoItForMe" layoutX="313.0" layoutY="273.0" mnemonicParsing="false" onAction="#FindPoEVersionsOnSystem" prefHeight="25.0" prefWidth="80.0" text="Scan Drives" visible="false" />
+               </children></AnchorPane>
+            <AnchorPane fx:id="settings_a_launchoptions" prefHeight="400.0" prefWidth="400.0" visible="false">
+               <children>
+                  <Text fill="#2b91af" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Launch Options">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="2.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This setting allows you to customize how the program respons to launching Path of Exile, you can set several options, such as in what order addons should be launched and wheter or not you want to launch PoE the moment you launch PAL." wrappingWidth="382.21486219763756">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <ListView fx:id="settings_dont_launch_list" layoutX="-2.0" layoutY="107.0" prefHeight="200.0" prefWidth="180.0" />
+                  <ListView fx:id="settings_launch_list" layoutX="209.0" layoutY="107.0" prefHeight="200.0" prefWidth="180.0" />
+                  <Text fill="WHITE" layoutX="233.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Launch with Path of Exile" />
+                  <Text fill="WHITE" layoutX="25.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Won't Launch with PoE" />
+                  <Button fx:id="bLaunchSelectedItem" layoutX="178.0" layoutY="148.0" mnemonicParsing="false" onAction="#addToLaunchList" prefHeight="25.0" prefWidth="30.0" text="&gt;" />
+                  <Button fx:id="bDontLaunchSelectedItem" layoutX="178.0" layoutY="218.0" mnemonicParsing="false" onAction="#removeFromLaunchList" prefHeight="25.0" prefWidth="30.0" text="&lt;" />
+                  <CheckBox fx:id="checkbox_launch_poe_when_pal_launches" layoutX="2.0" layoutY="328.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="382.0" text="Launch PoE when PAL has launched" />
+                  <CheckBox fx:id="checkbox_download_updates_upon_launch" layoutX="2.0" layoutY="311.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="382.0" text="Download all available updates upon launching PAL" visible="false" />
+                  <CheckBox fx:id="checkbox_wait_for_updates_to_download" layoutX="2.0" layoutY="345.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="382.0" text="Wait for updates to have downloaded before launching PoE" visible="false" />
+                  <ComboBox fx:id="combobox_PoE_Version" layoutX="108.0" layoutY="367.0" prefHeight="25.0" prefWidth="194.0" />
+                  <Text fill="WHITE" layoutX="4.0" layoutY="376.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path of Exile Version to Launch:" textAlignment="CENTER" wrappingWidth="98.99999982491136" />
+               </children></AnchorPane>
+            <AnchorPane fx:id="settings_a_AHK" prefHeight="400.0" prefWidth="400.0" visible="false">
+               <children>
+                  <Text fill="#2b91af" layoutX="4.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AutoHotKey">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="5.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AutoHotKey is a popular scripting language which the PoE community often uses to create useful tools to maximize compatibility please, fill out these settings." wrappingWidth="382.21484899520874">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="AHK_LOCATION" layoutX="3.0" layoutY="116.0" prefHeight="25.0" prefWidth="322.0" />
+                  <Text fill="#2b91af" layoutX="4.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AutoHotKey.exe Location" wrappingWidth="149.00000195205212">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="bBrowseAHK" layoutX="334.0" layoutY="116.0" mnemonicParsing="false" onAction="#browseForAHK" text="Browse" />
+                  <Hyperlink fx:id="hyperlink_AHK_WEBSITE" layoutX="29.0" layoutY="77.0" onMouseClicked="#downloadAHK" style="-fx-text-fill: white;" text="Don't have AutoHotkey installed? Click &gt;here&lt; to install it">
+                     <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                     </font>
+                  </Hyperlink>
+                  <Text fill="#2b91af" layoutX="4.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Custom AHK scripts:" wrappingWidth="149.00000195205212">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <ListView fx:id="customAHKlist" layoutX="6.0" layoutY="171.0" prefHeight="190.0" prefWidth="380.0" />
+                  <Button fx:id="addScript" layoutX="6.0" layoutY="366.0" mnemonicParsing="false" onAction="#addAHKscript" text="+" />
+                  <CheckBox fx:id="box_launch_with_PoE" layoutX="78.0" layoutY="370.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="236.0" selected="true" text="Launch Selected Script with Path of Exile" />
+                  <Button fx:id="removeScript" layoutX="44.0" layoutY="366.0" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#removeAHKscript" prefHeight="25.0" prefWidth="25.0" text="-" />
+               </children></AnchorPane>
+            <AnchorPane fx:id="settings_a_overlay" prefHeight="400.0" prefWidth="400.0" visible="false">
+               <children>
+                  <Text fill="WHITE" layoutX="9.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PAL Overlay {BETA}">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="9.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Opt into the open beta for PAL Overlay!">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="9.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Keybinds (Not Changeable yet)">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="42.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="               = : Show / Hide Windows">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="42.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="            ESC : Close Current Window">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="42.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shift + ESC : Close All Windows">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="42.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shift + ESC : Close All Windows">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="bLaunchOverlay" layoutX="14.0" layoutY="188.0" mnemonicParsing="false" onAction="#LaunchOverlay" text="Launch PAL Overlay" textFill="WHITE" />
+                  <Text fill="WHITE" layoutX="14.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, provide feedback on /r/POEAddonLauncher or Github" />
+               </children></AnchorPane>
+            <AnchorPane fx:id="settings_a_e" prefHeight="400.0" prefWidth="400.0" visible="false" />
+            <AnchorPane fx:id="settings_a_f" prefHeight="400.0" prefWidth="400.0" visible="false" />
+            <AnchorPane fx:id="settings_a_about" prefHeight="400.0" prefWidth="400.0" visible="false">
+               <children>
+                  <Text fill="#2b91af" layoutX="7.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="8.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="This application was created by Rizlim." wrappingWidth="382.21484375">
+                     <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#2b91af" layoutX="9.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="If you've got some feedback, or need some way to contact me you can find me on these platforms:" wrappingWidth="382.21484375" />
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="8.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@settings/Twitch_icon.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink layoutX="48.0" layoutY="87.0" onMouseClicked="#visit" style="-fx-text-fill: white;" text="https://www.twitch.tv/Rizlim" />
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="6.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@settings/YouTube-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink layoutX="48.0" layoutY="124.0" onMouseClicked="#visit" style="-fx-text-fill: white;" text="https://www.youtube.com/c/Pastillage" />
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="5.0" layoutY="156.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@settings/twitter.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink layoutX="47.0" layoutY="160.0" onMouseClicked="#visit" style="-fx-text-fill: white;" text="https://twitter.com/RizlimWasTaken" />
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="5.0" layoutY="196.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@settings/reddit.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink layoutX="47.0" layoutY="200.0" onMouseClicked="#visit" style="-fx-text-fill: white;" text="https://www.reddit.com/user/rizlim" />
+                  <Text fill="#2b91af" layoutX="10.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Or try this subreddit:" wrappingWidth="382.21484375">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="9.0" layoutY="248.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@settings/reddit.png" />
+                     </image>
+                  </ImageView>
+                  <Hyperlink layoutX="51.0" layoutY="252.0" onMouseClicked="#visit" style="-fx-text-fill: white;" text="https://www.reddit.com/r/PoEAddonLauncher" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <Button layoutX="525.0" layoutY="368.0" mnemonicParsing="false" onAction="#SaveAndExit" text="Save &amp; Exit" />
+   </children>
+</AnchorPane>

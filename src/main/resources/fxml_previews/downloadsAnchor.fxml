@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="anchor" prefHeight="55.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fx:id="addonIcon" fitHeight="50.0" fitWidth="50.0" layoutX="20.0" layoutY="2.5" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../icons/NoIcon.png" />
+            </image>
+        </ImageView>
+        <Text fx:id="addonName" fill="WHITE" layoutX="75.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 14; -fx-font-weight: Bold;" text="Addon Name Here [VERSION]" wrappingWidth="520.13671875">
+            <font>
+                <Font size="10.0" />
+            </font>
+        </Text>
+        <ProgressBar fx:id="progressBarDownload" layoutX="75.0" layoutY="32.0" prefHeight="18.0" prefWidth="500.0" progress="0.0" />
+      <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="2.0" layoutY="2.5" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/upArrow.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="2.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/downArrow.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="2.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/minus.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>

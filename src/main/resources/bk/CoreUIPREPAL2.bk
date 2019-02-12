@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="500.0" maxWidth="600.0" minHeight="500.0" minWidth="600.0" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PAL2.GUI.CoreController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
+         <children>
+            <TabPane fx:id="core_tabpane" layoutY="30.0" prefHeight="430.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab text="Addons2">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="addonListView" prefHeight="400.0" prefWidth="600.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="core_tab_installed" text="Installed">
+                     <content>
+                        <AnchorPane fx:id="installed_anchorpane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
+                           <children>
+                              <TableView fx:id="installed_tableView" layoutY="30.0" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: #2B2B2B;">
+                                 <columns>
+                                    <TableColumn fx:id="installed_tc_type" editable="false" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="#" />
+                                    <TableColumn fx:id="installed_tc_name" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Addon Name" />
+                                    <TableColumn fx:id="installed_tc_status" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Status" />
+                                    <TableColumn fx:id="installed_tc_version" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Version" />
+                                    <TableColumn fx:id="installed_tc_latestVersion" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Last Update" />
+                                    <TableColumn fx:id="installed_tc_source" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Source" />
+                                    <TableColumn fx:id="installed_tc_creators" maxWidth="98.0" minWidth="98.0" prefWidth="98.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Creator(s)" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <ImageView fx:id="installed_refresh_img" fitHeight="25.0" fitWidth="25.0" layoutX="9.0" layoutY="3.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/refresh_icon.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_refresh_text" fill="#2b91af" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="installed_update_img" fitHeight="25.0" fitWidth="25.0" layoutX="110.0" layoutY="3.0" onMouseClicked="#installUpdateClick" onMouseEntered="#installUpdateMouseEnter" onMouseExited="#installUpdateMouseExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/download.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_update_text" fill="#2b91af" layoutX="139.0" layoutY="20.0" onMouseClicked="#installUpdateClick" onMouseEntered="#installUpdateMouseEnter" onMouseExited="#installUpdateMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="installed_updateAll_img" fitHeight="25.0" fitWidth="25.0" layoutX="222.0" layoutY="3.0" onMouseClicked="#updateAllClick" onMouseEntered="#updateAllEnter" onMouseExited="#updateAllExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/download_all.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_updateAll_text" fill="#2b91af" layoutX="251.0" layoutY="20.0" onMouseClicked="#updateAllClick" onMouseEntered="#updateAllEnter" onMouseExited="#updateAllExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update All">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="installed_remove_img" fitHeight="25.0" fitWidth="25.0" layoutX="333.0" layoutY="2.0" onMouseClicked="#removeClick" onMouseEntered="#removeEnter" onMouseExited="#removeExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/remove.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_remove_text" fill="#c43131" layoutX="362.0" layoutY="19.0" onMouseClicked="#removeClick" onMouseEntered="#removeEnter" onMouseExited="#removeExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="installed_searchField" layoutX="449.0" layoutY="2.0" promptText="Filter" style="-fx-prompt-text-fill: #2B91AF;" visible="false" />
+                              <Text fx:id="installed_refresh_text_hl" fill="WHITE" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="installed_update_text_hl" fill="WHITE" layoutX="139.0" layoutY="20.0" onMouseClicked="#installUpdateClick" onMouseEntered="#installUpdateMouseEnter" onMouseExited="#installUpdateMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="installed_updateAll_text_hl" fill="WHITE" layoutX="251.0" layoutY="20.0" onMouseClicked="#updateAllClick" onMouseEntered="#updateAllEnter" onMouseExited="#updateAllExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update All" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="installed_remove_text_hl" fill="WHITE" layoutX="362.0" layoutY="19.0" onMouseClicked="#removeClick" onMouseEntered="#removeEnter" onMouseExited="#removeExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="core_tab_addons" text="Addons">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="addons_tableView" layoutY="30.0" prefHeight="375.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;">
+                                 <columns>
+                                    <TableColumn fx:id="addons_tc_name" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Name" />
+                                    <TableColumn fx:id="addon_tc_code" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="#" />
+                                    <TableColumn fx:id="addon_tc_version" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Version" />
+                                    <TableColumn fx:id="addon_tc_lastUpdate" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Status" />
+                                    <TableColumn fx:id="addon_tc_source" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Source" />
+                                    <TableColumn fx:id="addon_tc_creators" maxWidth="98.0" minWidth="98.0" prefWidth="98.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Creator(s)" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <ImageView fx:id="addon_refresh_img" fitHeight="25.0" fitWidth="25.0" layoutX="9.0" layoutY="3.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/refresh_icon.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="addon_refresh_text" fill="#2b91af" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="addon_download_img" fitHeight="25.0" fitWidth="25.0" layoutX="300.0" layoutY="3.0" onMouseClicked="#addon_download_onMouseClicked" onMouseEntered="#addon_download_onMouseOver" onMouseExited="#addon_download_onMouseExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/download.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="addon_download_text" fill="#2b91af" layoutX="330.0" layoutY="20.0" onMouseClicked="#addon_download_onMouseClicked" onMouseEntered="#addon_download_onMouseOver" onMouseExited="#addon_download_onMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Download">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="addon_search" layoutX="448.0" layoutY="3.0" promptText="Filter" style="-fx-prompt-text-fill: #2B91AF;" visible="false" />
+                              <Text fx:id="addon_download_text_hl" fill="WHITE" layoutX="330.0" layoutY="20.0" onMouseClicked="#addon_download_onMouseClicked" onMouseEntered="#addon_download_onMouseOver" onMouseExited="#addon_download_onMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Download" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="addon_refresh_text_hl" fill="WHITE" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="core_tab_filters" disable="true" text="Filters">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="filters_tableView" layoutY="30.0" maxWidth="600.0" minWidth="600.0" prefHeight="375.0" prefWidth="600.0" style="-fx-background-color: #2b2b2b;" stylesheets="@../text.css">
+                                 <columns>
+                                    <TableColumn fx:id="filters_tc_name" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Name" />
+                                    <TableColumn fx:id="filters_tc_PoEVersion" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="PoE Version" />
+                                    <TableColumn fx:id="filters_tc_version" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Version" />
+                                    <TableColumn fx:id="filters_tc_lastUpdate" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Last Update" />
+                                    <TableColumn fx:id="filters_tc_source" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Source" />
+                                    <TableColumn fx:id="filters_tc_creators" maxWidth="85.0" minWidth="85.0" prefWidth="85.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Creator(s)" />
+                                 </columns>
+                              </TableView>
+                              <ImageView fx:id="filters_refresh_img" fitHeight="25.0" fitWidth="25.0" layoutX="9.0" layoutY="3.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/refresh_icon.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="filters_refresh_text" fill="#2b91af" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="filters_download_img" fitHeight="25.0" fitWidth="25.0" layoutX="300.0" layoutY="3.0" onMouseClicked="#FiltersDownloadMouseClicked" onMouseEntered="#FiltersDownloadMouseEntered" onMouseExited="#FiltersDownloadMouseExited" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/download.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="filters_download_text" fill="#2b91af" layoutX="330.0" layoutY="20.0" onMouseClicked="#FiltersDownloadMouseClicked" onMouseEntered="#FiltersDownloadMouseEntered" onMouseExited="#FiltersDownloadMouseExited" strokeType="OUTSIDE" strokeWidth="0.0" text="Download">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="filters_search" layoutX="448.0" layoutY="3.0" promptText="Filter" style="-fx-prompt-text-fill: #2B91AF;" visible="false" />
+                              <Text fx:id="filters_refresh_text_hl" fill="WHITE" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="filters_download_text_hl" fill="WHITE" layoutX="330.0" layoutY="20.0" onMouseClicked="#FiltersDownloadMouseClicked" onMouseEntered="#FiltersDownloadMouseEntered" onMouseExited="#FiltersDownloadMouseExited" strokeType="OUTSIDE" strokeWidth="0.0" text="Download" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="addonDescTab" text="AddonDesc">
+                     <content>
+                        <AnchorPane fx:id="addonDescAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane prefHeight="400.0" prefWidth="600.0">
+                                 <content>
+                                    <AnchorPane fx:id="addonDescInnerAnchor" maxWidth="580.0" minWidth="580.0" prefHeight="574.0" prefWidth="580.0">
+                                       <children>
+                                          <ImageView fx:id="addonDescImg" fitHeight="150.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../icons/trayIcon.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Rectangle fx:id="addonDescRectImg" arcHeight="5.0" arcWidth="5.0" fill="#0084ff00" height="150.0" layoutX="13.0" layoutY="13.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" width="150.0" />
+                                          <AnchorPane fx:id="addonDescAnchorDownloadButton" layoutX="174.0" layoutY="79.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #2b2b2b;">
+                                             <children>
+                                                <Rectangle fx:id="addonDescDownloadButtonRect" arcHeight="5.0" arcWidth="5.0" fill="#0084ff00" height="50.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
+                                                <Text fx:id="addonDescDownloadText" fill="WHITE" layoutX="1.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Download" textAlignment="CENTER" wrappingWidth="199.99999701976776">
+                                                   <font>
+                                                      <Font name="System Bold" size="22.0" />
+                                                   </font>
+                                                </Text>
+                                             </children>
+                                          </AnchorPane>
+                                          <Text fx:id="addonDescName" fill="WHITE" layoutX="174.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon Name Here Pretty Long Allowed I guess&#10;also some more text here" wrappingWidth="421.0888671875">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <ProgressBar fx:id="addonDescProgressbar" layoutX="174.0" layoutY="145.0" prefHeight="18.0" prefWidth="200.0" progress="0.0" />
+                                          <Text fx:id="addonDescInfoText" fill="WHITE" layoutX="394.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="downloads:     101101&#10;          likes:&#9;100&#10;      dislikes:      0" visible="false">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fx:id="addonDescDesc" fill="WHITE" layoutX="14.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
+                                             <font>
+                                                <Font name="System Bold" size="30.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fx:id="addonDescTextDesc" fill="WHITE" layoutX="14.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to POE-TradeMacro!&#10;&#10;PoE TradeMacro is an Autohotkey (AHK) script that provides several convenient QoL features for Path of Exile Trading.&#10;&#10;This builds on top of PoE-ItemInfo which provides very useful item information on ctrl+c. With TradeMacro, price checking is added via ctrl+d, ctrl+alt+d or ctrl+i. You can also open the items wiki page via ctrl+w or open the item search on poe.trade instead via ctrl+q.&#10;TradeMacro will be updated to always have the latest PoE-ItemInfo code, you don't have to run their script since it's included here.&#10;Warning&#10;&#10;Never completely trust any price checking tool. Inform yourself about what this tool can do and what not (FAQ for example). Use the tools average and median prices to quickly judge if the first results could be accurate or totally wrong. When in doubt ask other people or do some manual checks." wrappingWidth="580.13671875">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Downloads">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane prefHeight="400.0" prefWidth="600.0">
+                                 <content>
+                                    <ListView fx:id="listViewDownloads" prefHeight="400.0" prefWidth="585.0" />
+                                 </content></ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="core_tab_installed1" text="Installed_BK">
+                     <content>
+                        <AnchorPane fx:id="installed_anchorpane1" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
+                           <children>
+                              <TableView fx:id="installed_tableView1" layoutY="30.0" prefHeight="377.0" prefWidth="600.0" style="-fx-background-color: #2B2B2B;">
+                                 <columns>
+                                    <TableColumn fx:id="installed_tc_type1" editable="false" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="#" />
+                                    <TableColumn fx:id="installed_tc_name1" editable="false" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Addon Name" />
+                                    <TableColumn fx:id="installed_tc_status1" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Status" />
+                                    <TableColumn fx:id="installed_tc_version1" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Version" />
+                                    <TableColumn fx:id="installed_tc_latestVersion1" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Last Update" />
+                                    <TableColumn fx:id="installed_tc_source1" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Source" />
+                                    <TableColumn fx:id="installed_tc_creators1" maxWidth="98.0" minWidth="98.0" prefWidth="98.0" style="-fx-background-color: #2b2b2b; -fx-alignment: CENTER;" text="Creator(s)" />
+                                 </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <ImageView fx:id="installed_refresh_img1" fitHeight="25.0" fitWidth="25.0" layoutX="9.0" layoutY="3.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/refresh_icon.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_refresh_text1" fill="#2b91af" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="installed_update_img1" fitHeight="25.0" fitWidth="25.0" layoutX="110.0" layoutY="3.0" onMouseClicked="#installUpdateClick" onMouseEntered="#installUpdateMouseEnter" onMouseExited="#installUpdateMouseExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/download.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_update_text1" fill="#2b91af" layoutX="139.0" layoutY="20.0" onMouseClicked="#installUpdateClick" onMouseEntered="#installUpdateMouseEnter" onMouseExited="#installUpdateMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="installed_updateAll_img1" fitHeight="25.0" fitWidth="25.0" layoutX="222.0" layoutY="3.0" onMouseClicked="#updateAllClick" onMouseEntered="#updateAllEnter" onMouseExited="#updateAllExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/download_all.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_updateAll_text1" fill="#2b91af" layoutX="251.0" layoutY="20.0" onMouseClicked="#updateAllClick" onMouseEntered="#updateAllEnter" onMouseExited="#updateAllExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update All">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <ImageView fx:id="installed_remove_img1" fitHeight="25.0" fitWidth="25.0" layoutX="333.0" layoutY="2.0" onMouseClicked="#removeClick" onMouseEntered="#removeEnter" onMouseExited="#removeExit" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/remove.png" />
+                                 </image>
+                              </ImageView>
+                              <Text fx:id="installed_remove_text1" fill="#c43131" layoutX="362.0" layoutY="19.0" onMouseClicked="#removeClick" onMouseEntered="#removeEnter" onMouseExited="#removeExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="installed_searchField1" layoutX="449.0" layoutY="2.0" promptText="Filter" style="-fx-prompt-text-fill: #2B91AF;" visible="false" />
+                              <Text fx:id="installed_refresh_text_hl1" fill="WHITE" layoutX="38.0" layoutY="20.0" onMouseClicked="#refreshOnClick" onMouseEntered="#refreshOnMouseEnter" onMouseExited="#refreshOnMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Refresh" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="installed_update_text_hl1" fill="WHITE" layoutX="139.0" layoutY="20.0" onMouseClicked="#installUpdateClick" onMouseEntered="#installUpdateMouseEnter" onMouseExited="#installUpdateMouseExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="installed_updateAll_text_hl1" fill="WHITE" layoutX="251.0" layoutY="20.0" onMouseClicked="#updateAllClick" onMouseEntered="#updateAllEnter" onMouseExited="#updateAllExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Update All" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="installed_remove_text_hl1" fill="WHITE" layoutX="362.0" layoutY="19.0" onMouseClicked="#removeClick" onMouseEntered="#removeEnter" onMouseExited="#removeExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+            <AnchorPane fx:id="desc_anchorpane" layoutY="300.0" prefHeight="100.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;" visible="false">
+               <children>
+                  <ImageView fx:id="desc_image_closeWindow" fitHeight="60.0" fitWidth="30.0" layoutX="570.0" onMouseClicked="#desc_image_close_onMouseClicked" onMouseEntered="#desc_image_close_onMouseEntered" onMouseExited="#desc_image_close_onMouseExit" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/cancel0.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="desc_like_dislike_percentage" fill="#2b91af" layoutX="569.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="90%" visible="false">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="desc_downloads_text" fill="#2b91af" layoutX="463.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Downloads: [x]k" textAlignment="CENTER" visible="false" wrappingWidth="126.681640625">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+                  <ProgressBar fx:id="desc_like_dislike_bar" layoutX="440.0" layoutY="41.0" prefHeight="18.0" prefWidth="121.0" progress="0.9" visible="false" />
+                  <ImageView fx:id="desc_like_image" fitHeight="20.0" fitWidth="20.0" layoutX="440.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../icons/thumbsUp.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="desc_dislike_image" fitHeight="20.0" fitWidth="20.0" layoutX="506.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../icons/thumbsDown.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="desc_like_count" fill="#2b91af" layoutX="461.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1M" textAlignment="CENTER" visible="false" wrappingWidth="44.99999284744263" />
+                  <Text fx:id="desc_dislike_count" fill="#2b91af" layoutX="526.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="999k" textAlignment="CENTER" visible="false" wrappingWidth="45.65039277076721" />
+                  <ImageView fx:id="desc_Addon_Image" fitHeight="85.0" fitWidth="85.0" layoutX="2.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/NoIcon.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="desc_Title" fill="#2b91af" layoutX="90.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descriptions are in Beta right now!" wrappingWidth="334.13671875">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="desc_long_text" fill="#2b91af" layoutX="90.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." wrappingWidth="336.9999928474426" />
+                  <ImageView fx:id="desc_download_icon" fitHeight="25.0" fitWidth="25.0" layoutX="450.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../icons/download.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="launch_anchorpane" layoutY="460.0" onMouseClicked="#launchPoE" onMouseEntered="#launchPoEEnter" onMouseExited="#launchPoEExit" prefHeight="45.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
+         <children>
+            <Text fx:id="launch_text" fill="WHITE" layoutY="20.0" onMouseEntered="#launchPoEEnter" onMouseExited="#launchPoEExit" strokeType="OUTSIDE" strokeWidth="0.0" text="Launch Path of Exile" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="600.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <ProgressIndicator fx:id="show_while_downloading" layoutX="555.0" layoutY="3.0" prefHeight="39.0" prefWidth="45.0" visible="false" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="topbar_anchorpane" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressed" prefHeight="30.0" prefWidth="600.0">
+         <children>
+            <ImageView fx:id="topbar_image_closeWindow" fitHeight="29.0" fitWidth="45.0" layoutX="555.0" onMouseClicked="#topbar_closeWIndow_onMouseClicked" onMouseEntered="#topbar_closeWindow_onMouseEntered" onMouseExited="#topbar_closeWindow_onMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/cancel0.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="topbar_image_minimizeWindow" fitHeight="29.0" fitWidth="45.0" layoutX="510.0" onMouseClicked="#topbar_minimizeWindow_onMouseClicked" onMouseEntered="#topbar_minimizeWindow_onMouseEntered" onMouseExited="#topbar_minimizeWindow_onMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/minimize.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="topbar_image_settings" fitHeight="29.0" fitWidth="45.0" onMouseClicked="#topbar_settings_onMouseClicked" onMouseEntered="#topbar_settings_onMouseEntered" onMouseExited="#topbar_settings_onMouseExited" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/settings.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="txtWarning" fill="RED" layoutX="57.0" layoutY="20.0" onMouseClicked="#hideTxtWarning" strokeType="OUTSIDE" strokeWidth="0.0" text="WARNING: LOOTFILTER FOLDER HAS NOT BEEN SET!" textAlignment="CENTER" visible="false" wrappingWidth="452.13671875">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

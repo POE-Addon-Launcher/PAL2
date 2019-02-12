@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="182.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DownloadAsker">
+   <children>
+      <Text fill="WHITE" layoutX="15.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mercury Trade" wrappingWidth="440.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="15.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't know what to select?&#10;- .JAR &lt;-- Must have java installed&#10;- .AHK &lt;-- Must have AHK installed&#10;- .zip &lt;-- Archive&#10;- .exe &lt;-- Installer or Executable&#10;- .msi &lt;-- Installer" wrappingWidth="311.939453125" />
+      <Text fill="WHITE" layoutX="273.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Available Downloads:" textAlignment="CENTER" wrappingWidth="200.00000104308128" />
+      <Button layoutX="389.0" layoutY="86.0" mnemonicParsing="false" text="Use Selected" />
+      <Button layoutX="261.0" layoutY="86.0" mnemonicParsing="false" text="Decide for me" />
+      <ComboBox layoutX="243.0" layoutY="46.0" prefHeight="25.0" prefWidth="250.0" />
+      <TextField layoutX="14.0" layoutY="148.0" prefHeight="25.0" prefWidth="357.0" text="\%addons%" />
+      <Button layoutX="376.0" layoutY="148.0" mnemonicParsing="false" text="Browse" />
+      <Text fill="WHITE" layoutX="16.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Install Location: (If you select nothing it will use your addons folder)" />
+      <Button layoutX="436.0" layoutY="148.0" mnemonicParsing="false" text="Finished" />
+      <ImageView fitHeight="25.0" fitWidth="42.0" layoutX="461.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/cancel.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="149.0" prefWidth="265.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.OOD.UpdateplsController">
+   <children>
+      <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Out of Date Launcher">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="12.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You are using PAL Launcher v1.3 or lower, please update to v1.4 to continue using PAL. Please, use the link below to download the upated Launcher" wrappingWidth="241.45312739163637" />
+      <Hyperlink layoutX="10.0" layoutY="113.0" onAction="#openBrowser" prefHeight="23.0" prefWidth="241.0" text="https://github.com/POE-Addon-Launcher/PoE-Addon-Launcher/releases/download/v1.2/PoE.Addon.Launcher.v1.4.jar" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressed" prefHeight="150.0" prefWidth="350.0" style="-fx-background-color: #3C3F41;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PopUp.PopUp_Controller">
+   <children>
+      <Text fx:id="bold_text" fill="WHITE" layoutX="11.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Big Bold Text" wrappingWidth="326.53125">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Text>
+      <Text fx:id="small_text" fill="WHITE" layoutX="12.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="smaller_normal_text" wrappingWidth="326.53125" />
+      <ImageView fx:id="topbar_image_closeWindow" onMouseClicked="#topbar_closeWIndow_onMouseClicked" onMouseEntered="#topbar_closeWindow_onMouseEntered" onMouseExited="#topbar_closeWindow_onMouseExited" fitHeight="25.0" fitWidth="33.0" layoutX="317.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/cancel0.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="topbar_text" fill="WHITE" layoutX="13.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="topbar_text" wrappingWidth="180.53125" />
+   </children>
+</AnchorPane>

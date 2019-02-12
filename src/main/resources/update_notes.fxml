@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressed" prefHeight="300.0" prefWidth="499.0" style="-fx-background-color: #3C3F41;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.PopUp.Updated_HTML_Popup_Controller">
+   <children>
+      <ImageView fx:id="topbar_image_closeWindow" fitHeight="25.0" fitWidth="33.0" layoutX="465.0" onMouseClicked="#topbar_closeWIndow_onMouseClicked" onMouseEntered="#topbar_closeWindow_onMouseEntered" onMouseExited="#topbar_closeWindow_onMouseExited" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/cancel0.png" />
+         </image>
+      </ImageView>
+      <WebView fx:id="HTML_Viewer" layoutY="22.0" prefHeight="279.0" prefWidth="499.0" />
+      <Text fill="WHITE" layoutX="3.0" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PAL: Update Notes" />
+   </children>
+</AnchorPane>
