@@ -73,7 +73,7 @@ public class Updated_HTML_Popup_Controller
             if (f.exists())
                 f.delete();
 
-            InputStream inputStream = new URL("https://raw.githubusercontent.com/POE-Addon-Launcher/Core/master/src/main/resources/update_notes.html").openStream();
+            InputStream inputStream = new URL("https://raw.githubusercontent.com/POE-Addon-Launcher/PAL2/master/src/main/resources/update_notes.html").openStream();
             Files.copy(inputStream, Paths.get(f.getPath() ));
             Platform.runLater(() ->
             {

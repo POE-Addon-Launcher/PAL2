@@ -80,17 +80,21 @@ fun runSteamPoE()
 
 fun launchAddons()
 {
-    val arr = getRunOnLaunchCommands()
-    if (arr != null)
+    if (GlobalData.launch_addons)
     {
-        for (lc in arr)
+        val arr = getRunOnLaunchCommands()
+        if (arr != null)
         {
-            GlobalScope.launch {
-                Runtime.getRuntime().exec(lc)
+            for (lc in arr)
+            {
+                GlobalScope.launch {
+                    Runtime.getRuntime().exec(lc)
+                }
             }
         }
+        launchAHKScripts()
+        GlobalData.launch_addons = false
     }
-    launchAHKScripts()
 }
 
 fun launchAHKScripts()

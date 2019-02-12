@@ -346,54 +346,58 @@
          <children>
             <AnchorPane fx:id="sAbout" layoutX="150.0" prefHeight="470.0" prefWidth="450.0">
                <children>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="180.0" onMouseClicked="#reddit" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/reddit.png" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="reddit" layoutX="49.0" layoutY="186.0" text="/r/PoEAddonLauncher" />
+                  <Hyperlink fx:id="reddit" layoutX="49.0" layoutY="186.0" onAction="#reddit" text="/r/PoEAddonLauncher" textFill="#0066cc" />
                   <Text fill="WHITE" layoutX="14.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
                      <font>
                         <Font size="36.0" />
                      </font>
                   </Text>
                   <Text fill="WHITE" layoutX="15.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PoE Addon Launcher was created by me (Rizlim)&#10;&#10;I'm not affiliated with GGG in anyway.&#10;&#10;None of the addons in this Launcher were made by me so I can't guarentee the content in the addons, you should always download these addons at your own risk!" wrappingWidth="420.0" />
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="225.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="225.0" layoutY="180.0" onMouseClicked="#discord" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/discord.jpg" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="discord" layoutX="259.0" layoutY="186.0" text="discord.gg/JcCNkGc" />
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true">
+                  <Hyperlink fx:id="discord" layoutX="259.0" layoutY="186.0" onAction="#discord" text="discord.gg/JcCNkGc" textFill="#0066cc" />
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="218.0" onMouseClicked="#twitter" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/twitter.png" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="twitter" layoutX="49.0" layoutY="224.0" text="\@RizlimWasTaken" />
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="225.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true">
+                  <Hyperlink fx:id="twitter" layoutX="49.0" layoutY="224.0" onAction="#twitter" text="\@RizlimWasTaken" textFill="#0066cc" />
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="225.0" layoutY="218.0" onMouseClicked="#twitch" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/Twitch_icon.png" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="twitch" layoutX="259.0" layoutY="224.0" text="twitch.tv/Rizlim" />
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
+                  <Hyperlink fx:id="twitch" layoutX="259.0" layoutY="224.0" onAction="#twitch" text="twitch.tv/Rizlim" textFill="#0066cc" />
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="253.0" onMouseClicked="#youtube" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/YouTube-icon.png" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="youtube" layoutX="49.0" layoutY="259.0" text="youtube.com/Pastillage" />
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="220.0" layoutY="253.0" pickOnBounds="true" preserveRatio="true">
+                  <Hyperlink fx:id="youtube" layoutX="49.0" layoutY="259.0" onAction="#youtube" text="youtube.com/Pastillage" textFill="#0066cc" />
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="220.0" layoutY="253.0" onMouseClicked="#github" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/github-512.png" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="github" layoutX="258.0" layoutY="259.0" text="Github" />
-                  <ImageView fitHeight="25.0" fitWidth="98.0" layoutX="15.0" layoutY="306.0" pickOnBounds="true" preserveRatio="true">
+                  <Hyperlink fx:id="github" layoutX="258.0" layoutY="259.0" onAction="#github" text="Github" textFill="#0066cc" />
+                  <ImageView fitHeight="25.0" fitWidth="98.0" layoutX="15.0" layoutY="306.0" onMouseClicked="#patreon" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/patreon.png" />
                      </image>
                   </ImageView>
-                  <Hyperlink fx:id="patreon" layoutX="116.0" layoutY="307.0" text="Support PAL on Patreon" />
+                  <Hyperlink fx:id="patreon" layoutX="116.0" layoutY="307.0" onAction="#patreon" text="Support PAL on Patreon" textFill="#0066cc" />
+                  <Hyperlink fx:id="hyperlinkVersion" onAction="#showUpdates" alignment="CENTER_RIGHT" layoutX="324.0" prefHeight="23.0" prefWidth="126.0" text="1.0.0" textAlignment="RIGHT" textFill="#0066cc">
+                     <font>
+                        <Font size="16.0" />
+                     </font></Hyperlink>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="sFolders" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
@@ -405,21 +409,21 @@
                   </Text>
                   <Text fill="WHITE" layoutX="15.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In order for PAL to work properly it will need to know specific folders and where to find it, you can configure that here." wrappingWidth="420.0000100135803" />
                   <TextField fx:id="sAddonFolder" layoutX="10.0" layoutY="118.0" prefHeight="25.0" prefWidth="380.0" />
-                  <Button fx:id="bBrowseMainAddonFolder" onAction="#browseAddonFolder" layoutX="393.0" layoutY="118.0" mnemonicParsing="false" text="Browse" />
+                  <Button fx:id="bBrowseMainAddonFolder" layoutX="393.0" layoutY="118.0" mnemonicParsing="false" onAction="#browseAddonFolder" text="Browse" />
                   <Text fill="WHITE" layoutX="17.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Addon Folder">
                      <font>
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </Text>
                   <TextField fx:id="sTempDownFolder" layoutX="10.0" layoutY="159.0" prefHeight="25.0" prefWidth="380.0" />
-                  <Button fx:id="bBrowseTempDownFolder" onAction="#browseTempDown" layoutX="393.0" layoutY="159.0" mnemonicParsing="false" text="Browse" />
+                  <Button fx:id="bBrowseTempDownFolder" layoutX="393.0" layoutY="159.0" mnemonicParsing="false" onAction="#browseTempDown" text="Browse" />
                   <Text fill="WHITE" layoutX="16.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Temp Download Folder">
                      <font>
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </Text>
                   <TextField fx:id="sLootFilterFolder" layoutX="10.0" layoutY="203.0" prefHeight="25.0" prefWidth="380.0" />
-                  <Button fx:id="bBrowseLootFilterFolder" onAction="#browseLootFilter" layoutX="393.0" layoutY="203.0" mnemonicParsing="false" text="Browse" />
+                  <Button fx:id="bBrowseLootFilterFolder" layoutX="393.0" layoutY="203.0" mnemonicParsing="false" onAction="#browseLootFilter" text="Browse" />
                   <Text fill="WHITE" layoutX="12.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Loot Filter Folder">
                      <font>
                         <Font name="System Italic" size="12.0" />
@@ -429,8 +433,8 @@
                   <Button mnemonicParsing="false" text="Browse" visible="false" />
                   <Text fill="WHITE" layoutX="16.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path of Exile Locations:" />
                   <ListView fx:id="poeLocations" layoutX="16.0" layoutY="252.0" prefHeight="210.0" prefWidth="370.0" />
-                  <Button fx:id="bAddPoELocation" onAction="#addPoELocation" layoutX="393.0" layoutY="252.0" mnemonicParsing="false" text="+" />
-                  <Button fx:id="bRemovePoELocation" onAction="#removePoELocation" layoutX="393.0" layoutY="284.0" mnemonicParsing="false" prefWidth="25.0" text="-" />
+                  <Button fx:id="bAddPoELocation" layoutX="393.0" layoutY="252.0" mnemonicParsing="false" onAction="#addPoELocation" text="+" />
+                  <Button fx:id="bRemovePoELocation" layoutX="393.0" layoutY="284.0" mnemonicParsing="false" onAction="#removePoELocation" prefWidth="25.0" text="-" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="sAutoHotKey" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
@@ -447,16 +451,16 @@
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </Text>
-                  <Button fx:id="bBrowseAHK" onAction="#browseAHKFolder" layoutX="392.0" layoutY="141.0" mnemonicParsing="false" text="Browse" />
-                  <Hyperlink fx:id="installAutoHotKey" onAction="#installAHK" alignment="CENTER" layoutX="14.0" layoutY="94.0" prefHeight="23.0" prefWidth="420.0" text="Don't have AutoHotKey? Click &gt;here&lt; to install it!" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="bBrowseAHK" layoutX="392.0" layoutY="141.0" mnemonicParsing="false" onAction="#browseAHKFolder" text="Browse" />
+                  <Hyperlink fx:id="installAutoHotKey" alignment="CENTER" layoutX="14.0" layoutY="94.0" onAction="#installAHK" prefHeight="23.0" prefWidth="420.0" text="Don't have AutoHotKey? Click &gt;here&lt; to install it!" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Hyperlink>
                   <Text fill="WHITE" layoutX="14.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Custom AHK Scripts:" />
                   <ListView fx:id="sListViewAHKScripts" layoutX="12.0" layoutY="191.0" prefHeight="275.0" prefWidth="380.0" />
-                  <Button fx:id="bAddAHKScript" onAction="#addAHK" layoutX="395.0" layoutY="192.0" mnemonicParsing="false" text="+" />
-                  <Button fx:id="bRemoveAHKScript" onAction="#removeAHK" layoutX="395.0" layoutY="223.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" text="-" />
+                  <Button fx:id="bAddAHKScript" layoutX="395.0" layoutY="192.0" mnemonicParsing="false" onAction="#addAHK" text="+" />
+                  <Button fx:id="bRemoveAHKScript" layoutX="395.0" layoutY="223.0" mnemonicParsing="false" onAction="#removeAHK" prefHeight="25.0" prefWidth="25.0" text="-" />
                </children>
             </AnchorPane>
             <ListView fx:id="listViewSettings" onMouseClicked="#settingsListViewClicked" prefHeight="470.0" prefWidth="150.0" />
@@ -472,7 +476,7 @@
                         <Font size="16.0" />
                      </font>
                   </CheckBox>
-                  <CheckBox fx:id="useSteam" onAction="#checkUseSteam" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" selected="true" text="Use Steam to launch PoE">
+                  <CheckBox fx:id="useSteam" layoutX="14.0" layoutY="53.0" mnemonicParsing="false" onAction="#checkUseSteam" selected="true" text="Use Steam to launch PoE">
                      <font>
                         <Font size="16.0" />
                      </font>

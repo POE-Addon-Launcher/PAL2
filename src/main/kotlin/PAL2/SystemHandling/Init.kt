@@ -87,7 +87,7 @@ fun moreInit()
             if (getLastPALVersion() != GlobalData.version)
             {
                 setPALVersion()
-                GlobalData.show_update_note
+                GlobalData.show_update_note = true
             }
         }
 

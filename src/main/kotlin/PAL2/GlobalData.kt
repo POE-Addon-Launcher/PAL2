@@ -10,7 +10,7 @@ class GlobalData
     companion object
     {
         var version = "1.0.1"
-        var debugging = true
+        var debugging = false
         var install_dir = ""
         var github_token = ""
         var list_of_addons = ArrayList<PAL_AddonFullData>()

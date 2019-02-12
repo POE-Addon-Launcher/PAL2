@@ -29,6 +29,7 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import kotlinx.coroutines.*
+import java.awt.Desktop
 import java.io.File
 import java.net.URI
 import java.net.URL
@@ -58,9 +59,9 @@ class CoreController : Initializable
 
     private fun showMOTD()
     {
-        Platform.runLater {
-            val up = Updated_HTML_Popup()
-            up.start(Stage())
+        if (GlobalData.show_update_note && GlobalData.showUpdateNotesOnUpdate)
+        {
+            showUpdates()
         }
     }
 
@@ -1127,9 +1128,17 @@ class CoreController : Initializable
     private fun setSettings()
     {
         Platform.runLater {
+            SETAbout()
             SETAHKSettings()
             SETGeneralSettings()
             SETFolders()
+        }
+    }
+
+    private fun SETAbout()
+    {
+        Platform.runLater {
+            hyperlinkVersion.text = GlobalData.version
         }
     }
 
@@ -1391,6 +1400,57 @@ class CoreController : Initializable
         }
     }
 
+    fun reddit(actionEvent: ActionEvent)
+    {
+        openWebsite("https://www.reddit.com/r/PoEAddonLauncher/")
+    }
+
+    fun discord(actionEvent: ActionEvent)
+    {
+        openWebsite("https://discord.gg/JcCNkGc")
+    }
+
+    fun twitter(actionEvent: ActionEvent)
+    {
+        openWebsite("https://twitter.com/RizlimWasTaken")
+    }
+
+    fun twitch(actionEvent: ActionEvent)
+    {
+        openWebsite("https://twitch.tv/Rizlim")
+    }
+
+    fun youtube(actionEvent: ActionEvent)
+    {
+        openWebsite("https://youtube.com/Pastillage")
+    }
+
+    fun github(actionEvent: ActionEvent)
+    {
+        openWebsite("https://github.com/POE-Addon-Launcher/PAL2")
+    }
+
+    fun patreon(actionEvent: ActionEvent)
+    {
+        openWebsite("https://www.patreon.com/Rizlim")
+    }
+
+    fun openWebsite(arg: String)
+    {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+        {
+            Desktop.getDesktop().browse(URI(arg))
+        }
+    }
+
+    fun showUpdates()
+    {
+        Platform.runLater {
+            val up = Updated_HTML_Popup()
+            up.start(Stage())
+        }
+    }
+
     @FXML
     private lateinit var reddit: Hyperlink
 
@@ -1478,5 +1538,8 @@ class CoreController : Initializable
 
     @FXML
     private lateinit var sComboPoE: ComboBox<String>
+
+    @FXML
+    private lateinit var hyperlinkVersion: Hyperlink
 
 }
