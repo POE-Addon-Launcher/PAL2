@@ -106,6 +106,14 @@ fun removePoELoc(string: String)
     connection.close()
 }
 
+fun updateRunAddonWhenLaunching(runOnLaunch: Boolean, aid: Int)
+{
+    val connection = connectToDB()
+    connection.createStatement().executeUpdate("update InstalledAddon set run_on_launch = $runOnLaunch where aid = $aid;")
+    connection.close()
+}
+
+
 fun updateAddonConfig(lc: String, installDir: String, aid: Int, addonName: String, version:String, runOnLaunch: Boolean)
 {
     val connection = connectToDB()

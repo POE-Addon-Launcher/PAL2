@@ -1,10 +1,12 @@
 package PAL2.GUI
 
+import PAL2.Database.getRunAddonOnLaunch
+import PAL2.Database.updateRunAddonWhenLaunching
 import PAL2.SystemHandling.launchAddon
 import PAL2.SystemHandling.updateAddon
 import javafx.application.Platform
 import javafx.event.EventHandler
-import javafx.scene.control.Hyperlink
+import javafx.scene.control.CheckBox
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseButton
@@ -27,12 +29,15 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
     lateinit var textAddonName: Text
     lateinit var textNewestVersion: Text
     lateinit var textLastCheck: Text
+    lateinit var textEnabled: Text
 
     lateinit var bTextVersion: Text
     lateinit var bTextLastCheck: Text
     lateinit var bTextNewVersion: Text
 
-    var imageViewInfo = ImageView()
+    lateinit var checkBox: CheckBox
+
+    //var imageViewInfo = ImageView()
 
     var anchorButton = AnchorPane()
     var rectButton = Rectangle(75.0, 25.0)
@@ -45,6 +50,7 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         initTopText()
         initBottomText()
         initButton()
+        initCheckBox()
 
         // Check up to date
         if (version == newestVersion)
@@ -59,10 +65,28 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         setListners()
     }
 
+    private fun initCheckBox()
+    {
+        checkBox = CheckBox("")
+        anchorPane.children.add(checkBox)
+        checkBox.layoutX = 542.5
+        checkBox.layoutY = 20.0
+        checkBox.isSelected = getRunAddonOnLaunch(aid)
+    }
+
     private fun setListners()
     {
         anchorListner()
         setDownloadUpdateListner()
+        checkBoxListener()
+    }
+
+    private fun checkBoxListener()
+    {
+        checkBox.onMouseClicked = EventHandler()
+        {
+            updateRunAddonWhenLaunching(checkBox.isSelected, aid)
+        }
     }
 
     fun anchorListner()
@@ -131,7 +155,7 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
             textButton.layoutY = 25.0
         }
     }
-
+    /*
     fun isGGGAproved()
     {
         Platform.runLater {
@@ -144,7 +168,7 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         Platform.runLater {
             imageViewInfo.image = Image(javaClass.getResource("/icons/gggAproveQ.png").openStream())
         }
-    }
+    }*/
 
     private fun initButton()
     {
@@ -215,8 +239,9 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         textAddonName.textAlignment = TextAlignment.LEFT
         textNewestVersion = textTopFactory("Newest Version", 325.0, 100.0)
         textLastCheck = textTopFactory("Last Check", 425.0, 100.0)
+        textEnabled = textTopFactory("Enabled", 525.0, 50.0)
 
-        anchorPane.children.addAll(textAddonName, textNewestVersion, textLastCheck)
+        anchorPane.children.addAll(textAddonName, textNewestVersion, textLastCheck, textEnabled)
     }
 
     fun bottomTextFactory(arg: String, x: Double, ww: Double): Text
@@ -246,12 +271,13 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
 
     fun initImg()
     {
+        /*
         imageViewInfo.layoutX = 530.0
         imageViewInfo.layoutY = 2.5
         imageViewInfo.fitHeight = 35.0
         imageViewInfo.fitWidth = 35.0
         imageViewInfo.image = Image(javaClass.getResource("/icons/gggAproveQ.png").openStream())
-        anchorPane.children.add(imageViewInfo)
+        anchorPane.children.add(imageViewInfo)*/
 
         displayImage.layoutX = 2.5
         displayImage.layoutY = 2.5

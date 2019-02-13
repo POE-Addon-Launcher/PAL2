@@ -5,6 +5,7 @@ import GUI.PopUp.Updated_HTML_Popup
 import PAL2.Database.*
 import PAL2.GUI.Loader.Loader
 import PAL2.SystemHandling.FileDownloader
+import PAL2.SystemHandling.launchAddons
 import PAL2.SystemHandling.removeAddon
 import PAL2.SystemHandling.updateAddon
 import PAL_DataClasses.PAL_AddonTableRow
@@ -601,7 +602,15 @@ class CoreController : Initializable
     @FXML
     fun launchPoE(event: MouseEvent)
     {
-        PAL2.SystemHandling.launchPoE()
+        if (event.button == MouseButton.PRIMARY)
+        {
+            PAL2.SystemHandling.launchPoE()
+        }
+        else if (event.button == MouseButton.SECONDARY)
+        {
+            launchAddons()
+        }
+
     }
 
     @FXML
