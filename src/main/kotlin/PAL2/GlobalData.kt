@@ -8,7 +8,7 @@ class GlobalData
 {
     companion object
     {
-        var version = "1.0.2"
+        var version = "1.0.3"
         var debugging = false
         var install_dir = ""
         var github_token = ""

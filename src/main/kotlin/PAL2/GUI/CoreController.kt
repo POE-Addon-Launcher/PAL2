@@ -1022,7 +1022,7 @@ class CoreController : Initializable
         GlobalScope.launch {
             val fd = FileDownloader()
             //TODO: Change to GlobalData temp folder
-            fd.downloadFile(URL(download_url), File("C:\\Users\\Kirishima\\AppData\\Local\\PAL\\temp_downloads"), 1024, addonDescImg.image, aid)
+            fd.downloadFile(URL(download_url), GlobalData.temp_down_folder, 1024, addonDescImg.image, aid)
         }
     }
 
