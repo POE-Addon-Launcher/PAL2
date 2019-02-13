@@ -1,4 +1,3 @@
-import Client.PALClient
 import PAL_DataClasses.PAL_AddonFullData
 import java.io.File
 
@@ -9,7 +8,7 @@ class GlobalData
 {
     companion object
     {
-        var version = "1.0.1"
+        var version = "1.0.2"
         var debugging = false
         var install_dir = ""
         var github_token = ""
@@ -19,7 +18,6 @@ class GlobalData
         var pal_folder = File("${System.getenv("LOCALAPPDATA")}${File.separator}PAL")
         var pal_data_folder = File("${pal_folder.path}${File.separator}Data")
         var db_file = File("${pal_data_folder}${File.separator}PALData.db")
-        var client: PALClient? = null
         var server_enabled = false
         var first_launch = true
         var first_launch_after_update = true
