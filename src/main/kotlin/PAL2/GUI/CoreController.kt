@@ -30,6 +30,7 @@ import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import kotlinx.coroutines.*
+import org.apache.commons.io.FileUtils
 import java.awt.Desktop
 import java.io.File
 import java.net.URI
@@ -54,6 +55,10 @@ class CoreController : Initializable
             init()
             setSettings()
             showMOTD()
+            if (GlobalData.launchPOEonLaunch)
+            {
+                PAL2.SystemHandling.launchPoE()
+            }
         }
         core_tabpane.tabs.remove(addonDescTab)
     }
@@ -602,14 +607,11 @@ class CoreController : Initializable
     @FXML
     fun launchPoE(event: MouseEvent)
     {
-        if (event.button == MouseButton.PRIMARY)
+        if (event.button == MouseButton.SECONDARY)
         {
-            PAL2.SystemHandling.launchPoE()
+            GlobalData.launch_addons = true
         }
-        else if (event.button == MouseButton.SECONDARY)
-        {
-            launchAddons()
-        }
+        PAL2.SystemHandling.launchPoE()
 
     }
 
@@ -1128,7 +1130,7 @@ class CoreController : Initializable
     private lateinit var sGeneral: AnchorPane
 
 
-    val settingsArray = arrayOf("About", "AutoHotKey", "General Settings", "Folders")
+    val settingsArray = arrayOf("About", "AutoHotKey", "General Settings", "Folders", "Log")
     fun populateSettingsList()
     {
         Platform.runLater { listViewSettings.items.addAll(settingsArray) }
@@ -1147,7 +1149,15 @@ class CoreController : Initializable
     private fun SETAbout()
     {
         Platform.runLater {
-            hyperlinkVersion.text = GlobalData.version
+            if (GlobalData.debugging)
+            {
+                hyperlinkVersion.text = "DEBUGGING MODE ${GlobalData.version}"
+            }
+            else
+            {
+                hyperlinkVersion.text = GlobalData.version
+            }
+
         }
     }
 
@@ -1221,6 +1231,7 @@ class CoreController : Initializable
                     "AutoHotKey" -> showAHK()
                     "General Settings" -> showGeneralSettings()
                     "Folders" -> showFolders()
+                    "Log" -> showLog()
                 }
             }
         }
@@ -1250,6 +1261,13 @@ class CoreController : Initializable
         Platform.runLater { sAbout.isVisible = true }
     }
 
+    private fun showLog()
+    {
+        hideAll()
+        Platform.runLater { debugLog.text = FileUtils.readFileToString(File("PAL_Logger.log")) }
+        Platform.runLater { anchorLog.isVisible = true }
+    }
+
     private fun hideAll()
     {
         Platform.runLater {
@@ -1257,6 +1275,7 @@ class CoreController : Initializable
             sFolders.isVisible = false
             sGeneral.isVisible = false
             sAbout.isVisible = false
+            anchorLog.isVisible = false
         }
     }
 
@@ -1459,6 +1478,12 @@ class CoreController : Initializable
             up.start(Stage())
         }
     }
+
+    @FXML
+    private lateinit var anchorLog: AnchorPane
+
+    @FXML
+    private lateinit var debugLog: TextArea
 
     @FXML
     private lateinit var reddit: Hyperlink

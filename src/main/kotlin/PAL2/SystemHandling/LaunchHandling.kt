@@ -41,8 +41,11 @@ fun launchAddon(aid: Int)
 
 private fun launch_poe(exe: String)
 {
+    logger.debug { "CALLED: LAUNCH_POE(exe) | exe = \'$exe\'" }
+
     if (exe.contains("PathOfExileSteam.exe") || exe.contains("PathOfExile_x64Steam.exe"))
     {
+        logger.debug { "Attempting to run Steam PoE" }
         runSteamPoE()
     }
     else if (exe.contains("PathOfExile.exe") || exe.contains("PathOfExile_x64.exe"))
@@ -51,21 +54,27 @@ private fun launch_poe(exe: String)
         val executable: String
         if (exe.contains("PathOfExile_x64.exe"))
         {
+            logger.debug { "Found PathOfExile_x64.exe" }
             executable = "PathOfExile_x64.exe"
             dir = exe.replace(executable, "")
+            logger.debug { "dir = $dir" }
         }
         else
         {
+            logger.debug { "ELSE case" }
             executable = "PathOfExile.exe"
             dir = exe.replace(executable, "")
+            logger.debug { "dir = $dir" }
         }
         try
         {
-            Runtime.getRuntime().exec(exe, null, File(dir))
+            logger.debug { "Runtime command: \"$exe\", NULL, ${File(dir)}" }
+            logger.debug { "dir = $dir" }
+            Runtime.getRuntime().exec("\"$exe\"", null, File(dir))
         }
         catch (e: IOException)
         {
-            e.printStackTrace()
+            logger.error { e.printStackTrace() }
         }
 
     }
@@ -162,6 +171,7 @@ fun launchPoE()
         {
             if (f.exists())
             {
+                launchAddons()
                 launch_poe(f.path)
             }
         }

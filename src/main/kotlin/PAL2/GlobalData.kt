@@ -8,7 +8,7 @@ class GlobalData
 {
     companion object
     {
-        var version = "1.0.4"
+        var version = "1.0.5"
         var debugging = false
         var install_dir = ""
         var github_token = ""
@@ -23,6 +23,7 @@ class GlobalData
         var first_launch_after_update = true
         var primaryPoEFile: File? = null
         var poeLocations = ArrayList<String>()
+        var logFile = ""
 
         var loot_filter_path = ""
         var show_update_note = false

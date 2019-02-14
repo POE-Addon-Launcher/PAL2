@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -394,7 +395,7 @@
                      </image>
                   </ImageView>
                   <Hyperlink fx:id="patreon" layoutX="116.0" layoutY="307.0" onAction="#patreon" text="Support PAL on Patreon" textFill="#0066cc" />
-                  <Hyperlink fx:id="hyperlinkVersion" onAction="#showUpdates" alignment="CENTER_RIGHT" layoutX="324.0" prefHeight="23.0" prefWidth="126.0" text="1.0.0" textAlignment="RIGHT" textFill="#0066cc">
+                  <Hyperlink fx:id="hyperlinkVersion" alignment="CENTER_RIGHT" layoutX="324.0" onAction="#showUpdates" prefHeight="23.0" prefWidth="126.0" text="1.0.0" textAlignment="RIGHT" textFill="#0066cc">
                      <font>
                         <Font size="16.0" />
                      </font></Hyperlink>
@@ -516,7 +517,15 @@
                   </Text>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
+            <AnchorPane fx:id="anchorLog" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
+               <children>
+                  <TextArea fx:id="debugLog" layoutX="10.0" layoutY="35.0" prefHeight="430.0" prefWidth="430.0" />
+                  <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Log">
+                     <font>
+                        <Font size="29.0" />
+                     </font>
+                  </Text>
+               </children></AnchorPane>
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
