@@ -68,7 +68,7 @@
                </font>
             </Text>
             <CheckBox fx:id="checkmarkLaunchPOEPAL" layoutX="14.0" layoutY="128.0" mnemonicParsing="false" text="Launch Path of Exile when PAL Launches" />
-            <CheckBox fx:id="checkBoxGithubAPI" layoutX="14.0" layoutY="155.0" mnemonicParsing="false" selected="true" text="Enable GitHub API (Strongly Reccomended)" />
+            <CheckBox fx:id="checkBoxGithubAPI" layoutX="14.0" layoutY="155.0" mnemonicParsing="false" selected="true" text="Enable GitHub API (Strongly Recommended)" />
             <CheckBox fx:id="checkShowUpdateNotes" layoutX="14.0" layoutY="183.0" mnemonicParsing="false" selected="true" text="Show update notes after an update (Only shows once)" />
             <Hyperlink fx:id="howToGetAPIToken" layoutX="365.0" layoutY="90.0" onAction="#openWebsite" text="How do I get a github api token?" />
             <Text fx:id="txtInValidToken" fill="RED" layoutX="228.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid Token" visible="false">
@@ -81,7 +81,7 @@
                      <Font name="System Bold" size="12.0" />
                  </font>
              </Text>
-            <Text fx:id="txtWarn" fill="WHITE" layoutX="89.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By not using a github API token you will receive updates to addons a lot slower, and thus is not reccomended, however, you can continue without setting one if you want" wrappingWidth="430.4140625">
+            <Text fx:id="txtWarn" fill="WHITE" layoutX="89.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By not using a github API token you will receive updates to addons a lot slower, and thus is not recommended, however, you can continue without setting one if you want" wrappingWidth="430.4140625">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>

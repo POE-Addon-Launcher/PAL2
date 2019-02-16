@@ -1,5 +1,6 @@
 package PAL2.SystemHandling
 
+import PAL2.Database.getInstallDir
 import PAL2.Database.getLaunchCommand
 import PAL2.Database.getRunAddonOnLaunch
 import PAL2.Database.getRunOnLaunchCommands
@@ -22,6 +23,17 @@ fun launchAddon(aid: Int)
     // Grab launch command from DB
     val lc = getLaunchCommand(aid)
 
+    when (aid)
+    {
+        14 -> procurementHandler(aid)
+        12 -> runPathOfMaps(lc)
+        15 -> leagueOverlayHandler(aid, lc)
+        else -> defaultHandler(aid, lc)
+        }
+    }
+
+fun defaultHandler(aid: Int, lc: String)
+{
     GlobalScope.launch {
         // Check for exceptions: ? "SET_AHK_FOLDER" etc
         if (lc == "?")
@@ -34,8 +46,61 @@ fun launchAddon(aid: Int)
         }
         else
         {
-            Runtime.getRuntime().exec(lc)
+            val dir = getInstallDir(aid)
+            if (dir != null)
+            {
+                Runtime.getRuntime().exec(lc, null, dir)
+            }
+            else
+            {
+                Runtime.getRuntime().exec(lc)
+            }
+
         }
+}
+
+
+}
+
+fun runPathOfMaps(lc: String)
+{
+    GlobalScope.launch {
+        Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler $lc")
+    }
+
+}
+
+fun leagueOverlayHandler(aid: Int, launch_command: String)
+{
+    GlobalScope.launch {
+        val dir = getInstallDir(aid)
+        if (dir != null)
+        {
+            Runtime.getRuntime().exec(launch_command, null, dir)
+        }
+    }
+}
+
+fun procurementHandler(aid: Int)
+{
+    GlobalScope.launch {
+        val f = getInstallDir(aid)
+
+        if (f != null)
+        {
+            var exe = ""
+            for (_f in f.listFiles())
+            {
+                if (_f.name == "Procurement.exe")
+                {
+                    exe = _f.path
+                }
+            }
+
+            if (exe != "")
+                Runtime.getRuntime().exec("\"$exe\"", null, f)
+        }
+
     }
 }
 
