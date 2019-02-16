@@ -1130,7 +1130,7 @@ class CoreController : Initializable
     private lateinit var sGeneral: AnchorPane
 
 
-    val settingsArray = arrayOf("About", "AutoHotKey", "General Settings", "Folders", "Log")
+    val settingsArray = arrayOf("About", "AutoHotKey", "General Settings", "Folders", "Log", "Disclaimer")
     fun populateSettingsList()
     {
         Platform.runLater { listViewSettings.items.addAll(settingsArray) }
@@ -1232,9 +1232,19 @@ class CoreController : Initializable
                     "General Settings" -> showGeneralSettings()
                     "Folders" -> showFolders()
                     "Log" -> showLog()
+                    "Disclaimer" -> showDisclaimer()
                 }
             }
         }
+    }
+
+    @FXML
+    private lateinit var disclaimer: AnchorPane
+
+    private fun showDisclaimer()
+    {
+        hideAll()
+        Platform.runLater { disclaimer.isVisible = true }
     }
 
     private fun showFolders()
@@ -1276,6 +1286,7 @@ class CoreController : Initializable
             sGeneral.isVisible = false
             sAbout.isVisible = false
             anchorLog.isVisible = false
+            disclaimer.isVisible = false
         }
     }
 

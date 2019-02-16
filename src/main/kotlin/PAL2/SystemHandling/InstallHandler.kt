@@ -244,6 +244,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
         {
             "Update.exe" -> true
             "_TradeMacroMain.ahk" -> true
+            "Gdip_All.ahk" -> true
             else -> false
         }
     }

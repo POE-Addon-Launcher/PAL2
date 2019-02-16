@@ -25,7 +25,8 @@ class Launcher2
         @JvmStatic
         fun main(args: Array<String>)
         {
-            // TODO: Update Version Number & HTML Update Note Location
+            // TODO: Allow users to add existing addons
+            // TODO: Allow users to add custom programs
 
             logger.debug { "Welcome to PAL!" }
             // Set Locale to US to avoid any locale issues.

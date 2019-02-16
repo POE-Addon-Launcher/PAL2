@@ -526,7 +526,15 @@
                      </font>
                   </Text>
                </children></AnchorPane>
-            <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
+            <AnchorPane fx:id="disclaimer" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
+               <children>
+                  <Text fill="WHITE" layoutX="3.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disclaimer">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="2.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="I can't and will not guarentee the contents of the addons that are available for download, I only guarentee the workings of MY PROGRAM&#10;&#10;Anything you download through here should be done at your own risk and after inspecting the code for these respective programs on their respecitve github / bitbucket pages.&#10;&#10;I am not affiliated with any of the programs downloadable thorugh those program, nor will I check any of these programs for their past, current and future content.&#10;&#10;I give no guarentees that a program downloaded through here is safe for use nor do I endorse any of the programs downloadable as their content can change throughout updates.&#10;&#10;By using this program you agree with what I've written above and are aware of the risks involved with downloading software from 3rd party creators." wrappingWidth="440.13671875" />
+               </children></AnchorPane>
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
