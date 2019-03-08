@@ -3,9 +3,7 @@
 ![](https://i.imgur.com/yejvggx.png "")
 
 # HOW DO I DOWNLOAD THIS?
-Go to the releases tab or click on this useful link:
-
-#[v1.0.7](https://github.com/POE-Addon-Launcher/PAL2/releases/download/1.0.7/PAL2.zip)
+Go to the releases tab or click on this useful link: [v1.0.7](https://github.com/POE-Addon-Launcher/PAL2/releases/download/1.0.7/PAL2.zip)
 
 
 PAL2 is PAL but completely rewritten from the ground up in Kotlin, it also no longer requires you to install the java runtime for it to be used.
