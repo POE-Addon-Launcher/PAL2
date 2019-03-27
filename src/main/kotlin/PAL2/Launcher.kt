@@ -12,7 +12,6 @@ import java.io.PrintStream
 import java.util.Locale
 import kotlin.Exception
 
-private val logger = KotlinLogging.logger {}
 /**
  * Reads Data
  * Creates Data
@@ -28,10 +27,8 @@ class Launcher2
             // TODO: Allow users to add existing addons
             // TODO: Allow users to add custom programs
 
-            logger.debug { "Welcome to PAL!" }
             // Set Locale to US to avoid any locale issues.
             Locale.setDefault(Locale.US)
-            logger.debug { "Locale Set" }
 
             if (!GlobalData.debugging)
             {
@@ -49,7 +46,6 @@ class Launcher2
 
                 if (stateONE.exists())
                 {
-                    logger.debug { "State 1 Progressing!" }
                     val install_dir = File(GlobalData.install_dir)
                     FileUtils.copyDirectory(install_dir, install_dir.parentFile)
 
@@ -61,20 +57,18 @@ class Launcher2
                 }
                 else if (stateTWO.exists())
                 {
-                    logger.debug { "State 2 Progressing!" }
                     deleteFile(newest_update)
                     deleteFile(stateTWO)
                 }
             }
 
-            logger.debug { "Attempting to launch UI" }
             try
             {
                 Application.launch(CoreApplication::class.java, *args)
             }
             catch (ex: Exception)
             {
-                logger.error { ex.printStackTrace() }
+                ex.printStackTrace()
             }
         }
     }
