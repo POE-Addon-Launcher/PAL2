@@ -22,6 +22,66 @@ import java.util.*
  */
 private val logger = KotlinLogging.logger {}
 
+object InstallHandlerHelpers
+{
+    fun createJARLaunchCommand(jar_loc: String): String
+    {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("java -jar \"")
+        stringBuilder.append(jar_loc)
+        stringBuilder.append("\"")
+        return stringBuilder.toString()
+    }
+
+    fun createAHKLaunchCommand(ahk_file: String): String
+    {
+        val ahk_folder = GlobalData.ahkFolder
+        if (ahk_folder.path != "")
+        {
+            if (ahk_folder.exists())
+            {
+                val stringBuilder = StringBuilder()
+                stringBuilder.append("\"")
+                stringBuilder.append(ahk_folder.path)
+                stringBuilder.append(File.separator)
+                stringBuilder.append("autohotkey.exe")
+                stringBuilder.append("\" ")
+
+                stringBuilder.append("\"")
+                stringBuilder.append(ahk_file)
+                stringBuilder.append("\" ")
+
+                logger.debug { stringBuilder.toString() }
+                return stringBuilder.toString()
+            }
+            else
+            {
+                return "SET_AHK_FOLDER"
+            }
+        }
+        return "SET_AHK_FOLDER"
+    }
+
+    fun createExeLaunchCommandWithElevation(path: String): String
+    {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("rundll32 url.dll,FileProtocolHandler ")
+        stringBuilder.append("\"")
+        stringBuilder.append(path)
+        stringBuilder.append("\"")
+        return stringBuilder.toString()
+    }
+
+    fun createEXELaunchCommand(path: String): String
+    {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("\"")
+        stringBuilder.append(path)
+        stringBuilder.append("\"")
+        return stringBuilder.toString()
+    }
+}
+
 class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
 {
     var possibleEXEs = ArrayList<File>()
@@ -54,7 +114,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
 
     private fun poeCustomSoundTrack(downloadedFile: File)
     {
-        val process = Runtime.getRuntime().exec(createEXELaunchCommand(downloadedFile.path))
+        val process = Runtime.getRuntime().exec(InstallHandlerHelpers.createEXELaunchCommand(downloadedFile.path))
         process.waitFor()
 
         val p = Runtime.getRuntime().exec("taskkill /IM \"PoE Custom Soundtrack.exe\"")
@@ -64,14 +124,14 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
         val exe = File("$local${File.separator}Programs${File.separator}PoECustomSoundtrack${File.separator}PoE Custom Soundtrack.exe")
 
         addInstalledAddon(afd, File(exe.parent))
-        updateLaunchCommandInstalledAddon(createEXELaunchCommand(exe.path), afd.aid)
+        updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createEXELaunchCommand(exe.path), afd.aid)
     }
 
     // TODO: TaskKill before updating!
 
     private fun xenonTradeHandler(downloadedFile: File)
     {
-        val process = Runtime.getRuntime().exec(createExeLaunchCommandWithElevation(downloadedFile.path))
+        val process = Runtime.getRuntime().exec(InstallHandlerHelpers.createExeLaunchCommandWithElevation(downloadedFile.path))
         process.waitFor()
 
         val p = Runtime.getRuntime().exec("taskkill /IM XenonTrade.exe")
@@ -92,7 +152,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
                     {
                         if (f.name == "XenonTrade.exe")
                         {
-                            updateLaunchCommandInstalledAddon(createExeLaunchCommandWithElevation(f.path), afd.aid)
+                            updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createExeLaunchCommandWithElevation(f.path), afd.aid)
                         }
                     }
                 }
@@ -119,7 +179,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
         val exilenceExe = File("$local${File.separator}Programs${File.separator}exilence${File.separator}Exilence.exe")
 
         addInstalledAddon(afd, File(exilenceExe.parent))
-        updateLaunchCommandInstalledAddon(createEXELaunchCommand(exilenceExe.path), afd.aid)
+        updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createEXELaunchCommand(exilenceExe.path), afd.aid)
     }
 
     private fun currencyCopHandler(downloadedFile: File)
@@ -140,7 +200,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
         val ccExe = File("$local${File.separator}Programs${File.separator}currency-cop${File.separator}CurrencyCop.exe")
 
         addInstalledAddon(afd, File(ccExe.parent))
-        updateLaunchCommandInstalledAddon(createEXELaunchCommand(ccExe.path), afd.aid)
+        updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createEXELaunchCommand(ccExe.path), afd.aid)
     }
 
 
@@ -170,11 +230,11 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
         addInstalledAddon(afd, dest.parentFile)
         if (elevated)
         {
-            updateLaunchCommandInstalledAddon(createExeLaunchCommandWithElevation(dest.path), afd.aid)
+            updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createExeLaunchCommandWithElevation(dest.path), afd.aid)
         }
         else
         {
-            updateLaunchCommandInstalledAddon(createEXELaunchCommand(dest.path), afd.aid)
+            updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createEXELaunchCommand(dest.path), afd.aid)
         }
 
     }
@@ -195,15 +255,15 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
 
         if (possibleAHKs.size == 1)
         {
-            updateLaunchCommandInstalledAddon(createAHKLaunchCommand(possibleAHKs[0].path), afd.aid)
+            updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createAHKLaunchCommand(possibleAHKs[0].path), afd.aid)
         }
         else if (possibleJARs.size == 1)
         {
-            updateLaunchCommandInstalledAddon(createJARLaunchCommand(possibleJARs[0].path), afd.aid)
+            updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createJARLaunchCommand(possibleJARs[0].path), afd.aid)
         }
         else if (possibleEXEs.size == 1)
         {
-            updateLaunchCommandInstalledAddon(createEXELaunchCommand(possibleEXEs[0].path), afd.aid)
+            updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createEXELaunchCommand(possibleEXEs[0].path), afd.aid)
         }
         else
         {
@@ -258,7 +318,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
 
         // Register to DB
         addInstalledAddon(afd, dest.parentFile)
-        updateLaunchCommandInstalledAddon(createAHKLaunchCommand(dest.path), afd.aid)
+        updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createAHKLaunchCommand(dest.path), afd.aid)
     }
 
     /**
@@ -272,7 +332,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
 
         // Register to DB
         addInstalledAddon(afd, dest.parentFile)
-        updateLaunchCommandInstalledAddon(createJARLaunchCommand(dest.path), afd.aid)
+        updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createJARLaunchCommand(dest.path), afd.aid)
     }
 
     fun moveDownloadedfile(file: File): File
@@ -295,63 +355,6 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
         val zip = ZipFile(archive)
         zip.extractAll(destination.path)
         deleteFile(archive)
-    }
-
-    fun createJARLaunchCommand(jar_loc: String): String
-    {
-        val stringBuilder = StringBuilder()
-        stringBuilder.append("java -jar \"")
-        stringBuilder.append(jar_loc)
-        stringBuilder.append("\"")
-        return stringBuilder.toString()
-    }
-
-    fun createAHKLaunchCommand(ahk_file: String): String
-    {
-        val ahk_folder = GlobalData.ahkFolder
-        if (ahk_folder.path != "")
-        {
-            if (ahk_folder.exists())
-            {
-                val stringBuilder = StringBuilder()
-                stringBuilder.append("\"")
-                stringBuilder.append(ahk_folder.path)
-                stringBuilder.append(File.separator)
-                stringBuilder.append("autohotkey.exe")
-                stringBuilder.append("\" ")
-
-                stringBuilder.append("\"")
-                stringBuilder.append(ahk_file)
-                stringBuilder.append("\" ")
-
-                logger.debug { stringBuilder.toString() }
-                return stringBuilder.toString()
-            }
-            else
-            {
-                return "SET_AHK_FOLDER"
-            }
-        }
-        return "SET_AHK_FOLDER"
-    }
-
-    private fun createExeLaunchCommandWithElevation(path: String): String
-    {
-        val stringBuilder = StringBuilder()
-        stringBuilder.append("rundll32 url.dll,FileProtocolHandler ")
-        stringBuilder.append("\"")
-        stringBuilder.append(path)
-        stringBuilder.append("\"")
-        return stringBuilder.toString()
-    }
-
-    private fun createEXELaunchCommand(path: String): String
-    {
-        val stringBuilder = StringBuilder()
-        stringBuilder.append("\"")
-        stringBuilder.append(path)
-        stringBuilder.append("\"")
-        return stringBuilder.toString()
     }
 }
 

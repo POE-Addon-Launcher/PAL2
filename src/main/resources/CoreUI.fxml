@@ -119,6 +119,75 @@
                         </AnchorPane>
                      </content>
                   </Tab>
+                  <Tab fx:id="core_tab_external" text="External">
+                     <content>
+                        <AnchorPane fx:id="external_anchorpane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
+                           <children>
+                              <ListView fx:id="listViewExternalAddons" layoutY="40.0" prefHeight="360.0" prefWidth="600.0" />
+                              <AnchorPane fx:id="anchorDrag" prefHeight="40.0" prefWidth="600.0" />
+                              <Text fx:id="txtDrag" fill="WHITE" layoutX="32.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag any file onto here, or click to browse to add an external addon" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <Rectangle fx:id="rectDrag" onDragDetected="#handleDragDetect" onDragDropped="#handleDragDrop" onDragOver="#handleDragOver" arcHeight="5.0" arcWidth="5.0" fill="#ffffff03" height="35.0" layoutX="2.0" layoutY="2.0" onMouseEntered="#changeRectColorOnMouseEnter" onMouseExited="#changeRectColorOnExit" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" width="595.0" />
+                              <AnchorPane fx:id="SettingsExternalAnchor" layoutY="40.0" prefHeight="365.0" prefWidth="600.0" style="-fx-background-color: #1b1b1b;" visible="false">
+                                 <children>
+                                    <Text fill="WHITE" layoutX="8.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="External Addon Settings">
+                                       <font>
+                                          <Font size="26.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="eid_textfield" layoutX="7.0" layoutY="60.0" prefHeight="25.0" prefWidth="65.0" />
+                                    <Text fill="WHITE" layoutX="2.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="External ID" textAlignment="CENTER" wrappingWidth="76.0">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="name_textfield" layoutX="93.0" layoutY="60.0" prefHeight="25.0" prefWidth="150.0" />
+                                    <Text fill="WHITE" layoutX="136.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="CENTER" wrappingWidth="65.0">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="checksum_textfield" layoutX="255.0" layoutY="60.0" prefHeight="25.0" prefWidth="150.0" />
+                                    <Text fill="WHITE" layoutX="291.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Checksum" textAlignment="CENTER" wrappingWidth="78.0">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="iconurl_textfield" layoutX="420.0" layoutY="60.0" prefHeight="25.0" prefWidth="150.0" />
+                                    <Text fill="WHITE" layoutX="463.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Icon URL" textAlignment="CENTER" wrappingWidth="65.0">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="path_textfield" layoutX="8.0" layoutY="116.0" prefHeight="25.0" prefWidth="560.0" />
+                                    <Text fill="WHITE" layoutX="256.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path" textAlignment="CENTER" wrappingWidth="65.0">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="websource_textfield" layoutX="9.0" layoutY="168.0" prefHeight="25.0" prefWidth="560.0" />
+                                    <Text fill="WHITE" layoutX="12.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Website Source (e.g. where can the file be downloaded from)" textAlignment="CENTER" wrappingWidth="555.0">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="cmd_textfield" layoutX="11.0" layoutY="223.0" prefHeight="25.0" prefWidth="560.0" />
+                                    <Text fill="WHITE" layoutX="14.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CMD Launch Command" textAlignment="CENTER" wrappingWidth="555.0">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Text>
+                                    <Button fx:id="bTestRun" layoutX="261.0" layoutY="266.0" mnemonicParsing="false" onAction="#testRunExternal" text="Test Run" />
+                                    <Button fx:id="bSave" layoutX="545.0" layoutY="326.0" mnemonicParsing="false" onAction="#saveExternal" text="Save" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
                   <Tab fx:id="addonDescTab" onSelectionChanged="#hideAddonDescTab" text="Addon Description">
                      <content>
                         <AnchorPane fx:id="addonDescAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">

@@ -14,6 +14,18 @@ import java.util.*
 /**
  * PAL Data Classes; mimic database entries.
  */
+data class PAL_External_Addon
+(
+        var eid: Int,
+        var name: String,
+        var checksum: String,
+        var newCheckSum: String,
+        var iconUrl: String?,
+        var lastCheck: String,
+        var webSource: String,
+        var launchCMD: String
+)
+
 data class PAL_Addon
 (
         var id: Int,

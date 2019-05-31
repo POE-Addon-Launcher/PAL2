@@ -129,6 +129,7 @@ fun updateAddonConfig(lc: String, installDir: String, aid: Int, addonName: Strin
 
 fun getRunAddonOnLaunch(aid: Int): Boolean
 {
+    // TODO: Check if it exists? Some bug here.
     val connection = connectToDB()
     var rs = connection.createStatement().executeQuery("select run_on_launch from InstalledAddon where aid = $aid;")
     val result = rs.getBoolean(1)
