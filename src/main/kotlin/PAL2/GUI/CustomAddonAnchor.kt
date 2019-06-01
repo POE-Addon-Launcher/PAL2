@@ -15,6 +15,8 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import java.io.File
 import java.lang.StringBuilder
@@ -84,23 +86,26 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
 
     fun anchorListner()
     {
-        // TODO: Double Left Click = Launch
         // TODO: Launch on "Launch Path of Exile"
         // TODO: Update Checking
         // TODO: Icon URL
         // TODO: Lutbot = External
         // TODO: POE-Trades-Companion = External
-        /*
+        // TODO: Upon launch grab any AHKs users had saved and add them to to Externals.
+
         anchorPane.onMouseClicked = EventHandler()
         {
             if (it.button == MouseButton.PRIMARY)
             {
                 if (it.clickCount == 2)
                 {
-                    launchAddon(aid)
+                    // TODO: If no launch command show a popup that says that there is no launch command.
+                    GlobalScope.launch {
+                        Runtime.getRuntime().exec(externalAddon.launchCMD)
+                    }
                 }
             }
-        }*/
+        }
         anchorPane.onMouseClicked = EventHandler()
         {
             if (it.button == MouseButton.SECONDARY)
@@ -276,6 +281,8 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         displayImage.id = "imageInfo"
 
         logger.debug{"${externalAddon.name} | ${externalAddon.iconUrl}"}
+
+        // TODO: Use IconURL
 
         displayImage.image = Image(javaClass.getResource("/icons/NoIcon.png").openStream())
         anchorPane.children.add(displayImage)
