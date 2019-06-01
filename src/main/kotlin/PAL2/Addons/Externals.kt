@@ -1,5 +1,6 @@
 package PAL2.Addons
 
+import PAL2.Database.countExternalAddon
 import PAL2.SystemHandling.InstallHandler
 import PAL2.SystemHandling.InstallHandlerHelpers
 import java.io.File
@@ -34,9 +35,8 @@ object Externals
     }
 
     // Checks if Externals Table Exists, if it doesn't creates it.
-    fun determineDBID(file: File): Int
+    fun determineDBID(): Int
     {
-        //TODO create schema, find ID, pass on ID, create entries upon save button, fix buttons.
-        return -1
+        return countExternalAddon()+1
     }
 }

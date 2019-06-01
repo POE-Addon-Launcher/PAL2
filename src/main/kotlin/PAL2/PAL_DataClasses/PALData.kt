@@ -23,7 +23,9 @@ data class PAL_External_Addon
         var iconUrl: String?,
         var lastCheck: String,
         var webSource: String,
-        var launchCMD: String
+        var launchCMD: String,
+        var path: String,
+        var runOnLaunch: Boolean
 )
 
 data class PAL_Addon

@@ -9,6 +9,7 @@ import PAL2.SystemHandling.FileDownloader
 import PAL2.SystemHandling.removeAddon
 import PAL2.SystemHandling.updateAddon
 import PAL_DataClasses.PAL_AddonTableRow
+import PAL_DataClasses.PAL_External_Addon
 import SystemHandling.checkForUseableDownloads
 import SystemHandling.init
 import javafx.application.Platform
@@ -60,13 +61,27 @@ class CoreController : Initializable
             init()
             setSettings()
             showMOTD()
+            verifyDB()
             if (GlobalData.launchPOEonLaunch)
             {
                 PAL2.SystemHandling.launchPoE()
             }
+            GlobalScope.launch {
+                populateExternalsList()
+            }
         }
         //addExternalAnchor(ExternalAnchor(-1, null, "Test", "ABD123", "ABD123", "no", "hurr"))
         core_tabpane.tabs.remove(addonDescTab)
+    }
+
+    private fun populateExternalsList()
+    {
+        val list = retreiveExternalsFromDB() ?: return
+
+        for (arr in list)
+        {
+            addExternalAnchor(ExternalAnchor(arr))
+        }
     }
 
     private fun showMOTD()
@@ -710,6 +725,15 @@ class CoreController : Initializable
         Platform.runLater {
             installed_refresh_text_hl.isVisible = false
             installed_refresh_text.isVisible = true
+        }
+    }
+
+    fun removeExternalSelected()
+    {
+        Platform.runLater {
+            val selection = listViewExternalAddons.selectionModel.selectedItem
+            listViewExternalAddons.selectionModel.clearSelection()
+            listViewExternalAddons.items.remove(selection)
         }
     }
 
@@ -1530,13 +1554,51 @@ class CoreController : Initializable
 
     fun testRunExternal(actionEvent: ActionEvent)
     {
-        // TODO:
+        GlobalScope.launch { Runtime.getRuntime().exec(cmd_textfield.text) }
     }
 
     fun saveExternal(actionEvent: ActionEvent)
     {
-        // TODO:
+        val external = createExternal()
+
+        val c = countExternalAddon()
+
+        when
+        {
+            c == 0 ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+            c+1 > external.eid -> updateExternalAddon(external)
+            else ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+        }
+
+        Platform.runLater {
+            SettingsExternalAnchor.isVisible = false
+        }
+
     }
+
+    fun createExternal(): PAL_External_Addon
+    {
+        return PAL_External_Addon(
+                eid_textfield.text.toInt(),
+                name_textfield.text,
+                checksum_textfield.text,
+                "",
+                iconurl_textfield.text,
+                "Just now",
+                websource_textfield.text,
+                cmd_textfield.text,
+                path_textfield.text, false
+                                 )
+    }
+
 
     fun changeRectColorOnMouseEnter(mouseEvent: MouseEvent)
     {
@@ -1590,7 +1652,7 @@ class CoreController : Initializable
                 Platform.runLater { cmd_textfield.text = result }
             }
             GlobalScope.launch {
-                val result = Externals.determineDBID(file)
+                val result = Externals.determineDBID()
                 Platform.runLater { eid_textfield.text = result.toString()}
             }
         }
@@ -1601,6 +1663,60 @@ class CoreController : Initializable
         }
 
     }
+
+    fun onExitSettingsExternalButton(mouseEvent: MouseEvent)
+    {
+        changeImage(mouseEvent.source as ImageView, "/icons/cancel0.png")
+    }
+
+    fun onEnterSettingsExternalButton(mouseEvent: MouseEvent)
+    {
+        changeImage(mouseEvent.source as ImageView, "/icons/cancel.png")
+    }
+
+    fun onClickSettingsExternalImg()
+    {
+        SettingsExternalAnchor.isVisible = false
+    }
+
+    fun showSettingsOfExternal(ea: PAL_External_Addon)
+    {
+        Platform.runLater {
+            checksum_textfield.text = ea.checksum
+            cmd_textfield.text = ea.launchCMD
+            eid_textfield.text = ea.eid.toString()
+            SettingsExternalAnchor.isVisible = true
+            name_textfield.text = ea.name
+            path_textfield.text = ea.path
+        }
+    }
+
+    fun AddExternalAddonClick(mouseEvent: MouseEvent)
+    {
+        if (mouseEvent.button == MouseButton.PRIMARY)
+        {
+            val file = browseFile("Browse for a file!") ?: return
+            if (file.exists())
+            {
+                if (file.isDirectory)
+                    return
+
+                when (file.extension)
+                {
+                    "exe" -> showExternalSettings(file)
+                    "ahk" -> showExternalSettings(file)
+                    "jar" -> showExternalSettings(file)
+                    else -> logger.error { "Unsupported Extension! Request Support for it!" }
+                }
+            }
+
+        }
+        else if (mouseEvent.button == MouseButton.SECONDARY)
+        {
+            SettingsExternalAnchor.isVisible = !SettingsExternalAnchor.isVisible
+        }
+    }
+
 
     @FXML
     private lateinit var external_anchorpane: AnchorPane

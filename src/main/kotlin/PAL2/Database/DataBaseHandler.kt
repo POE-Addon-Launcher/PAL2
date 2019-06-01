@@ -5,6 +5,7 @@ import PAL2.GUI.Configurator.Configurator
 import PAL2.GUI.CoreApplication
 import PAL2.GUI.InstalledAnchor
 import PAL_DataClasses.PAL_AddonFullData
+import PAL_DataClasses.PAL_External_Addon
 import PAL_DataClasses.createDate
 import mu.KotlinLogging
 import java.io.File
@@ -399,6 +400,120 @@ fun insertConfiguratorData(config: Configurator)
     GlobalData.github_token = config.githubToken
 }
 
+fun countExternalAddon(): Int
+{
+    val connection = connectToDB()
+    val rs = connection.createStatement().executeQuery("SELECT COUNT(*) FROM ExternalAddon")
+    val count = rs.getInt(1)
+    connection.close()
+    return count
+
+}
+
+fun insertExternalAddonIntoDB(ea: PAL_External_Addon)
+{
+    val connection = connectToDB()
+    val sql = "INSERT into ExternalAddon values (${ea.eid}, \'${ea.name}\', \'${ea.path}\', \'${ea.checksum}\', \'${ea.webSource}\', \'${ea.iconUrl}\', \'${ea.launchCMD}\', false);"
+    println(sql)
+    connection.createStatement().execute(sql)
+    connection.close()
+}
+
+fun retreiveExternalsFromDB(): ArrayList<PAL_External_Addon>?
+{
+    val c = countExternalAddon()
+
+    if (c == 0)
+        return null
+
+    val arr = ArrayList<PAL_External_Addon>()
+    val connection = connectToDB()
+    val rs = connection.createStatement().executeQuery("SELECT eid, name, path, crc32, website_source, icon_url, launch_command, run_on_launch FROM ExternalAddon")
+    while (rs.next())
+    {
+        val name = rs.getString("name")
+
+        if (name != "3c484944453e")
+        {
+            arr.add(PAL_External_Addon(
+                    rs.getInt("eid"),
+                    rs.getString("name"),
+                    rs.getString("crc32"),
+                    "",
+                    rs.getString("icon_url"),
+                    "",
+                    rs.getString("website_source"),
+                    rs.getString("launch_command"),
+                    rs.getString("path"),
+                    rs.getBoolean("run_on_launch")
+                                      ))
+        }
+    }
+    connection.close()
+    return arr
+}
+
+fun hideExternalAddon(eid: Int)
+{
+    val c = countExternalAddon()
+
+    if (c == 0)
+        return
+
+    val connection = connectToDB()
+    connection.createStatement().executeUpdate("UPDATE ExternalAddon set name = \'3c484944453e\' WHERE eid = $eid;")
+    connection.close()
+}
+
+fun updateRunOnLaunchExternal(eid: Int, run_on_launch: Boolean)
+{
+    val c = countExternalAddon()
+
+    if (c == 0)
+    {
+        logger.error { "Update External Addon called without any externals in the DB!" }
+        return
+    }
+
+    val rol = if (run_on_launch) 1 else 0
+    val sql = "UPDATE ExternalAddon set run_on_launch = $rol WHERE eid = $eid;"
+
+    val connection = connectToDB()
+    connection.createStatement().executeUpdate(sql)
+    connection.close()
+}
+
+fun updateExternalAddon(ea: PAL_External_Addon)
+{
+    val c = countExternalAddon()
+
+    if (c == 0)
+    {
+        logger.error { "Update External Addon called without any externals in the DB!" }
+        return
+    }
+
+    val sql = "UPDATE ExternalAddon set name = \'${ea.name}\'," +
+            "path = \'${ea.path}\'," +
+            "crc32 = \'${ea.checksum}\'," +
+            "website_source = \'${ea.webSource}\'," +
+            "icon_url = \'${ea.iconUrl}\'," +
+            "launch_command = \'${ea.launchCMD}\'" +
+            "WHERE eid = ${ea.eid};"
+
+    val connection = connectToDB()
+    logger.debug { "Connected to DB executing SQL: \'$sql\'" }
+    connection.createStatement().executeUpdate(sql)
+    connection.close()
+}
+
+fun verifyDB()
+{
+    val connection = connectToDB()
+    logger.debug { "Verifying DB tables, creating missing tables if needed." }
+    createTables(connection)
+}
+
 fun createDB()
 {
     logger.debug { "Creating db at: ${GlobalData.db_file.path}" }
@@ -415,17 +530,17 @@ fun createDB()
 
 fun createTables(connection: Connection)
 {
-    connection.createStatement().execute("CREATE TABLE AHK_Scripts (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS AHK_Scripts (\n" +
             "    location text NOT NULL,\n" +
             "    run_on_launch boolean NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE Addons_Folder (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS Addons_Folder (\n" +
             "    location text NOT NULL,\n" +
             "    \"primary\" boolean NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE CustomPrograms (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS CustomPrograms (\n" +
             "    name text NOT NULL,\n" +
             "    install_location text NOT NULL,\n" +
             "    launch_command text NOT NULL,\n" +
@@ -433,19 +548,19 @@ fun createTables(connection: Connection)
             "    run_on_launch boolean NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE Data (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS Data (\n" +
             "    username text NOT NULL,\n" +
             "    pass text NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE Flags (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS Flags (\n" +
             "    launch_poe_on_pal_launch boolean NOT NULL,\n" +
             "    Steam_POE boolean NOT NULL,\n" +
             "    GitHub_API boolean NOT NULL,\n" +
             "    show_motd boolean NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE InstalledAddon (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS InstalledAddon (\n" +
             "    aid integer NOT NULL CONSTRAINT InstalledAddon_pk PRIMARY KEY,\n" +
             "    name text NOT NULL,\n" +
             "    install_location text NOT NULL,\n" +
@@ -456,7 +571,7 @@ fun createTables(connection: Connection)
             "    run_on_launch boolean NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE Meta (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS Meta (\n" +
             "    loot_filter_folder text NOT NULL,\n" +
             "    ahk_folder text NOT NULL,\n" +
             "    pal_version text NOT NULL,\n" +
@@ -464,12 +579,24 @@ fun createTables(connection: Connection)
             "    temp_down_folder text NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE PoE_Locations (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS PoE_Locations (\n" +
             "    location text NOT NULL,\n" +
             "    \"primary\" boolean NOT NULL\n" +
             ");")
 
-    connection.createStatement().execute("CREATE TABLE Repos (\n" +
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS Repos (\n" +
             "    repo text NOT NULL\n" +
             ");")
+
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS ExternalAddon (\n" +
+            "    eid integer NOT NULL PRIMARY KEY,\n" +
+            "    name text NOT NULL,\n" +
+            "    path text NOT NULL,\n" +
+            "    crc32 text NOT NULL,\n" +
+            "    website_source text NOT NULL,\n" +
+            "    icon_url text NOT NULL,\n" +
+            "    launch_command text NOT NULL,\n" +
+            "    run_on_launch boolean NOT NULL\n" +
+            ");")
+
 }

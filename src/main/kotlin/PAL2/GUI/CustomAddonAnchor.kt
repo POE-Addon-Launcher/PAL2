@@ -1,7 +1,6 @@
 package PAL2.GUI
 
-import PAL2.Database.getRunAddonOnLaunch
-import PAL2.Database.updateRunAddonWhenLaunching
+import PAL2.Database.*
 import PAL2.SystemHandling.launchAddon
 import PAL2.SystemHandling.updateAddon
 import PAL_DataClasses.PAL_External_Addon
@@ -17,6 +16,9 @@ import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
 import mu.KotlinLogging
+import java.io.File
+import java.lang.StringBuilder
+import kotlin.math.max
 
 /**
  *
@@ -62,8 +64,7 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         anchorPane.children.add(checkBox)
         checkBox.layoutX = 542.5
         checkBox.layoutY = 20.0
-        // TODO: Change to external AID run on launch
-        //checkBox.isSelected = getRunAddonOnLaunch(aid)
+        checkBox.isSelected = externalAddon.runOnLaunch
     }
 
     private fun setListners()
@@ -75,16 +76,20 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
 
     private fun checkBoxListener()
     {
-        // TODO:
-        /*
         checkBox.onMouseClicked = EventHandler()
         {
-            updateRunAddonWhenLaunching(checkBox.isSelected, aid)
-        }*/
+            updateRunOnLaunchExternal(externalAddon.eid, checkBox.isSelected)
+        }
     }
 
     fun anchorListner()
     {
+        // TODO: Double Left Click = Launch
+        // TODO: Launch on "Launch Path of Exile"
+        // TODO: Update Checking
+        // TODO: Icon URL
+        // TODO: Lutbot = External
+        // TODO: POE-Trades-Companion = External
         /*
         anchorPane.onMouseClicked = EventHandler()
         {
@@ -96,11 +101,22 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
                 }
             }
         }*/
+        anchorPane.onMouseClicked = EventHandler()
+        {
+            if (it.button == MouseButton.SECONDARY)
+            {
+                if (it.clickCount == 2)
+                {
+                    hideExternalAddon(externalAddon.eid)
+                    CoreApplication.controller.removeExternalSelected()
+                }
+            }
+        }
     }
 
     fun setDownloadUpdateListner()
     {
-        /*
+
         rectButton.onMouseEntered = EventHandler()
         {
             rectButton.stroke = Color(1.0, 0.0, 1.0, 1.0)
@@ -111,13 +127,10 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         }
         rectButton.onMouseClicked = EventHandler()
         {
-            // TODO: Start Update Downloading.
             Platform.runLater {
-                rectButton.isVisible = false
-                textButton.text = "Downloading"
-                updateAddon(aid, displayImage.image)
+                CoreApplication.controller.showSettingsOfExternal(externalAddon)
             }
-        }*/
+        }
     }
 
 
@@ -149,15 +162,41 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         rect.fill = Color(1.0, 1.0, 1.0, 0.0)
     }
 
+    // Drive letter :/ FileName.ext
+    fun shortner(maxChars: Int, string: String): String
+    {
+        if (string.length < maxChars)
+            return string
+
+        val f = File(string)
+        val splits = string.split(File.separator)
+
+        return if (splits[0].length + splits[splits.size-1].length < maxChars - 5)
+        {
+            "${splits[0]}${File.separator}...${File.separator}${splits[splits.size-1]}"
+        }
+        else
+        {
+            when
+            {
+                f.name.length < maxChars -> f.name
+                f.nameWithoutExtension.length < maxChars -> f.nameWithoutExtension
+                else -> ""
+            }
+        }
+
+    }
+
     private fun initBottomText()
     {
-        bTextVersion = bottomTextFactory(externalAddon.checksum, 40.0, 200.0)
+        // TODO: middle ... for x size
+        bTextVersion = bottomTextFactory(shortner(50, externalAddon.path), 40.0, 200.0)
         bTextVersion.textAlignment = TextAlignment.LEFT
         bTextVersion.id = "bTextVersion"
-        bTextLastCheck = bottomTextFactory(monthToNum(externalAddon.lastCheck), 425.0, 100.0)
+        bTextLastCheck = bottomTextFactory(monthToNum(externalAddon.eid.toString()), 425.0, 100.0)
         bTextLastCheck.id = "bTextLastCheck"
 
-        bTextNewVersion = bottomTextFactory(externalAddon.newCheckSum, 325.0, 100.0)
+        bTextNewVersion = bottomTextFactory(externalAddon.checksum, 325.0, 100.0)
 
         anchorPane.children.addAll(bTextVersion, bTextLastCheck, bTextNewVersion)
     }
@@ -188,8 +227,8 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         textAddonName = textTopFactory(externalAddon.name, 40.0, 200.0)
         textAddonName.id = "textAddonName"
         textAddonName.textAlignment = TextAlignment.LEFT
-        textNewestVersion = textTopFactory("Newest Version", 325.0, 100.0)
-        textLastCheck = textTopFactory("Last Check", 425.0, 100.0)
+        textNewestVersion = textTopFactory("CRC32", 325.0, 100.0)
+        textLastCheck = textTopFactory("EID", 425.0, 100.0)
         textEnabled = textTopFactory("Enabled", 525.0, 50.0)
 
         anchorPane.children.addAll(textAddonName, textNewestVersion, textLastCheck, textEnabled)
