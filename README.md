@@ -1,6 +1,6 @@
 # PoE Addon Launcher 2 (PAL2)
 
-![https://www.patreon.com/Rizlim](https://i.imgur.com/ERxHxYo.png, "Patreon") ![https://www.twitch.tv/rizlim/](https://i.imgur.com/CkvsZAL.png, "Twitch") ![https://twitter.com/RizlimWasTaken](https://i.imgur.com/2utihTe.png, "Twitter") ![http://youtube.com/pastillage](https://i.imgur.com/9NOcmc0.png, "Youtube")
+[![](https://i.imgur.com/ERxHxYo.png, "Patreon")](https://www.patreon.com/Rizlim) [![](https://i.imgur.com/CkvsZAL.png, "Twitch")](https://www.twitch.tv/rizlim/) [![](https://i.imgur.com/2utihTe.png, "Twitter")](https://twitter.com/RizlimWasTaken) [![](https://i.imgur.com/9NOcmc0.png, "Youtube")](http://youtube.com/pastillage)
 
 ![](https://i.imgur.com/QvZYFkM.png "")
 
