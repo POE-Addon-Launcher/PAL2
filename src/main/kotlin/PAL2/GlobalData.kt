@@ -43,6 +43,7 @@ class GlobalData
         var temp_down_folder = File("${pal_folder.path}${File.separator}temp_downloads")
         var launchList = ArrayList<File>()
         var steam_poe = false
+        var launch_externals = true
 
         fun addToListOfAddons(arr: Array<PAL_AddonFullData>)
         {

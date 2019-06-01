@@ -663,9 +663,9 @@ class CoreController : Initializable
         if (event.button == MouseButton.SECONDARY)
         {
             GlobalData.launch_addons = true
+            GlobalData.launch_externals = true
         }
         PAL2.SystemHandling.launchPoE()
-
     }
 
     @FXML

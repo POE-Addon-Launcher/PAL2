@@ -103,6 +103,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
         when (afd.aid)
         {
             4 -> currencyCopHandler(downloadedFile)
+            5 -> poeTradesCompanion(downloadedFile)
             8 -> xenonTradeHandler(downloadedFile)
             10 -> exilenceHandler(downloadedFile)
             11 -> poeCustomSoundTrack(downloadedFile)
@@ -125,6 +126,27 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
 
         addInstalledAddon(afd, File(exe.parent))
         updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createEXELaunchCommand(exe.path), afd.aid)
+    }
+
+    private fun poeTradesCompanion(downloadedFile: File)
+    {
+        val destination = File("${GlobalData.addonFolder}${File.separator}${afd.name}${File.separator}")
+        unzip(downloadedFile, destination)
+
+        addInstalledAddon(afd, destination)
+
+        val content = destination.listFiles()
+        for (f in content)
+        {
+               if (content.size == 1)
+               {
+                   findUsable(f.listFiles())
+                   if (possibleAHKs.size == 1)
+                   {
+                       updateLaunchCommandInstalledAddon(InstallHandlerHelpers.createAHKLaunchCommand(possibleAHKs[0].path), afd.aid)
+                   }
+               }
+        }
     }
 
     // TODO: TaskKill before updating!
@@ -305,6 +327,7 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
             "Update.exe" -> true
             "_TradeMacroMain.ahk" -> true
             "Gdip_All.ahk" -> true
+            "FileInstall_Cmds.ahk" -> true
             else -> false
         }
     }

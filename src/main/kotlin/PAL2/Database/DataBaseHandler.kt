@@ -260,6 +260,33 @@ fun getAHKScripts()
     connection.close()
 }
 
+fun getExternalsOnLaunchCommands(): Array<String>?
+{
+    val count = countExternalAddon()
+
+    if (count == 0)
+        return null
+
+    val connection = connectToDB()
+    val sql = "SELECT count(*) from ExternalAddon where run_on_launch = 1;"
+    val res = connection.createStatement().executeQuery(sql)
+    val c = res.getInt(1)
+    if (c > 0)
+    {
+        val arr = ArrayList<String>()
+        val sql2 = "SELECT launch_command from ExternalAddon where run_on_launch = 1;"
+        val rs = connection.createStatement().executeQuery(sql2)
+        while (rs.next())
+        {
+            arr.add(rs.getString(1))
+        }
+        connection.close()
+        return arr.toTypedArray()
+    }
+    connection.close()
+    return null
+}
+
 fun getRunOnLaunchCommands(): Array<String>?
 {
     val connection = connectToDB()

@@ -43,7 +43,7 @@ fun checkForUseableDownloads(download_urls: Array<String>, aid: Int): Array<Stri
     when (aid)
     {
         2 -> return usableDownloadsWithExtension(download_urls, "zip")
-        5 -> return usableDownloadsWithExtension(download_urls, "exe")
+        5 -> return usableDownloadsWithExtension(download_urls, "zip")
         8 -> return usableDownloadsWithExtension(download_urls, "exe")
         10 -> return usableDownloadsWithExtension(download_urls, "exe")
         11 -> return usableDownloadsWithExtension(download_urls, "exe")

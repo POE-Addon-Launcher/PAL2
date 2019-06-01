@@ -1,8 +1,6 @@
 package PAL2.GUI
 
 import PAL2.Database.*
-import PAL2.SystemHandling.launchAddon
-import PAL2.SystemHandling.updateAddon
 import PAL_DataClasses.PAL_External_Addon
 import javafx.application.Platform
 import javafx.event.EventHandler
@@ -19,8 +17,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import java.io.File
-import java.lang.StringBuilder
-import kotlin.math.max
 
 /**
  *
@@ -86,7 +82,6 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
 
     fun anchorListner()
     {
-        // TODO: Launch on "Launch Path of Exile"
         // TODO: Update Checking
         // TODO: Icon URL
         // TODO: Lutbot = External

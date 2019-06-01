@@ -1,9 +1,6 @@
 package PAL2.SystemHandling
 
-import PAL2.Database.getInstallDir
-import PAL2.Database.getLaunchCommand
-import PAL2.Database.getRunAddonOnLaunch
-import PAL2.Database.getRunOnLaunchCommands
+import PAL2.Database.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
@@ -166,13 +163,14 @@ fun launchAddons()
                 }
             }
         }
-        launchAHKScripts()
         GlobalData.launch_addons = false
     }
 }
 
+@Deprecated("Uses different method to launch AHKs now.")
 fun launchAHKScripts()
 {
+    // TODO: Convert current AHKs users have to externals.
     var arr = GlobalData.ahk_scripts
     for (ahk in arr)
     {
@@ -215,8 +213,17 @@ fun launchPoE()
 {
     if (GlobalData.steam_poe)
     {
-        launchAddons()
-        runSteamPoE()
+        GlobalScope.launch {
+            GlobalScope.launch {
+                launchAddons()
+            }
+            GlobalScope.launch {
+                launchExternals()
+            }
+            GlobalScope.launch {
+                runSteamPoE()
+            }
+        }
         return
     }
 
@@ -226,8 +233,17 @@ fun launchPoE()
     }
     else if (GlobalData.poeLocations.size == 1)
     {
-        launchAddons()
-        launch_poe(GlobalData.poeLocations[0])
+        GlobalScope.launch {
+            GlobalScope.launch {
+                launchAddons()
+            }
+            GlobalScope.launch {
+                launchExternals()
+            }
+            GlobalScope.launch {
+                launch_poe(GlobalData.poeLocations[0])
+            }
+        }
     }
     else
     {
@@ -236,9 +252,36 @@ fun launchPoE()
         {
             if (f.exists())
             {
-                launchAddons()
-                launch_poe(f.path)
+                GlobalScope.launch {
+                    GlobalScope.launch {
+                        launchAddons()
+                    }
+                    GlobalScope.launch {
+                        launchExternals()
+                    }
+                    GlobalScope.launch {
+                        launch_poe(f.path)
+                    }
+                }
             }
         }
     }
+}
+
+fun launchExternals()
+{
+    if (!GlobalData.launch_externals)
+        return
+
+    val arr = getExternalsOnLaunchCommands() ?: return
+
+    if (arr.isEmpty())
+        return
+
+    for (str in arr)
+    {
+        GlobalScope.launch { Runtime.getRuntime().exec(str) }
+    }
+
+    GlobalData.launch_externals = false
 }
