@@ -130,7 +130,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Text>
-                              <Rectangle fx:id="rectDrag" onMouseClicked="#AddExternalAddonClick" arcHeight="5.0" arcWidth="5.0" fill="#ffffff03" height="35.0" layoutX="2.0" layoutY="2.0" onDragDetected="#handleDragDetect" onDragDropped="#handleDragDrop" onDragOver="#handleDragOver" onMouseEntered="#changeRectColorOnMouseEnter" onMouseExited="#changeRectColorOnExit" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" width="595.0" />
+                              <Rectangle fx:id="rectDrag" arcHeight="5.0" arcWidth="5.0" fill="#ffffff03" height="35.0" layoutX="2.0" layoutY="2.0" onDragDetected="#handleDragDetect" onDragDropped="#handleDragDrop" onDragOver="#handleDragOver" onMouseClicked="#AddExternalAddonClick" onMouseEntered="#changeRectColorOnMouseEnter" onMouseExited="#changeRectColorOnExit" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" width="595.0" />
                               <AnchorPane fx:id="SettingsExternalAnchor" layoutY="40.0" prefHeight="365.0" prefWidth="600.0" style="-fx-background-color: #1b1b1b;" visible="false">
                                  <children>
                                     <Text fill="WHITE" layoutX="8.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="External Addon Settings">
@@ -182,7 +182,7 @@
                                     </Text>
                                     <Button fx:id="bTestRun" layoutX="261.0" layoutY="266.0" mnemonicParsing="false" onAction="#testRunExternal" text="Test Run" />
                                     <Button fx:id="bSave" layoutX="545.0" layoutY="326.0" mnemonicParsing="false" onAction="#saveExternal" text="Save" />
-                                    <ImageView fx:id="externalAddonCancelIcon" onMouseClicked="#onClickSettingsExternalImg" onMouseEntered="#onEnterSettingsExternalButton" onMouseExited="#onExitSettingsExternalButton" fitHeight="30.0" fitWidth="35.0" layoutX="565.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="externalAddonCancelIcon" fitHeight="30.0" fitWidth="35.0" layoutX="565.0" onMouseClicked="#onClickSettingsExternalImg" onMouseEntered="#onEnterSettingsExternalButton" onMouseExited="#onExitSettingsExternalButton" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@icons/cancel0.png" />
                                        </image>
@@ -419,7 +419,7 @@
       </AnchorPane>
       <AnchorPane fx:id="anchorSettings" layoutY="30.0" prefHeight="470.0" prefWidth="600.0" style="-fx-background-color: #1b1b1b;" visible="false">
          <children>
-            <AnchorPane fx:id="sAbout" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
+            <AnchorPane fx:id="sAbout" layoutX="150.0" prefHeight="470.0" prefWidth="450.0">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="308.0" onMouseClicked="#reddit" pickOnBounds="true" preserveRatio="true">
                      <image>
