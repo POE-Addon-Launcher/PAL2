@@ -9,8 +9,8 @@ class GlobalData
 {
     companion object
     {
-        var version = "1.0.9"
-        var debugging = true
+        var version = "1.0.10"
+        var debugging = false
         var install_dir = ""
         var github_token = ""
         var list_of_addons = ArrayList<PAL_AddonFullData>()
