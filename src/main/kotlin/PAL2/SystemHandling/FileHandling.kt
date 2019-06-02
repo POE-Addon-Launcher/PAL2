@@ -1,9 +1,9 @@
 package SystemHandling
 
+import GlobalData
 import mu.KotlinLogging
 import net.lingala.zip4j.core.ZipFile
 import java.io.File
-import java.net.URL
 
 private val logger = KotlinLogging.logger {}
 

@@ -1,6 +1,7 @@
 package PAL2.SystemHandling
 
 import GUI.DownloadsAnchor
+import GlobalData
 import SystemHandling.deleteFile
 import javafx.scene.image.Image
 import kotlinx.coroutines.GlobalScope

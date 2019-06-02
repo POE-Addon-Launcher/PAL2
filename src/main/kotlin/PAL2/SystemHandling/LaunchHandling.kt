@@ -1,13 +1,16 @@
 package PAL2.SystemHandling
 
-import PAL2.Database.*
+import GlobalData
+import PAL2.Database.getExternalsOnLaunchCommands
+import PAL2.Database.getInstallDir
+import PAL2.Database.getLaunchCommand
+import PAL2.Database.getRunOnLaunchCommands
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import java.awt.Desktop.getDesktop
 import java.io.File
 import java.io.IOException
-import java.lang.StringBuilder
 import java.net.URI
 
 

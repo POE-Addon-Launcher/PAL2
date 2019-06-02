@@ -1,5 +1,6 @@
 package PAL2.SystemHandling
 
+import GlobalData
 import PAL2.Database.addInstalledAddon
 import PAL2.Database.updateLaunchCommandInstalledAddon
 import PAL2.GUI.CoreApplication
@@ -12,7 +13,6 @@ import mu.KotlinLogging
 import net.lingala.zip4j.core.ZipFile
 import org.apache.commons.io.FileUtils
 import java.io.File
-import java.lang.StringBuilder
 import java.time.LocalDate
 import java.util.*
 

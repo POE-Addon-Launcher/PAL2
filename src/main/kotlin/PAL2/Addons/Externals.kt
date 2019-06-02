@@ -1,23 +1,20 @@
 package PAL2.Addons
 
-import PAL2.Database.*
+import GlobalData
+import PAL2.Database.countAHKs
+import PAL2.Database.countExternalAddon
+import PAL2.Database.getAHKScriptsArray
+import PAL2.Database.nukeAHK
 import PAL2.GUI.CoreApplication
-import PAL2.GUI.LightningEffects
 import PAL2.SystemHandling.FileDownloader
-import PAL2.SystemHandling.InstallHandler
 import PAL2.SystemHandling.InstallHandlerHelpers
 import PAL_DataClasses.PAL_External_Addon
 import SystemHandling.deleteFile
-import javafx.application.Platform
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.security.MessageDigest
 import java.util.zip.CRC32
-import javax.xml.bind.DatatypeConverter
 
 /**
  *

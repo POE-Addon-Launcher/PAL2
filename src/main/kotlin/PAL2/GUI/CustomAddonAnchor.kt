@@ -1,7 +1,10 @@
 package PAL2.GUI
 
+import GlobalData
 import PAL2.Addons.Externals
-import PAL2.Database.*
+import PAL2.Database.hideExternalAddon
+import PAL2.Database.updateExternalAddon
+import PAL2.Database.updateRunOnLaunchExternal
 import PAL2.SystemHandling.FileDownloader
 import PAL2.SystemHandling.taskKill
 import PAL_DataClasses.PAL_External_Addon
@@ -11,7 +14,6 @@ import javafx.event.EventHandler
 import javafx.scene.control.CheckBox
 import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
-import javafx.scene.effect.Light
 import javafx.scene.effect.Lighting
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView

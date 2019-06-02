@@ -1,5 +1,6 @@
 package PAL2.SystemHandling
 
+import GlobalData
 import SystemHandling.checkForUseableDownloads
 import javafx.scene.image.Image
 import kotlinx.coroutines.GlobalScope

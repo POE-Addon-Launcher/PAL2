@@ -1,12 +1,9 @@
 package PAL2.GUI
 
+import GlobalData
 import PAL2.Addons.Externals
 import PAL_DataClasses.PAL_AddonFullData
-import PAL2.SystemHandling.FileDownloader
-import PAL2.SystemHandling.launchAddon
-import PAL_DataClasses.PAL_External_Addon
 import SystemHandling.checkForUseableDownloads
-import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -16,11 +13,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import java.io.File
-import java.net.URL
 
 /**
  *

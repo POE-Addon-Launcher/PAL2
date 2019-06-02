@@ -2,6 +2,7 @@ package PAL2.GUI
 
 import GUI.DownloadsAnchor
 import GUI.PopUp.Updated_HTML_Popup
+import GlobalData
 import PAL2.Addons.Externals
 import PAL2.Database.*
 import PAL2.GUI.Loader.Loader
@@ -34,7 +35,9 @@ import javafx.scene.text.Text
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
 import java.awt.Desktop
@@ -45,7 +48,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.LocalDate
 import java.util.*
-import java.util.logging.FileHandler
 import java.util.regex.Pattern
 
 

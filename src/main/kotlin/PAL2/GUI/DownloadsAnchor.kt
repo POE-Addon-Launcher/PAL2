@@ -1,7 +1,6 @@
 package GUI
 
 import PAL2.GUI.CoreApplication
-import PAL_DataClasses.PAL_AddonFullData
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.fxml.FXML

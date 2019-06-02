@@ -1,6 +1,6 @@
 package PAL2.Database
 
-import Github.connect
+import GlobalData
 import PAL2.GUI.Configurator.Configurator
 import PAL2.GUI.CoreApplication
 import PAL2.GUI.InstalledAnchor
@@ -12,7 +12,6 @@ import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDate
-import kotlin.math.log
 
 private val logger = KotlinLogging.logger {}
 

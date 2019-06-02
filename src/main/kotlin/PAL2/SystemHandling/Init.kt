@@ -1,6 +1,7 @@
 package SystemHandling
 
 import Github.getAddonsFromGHRepo
+import GlobalData
 import PAL2.Database.*
 import PAL2.GUI.Configurator.ConfiguratorApplication
 import PAL2.GUI.CoreApplication

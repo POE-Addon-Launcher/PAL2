@@ -1,12 +1,12 @@
 package Github
 
+import GlobalData
 import PAL_DataClasses.PAL_AddonFullData
 import PAL_DataClasses.initObjectMapper
 import mu.KotlinLogging
 import org.kohsuke.github.GHRelease
 import org.kohsuke.github.GitHub
 import java.io.BufferedInputStream
-import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 

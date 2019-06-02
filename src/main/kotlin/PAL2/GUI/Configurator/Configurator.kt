@@ -1,6 +1,7 @@
 package PAL2.GUI.Configurator
 
 import Data.PALsettings
+import GlobalData
 import PAL2.Database.insertConfiguratorData
 import PAL_DataClasses.initObjectMapper
 import SystemHandling.configurating
@@ -8,12 +9,9 @@ import SystemHandling.verifyFolder
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.event.ActionEvent
-import javafx.fxml.Initializable
-import javafx.stage.Stage
-import java.net.URL
-import java.util.*
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
+import javafx.fxml.Initializable
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -21,6 +19,7 @@ import javafx.scene.image.Image
 import javafx.scene.layout.AnchorPane
 import javafx.scene.text.Text
 import javafx.stage.DirectoryChooser
+import javafx.stage.Stage
 import javafx.stage.StageStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -29,8 +28,9 @@ import mu.KotlinLogging
 import org.kohsuke.github.GitHub
 import java.awt.Desktop
 import java.io.File
-import java.lang.Exception
 import java.net.URI
+import java.net.URL
+import java.util.*
 import kotlin.collections.HashSet
 
 private val logger = KotlinLogging.logger {}

@@ -1,5 +1,6 @@
 package PAL2.GUI
 
+import GlobalData
 import PAL2.Database.getRunAddonOnLaunch
 import PAL2.Database.updateRunAddonWhenLaunching
 import PAL2.SystemHandling.launchAddon
