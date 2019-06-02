@@ -1,10 +1,18 @@
 package PAL2.GUI
 
+import PAL2.Addons.Externals
 import PAL2.Database.*
+import PAL2.SystemHandling.FileDownloader
+import PAL2.SystemHandling.taskKill
 import PAL_DataClasses.PAL_External_Addon
+import SystemHandling.deleteFile
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.control.CheckBox
+import javafx.scene.control.ContextMenu
+import javafx.scene.control.MenuItem
+import javafx.scene.effect.Light
+import javafx.scene.effect.Lighting
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseButton
@@ -16,7 +24,11 @@ import javafx.scene.text.TextAlignment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
+import java.io.BufferedInputStream
 import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
+import java.nio.file.Files
 
 /**
  *
@@ -44,6 +56,13 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
     var rectButton = Rectangle(75.0, 25.0)
     var textButton = Text()
 
+    // Context Menu
+    val cUpdate = MenuItem("Check for update")
+    val update = MenuItem("Update")
+    val settings = MenuItem("Settings")
+    val remove = MenuItem("Remove")
+    val editMenu = ContextMenu(cUpdate, update, settings, remove)
+
     init
     {
         anchorPane.id = externalAddon.eid.toString()
@@ -52,8 +71,81 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         initBottomText()
         initButton()
         initCheckBox()
+        initEditMenu()
 
         setListners()
+        updateChecker()
+    }
+
+    private fun initEditMenu()
+    {
+        editMenu.onHidden = EventHandler{GlobalData.contextMenuOpen = false}
+        cUpdate.onAction = EventHandler{ GlobalScope.launch { updateChecker() } }
+        settings.onAction = EventHandler { CoreApplication.controller.showSettingsOfExternal(externalAddon) }
+        update.onAction = EventHandler { updateExternal() }
+        remove.onAction = EventHandler {
+            val aid = Externals.isMajorAddon(externalAddon.webSource)
+            if (aid != 0)
+                CoreApplication.controller.setDownloadableAddon(aid)
+            hideExternalAddon(externalAddon.eid)
+            CoreApplication.controller.removeExternalSelected()
+        }
+    }
+
+    private fun updateExternal()
+    {
+        // TaskKill
+        val ext = File(externalAddon.path).extension
+
+        when (ext)
+        {
+            "ahk" -> taskKill("autohotkey.exe").waitFor()
+            "jar" -> taskKill("java").waitFor()
+            "exe" -> taskKill(File(externalAddon.path).name).waitFor()
+        }
+
+
+        GlobalScope.launch {
+            CoreApplication.controller.showDownloadPopup(File(externalAddon.webSource).name)
+            val location = FileDownloader().downloadFile(URL(externalAddon.webSource), GlobalData.temp_down_folder, 1024, GlobalData.noIcon)
+            val dest = File(externalAddon.path)
+            deleteFile(dest)
+            Files.copy(location.toPath(), dest.toPath())
+
+            // Set new CRC32
+            GlobalScope.launch {
+                val crc32 = Externals.calcCRC32(dest)
+                externalAddon.checksum = crc32
+                bTextNewVersion.text = crc32
+                updateExternalAddon(externalAddon)
+            }
+
+
+            // Set Icon to green
+            Platform.runLater { displayImage.effect = LightningEffects.noUpdateLighting() }
+        }
+    }
+
+    private fun updateChecker()
+    {
+        if (externalAddon.webSource.isEmpty())
+            return
+
+        Platform.runLater { displayImage.effect = Lighting() }
+
+        val httpConnection = URL(externalAddon.webSource).openConnection() as HttpURLConnection
+        httpConnection.addRequestProperty("User-Agent", "Mozilla/4.0")
+        val input = BufferedInputStream(httpConnection.inputStream)
+        val crc32 = Externals.calcCRC32(input.readBytes())
+
+        if (crc32 == externalAddon.checksum)
+        {
+            Platform.runLater { displayImage.effect = LightningEffects.noUpdateLighting() }
+        }
+        else
+        {
+            Platform.runLater { displayImage.effect = LightningEffects.updateAvailLighting() }
+        }
     }
 
     private fun initCheckBox()
@@ -80,12 +172,14 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         }
     }
 
+
     fun anchorListner()
     {
-        // TODO: Update Checking
-        // TODO: Icon URL
+        // TODO: Update
+        // TODO: Create Rollbock Update Option
         // TODO: Lutbot = External
-        // TODO: POE-Trades-Companion = External
+        // TODO: Synthesised = external
+
         // TODO: Upon launch grab any AHKs users had saved and add them to to Externals.
 
         anchorPane.onMouseClicked = EventHandler()
@@ -101,15 +195,12 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
                 }
             }
         }
-        anchorPane.onMouseClicked = EventHandler()
+        anchorPane.onContextMenuRequested = EventHandler()
         {
-            if (it.button == MouseButton.SECONDARY)
+            if (!GlobalData.contextMenuOpen)
             {
-                if (it.clickCount == 2)
-                {
-                    hideExternalAddon(externalAddon.eid)
-                    CoreApplication.controller.removeExternalSelected()
-                }
+                GlobalData.contextMenuOpen = true
+                editMenu.show(anchorPane, it.screenX, it.screenY)
             }
         }
     }

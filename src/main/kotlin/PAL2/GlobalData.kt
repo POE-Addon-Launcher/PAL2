@@ -1,4 +1,5 @@
 import PAL_DataClasses.PAL_AddonFullData
+import javafx.scene.image.Image
 import java.io.File
 
 /**
@@ -24,10 +25,12 @@ class GlobalData
         var primaryPoEFile: File? = null
         var poeLocations = ArrayList<String>()
         var logFile = ""
+        val noIcon = Image(GlobalData::class.java.getResource("/icons/NoIcon.png").openStream())
 
         var loot_filter_path = ""
         var show_update_note = false
         var launch_addons = true
+        var contextMenuOpen = false
 
         /**
          * DB Data

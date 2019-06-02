@@ -51,6 +51,15 @@ fun checkForUseableDownloads(download_urls: Array<String>, aid: Int): Array<Stri
     }
 }
 
+fun removeTempDownloads()
+{
+    if (GlobalData.temp_down_folder.exists() && GlobalData.temp_down_folder.isDirectory)
+    {
+        deleteFile(GlobalData.temp_down_folder)
+        GlobalData.temp_down_folder.mkdir()
+    }
+}
+
 fun usableDownloadsWithExtension(download_urls: Array<String>, extension_format: String): Array<String>
 {
     val arr = ArrayList<String>()

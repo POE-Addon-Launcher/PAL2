@@ -582,12 +582,15 @@
                      </font>
                   </CheckBox>
                   <TextField fx:id="textFieldGitHubToken" layoutX="14.0" layoutY="200.0" prefHeight="25.0" prefWidth="205.0" />
-                  <Text fill="WHITE" layoutX="14.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GitHub OAuth Token" />
+                  <Text fill="WHITE" layoutX="14.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GitHub OAuth Token">
+                     <font>
+                        <Font size="16.0" />
+                     </font></Text>
                   <Hyperlink fx:id="howDoIGetAGithubToken" layoutX="242.0" layoutY="200.0" prefHeight="23.0" prefWidth="185.0" text="How do I get a github API token?" textAlignment="CENTER" />
                   <ComboBox fx:id="sComboPoE" disable="true" layoutX="260.0" layoutY="53.0" prefHeight="25.0" prefWidth="185.0" />
                   <Text fill="WHITE" layoutX="264.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this Path of Exile">
                      <font>
-                        <Font name="System Italic" size="12.0" />
+                        <Font name="System Italic" size="16.0" />
                      </font>
                   </Text>
                   <Text fill="WHITE" layoutX="227.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR">

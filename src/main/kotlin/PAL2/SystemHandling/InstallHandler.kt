@@ -179,10 +179,6 @@ class InstallHandler(val afd: PAL_AddonFullData, val downloadedFile: File)
                     }
                 }
             }
-            else
-            {
-                addInstalledAddon(afd, GlobalData.addonFolder)
-            }
         }
     }
 

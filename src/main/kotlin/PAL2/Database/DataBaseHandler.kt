@@ -24,6 +24,13 @@ fun connectToDB(): Connection
     return DriverManager.getConnection("jdbc:sqlite:${GlobalData.db_file.path}")
 }
 
+fun nukeAHK()
+{
+    val connection = connectToDB()
+    connection.createStatement().execute("DELETE from AHK_Scripts")
+    connection.close()
+}
+
 // Reads GlobalData to sync
 fun syncGlobalWithDB()
 {
@@ -137,6 +144,7 @@ fun getRunAddonOnLaunch(aid: Int): Boolean
     connection.close()
     return result
 }
+
 
 fun removeInstalledAddon(aid: Int)
 {
@@ -258,6 +266,32 @@ fun getAHKScripts()
     }
 
     connection.close()
+}
+
+data class AHK(var location: String, var runOnLaunch: Boolean)
+
+fun getAHKScriptsArray(): Array<AHK>
+{
+    val arr = ArrayList<AHK>()
+    val connection = connectToDB()
+    val statement = connection.createStatement()
+    var rs = statement.executeQuery("SELECT count(*) from AHK_Scripts")
+    val c = rs.getInt(1)
+    if (c != 0)
+    {
+        rs = statement.executeQuery("SELECT location, run_on_launch from AHK_Scripts")
+        while (rs.next())
+        {
+            arr.add(AHK(rs.getString(1), rs.getBoolean(2)))
+        }
+    }
+    else
+    {
+        logger.debug { "No AHK Scripts stored." }
+    }
+
+    connection.close()
+    return arr.toTypedArray()
 }
 
 fun getExternalsOnLaunchCommands(): Array<String>?
@@ -434,13 +468,21 @@ fun countExternalAddon(): Int
     val count = rs.getInt(1)
     connection.close()
     return count
+}
 
+fun countAHKs(): Int
+{
+    val connection = connectToDB()
+    val rs = connection.createStatement().executeQuery("SELECT COUNT(*) FROM AHK_Scripts")
+    val count = rs.getInt(1)
+    connection.close()
+    return count
 }
 
 fun insertExternalAddonIntoDB(ea: PAL_External_Addon)
 {
     val connection = connectToDB()
-    val sql = "INSERT into ExternalAddon values (${ea.eid}, \'${ea.name}\', \'${ea.path}\', \'${ea.checksum}\', \'${ea.webSource}\', \'${ea.iconUrl}\', \'${ea.launchCMD}\', false);"
+    val sql = "INSERT into ExternalAddon values (${ea.eid}, \'${ea.name}\', \'${ea.path}\', \'${ea.checksum}\', \'${ea.webSource}\', \'${ea.iconUrl}\', \'${ea.launchCMD}\', ${ea.runOnLaunch});"
     println(sql)
     connection.createStatement().execute(sql)
     connection.close()
@@ -480,6 +522,30 @@ fun retreiveExternalsFromDB(): ArrayList<PAL_External_Addon>?
     return arr
 }
 
+/**
+ * Retreives download source from DB, can be an empty string.
+ */
+fun retreiveWebSource(eid: Int): String?
+{
+    val c = countExternalAddon()
+
+    if (c == 0)
+        return null
+
+    val connection = connectToDB()
+
+    var rs = connection.createStatement().executeQuery("SELECT count(*) from ExternalAddon where eid = $eid;")
+    val count = rs.getInt(1)
+
+    if (count != 1)
+        return null
+
+    rs = connection.createStatement().executeQuery("SELECT website_source from ExternalAddon where eid = $eid;")
+    val str = rs.getString(1)
+    connection.close()
+    return if (str != "") str else null
+}
+
 fun hideExternalAddon(eid: Int)
 {
     val c = countExternalAddon()
@@ -490,6 +556,7 @@ fun hideExternalAddon(eid: Int)
     val connection = connectToDB()
     connection.createStatement().executeUpdate("UPDATE ExternalAddon set name = \'3c484944453e\' WHERE eid = $eid;")
     connection.close()
+    updateRunOnLaunchExternal(eid, false)
 }
 
 fun updateRunOnLaunchExternal(eid: Int, run_on_launch: Boolean)

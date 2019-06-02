@@ -6,12 +6,14 @@ import PAL2.Addons.Externals
 import PAL2.Database.*
 import PAL2.GUI.Loader.Loader
 import PAL2.SystemHandling.FileDownloader
+import PAL2.SystemHandling.closeAllAddons
 import PAL2.SystemHandling.removeAddon
 import PAL2.SystemHandling.updateAddon
 import PAL_DataClasses.PAL_AddonTableRow
 import PAL_DataClasses.PAL_External_Addon
 import SystemHandling.checkForUseableDownloads
 import SystemHandling.init
+import SystemHandling.removeTempDownloads
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
@@ -43,6 +45,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.LocalDate
 import java.util.*
+import java.util.logging.FileHandler
 import java.util.regex.Pattern
 
 
@@ -66,8 +69,13 @@ class CoreController : Initializable
             {
                 PAL2.SystemHandling.launchPoE()
             }
+
+            removeTempDownloads()
+
             GlobalScope.launch {
+                Externals.checkForUpdatesAndUpdateExternals()
                 populateExternalsList()
+                Externals.syncAHKsWithExternals()
             }
         }
         //addExternalAnchor(ExternalAnchor(-1, null, "Test", "ABD123", "ABD123", "no", "hurr"))
@@ -80,6 +88,11 @@ class CoreController : Initializable
 
         for (arr in list)
         {
+            val aid = Externals.isMajorAddon(arr.webSource)
+
+            if (aid != 0)
+                setInstalled(aid)
+
             addExternalAnchor(ExternalAnchor(arr))
         }
     }
@@ -151,9 +164,8 @@ class CoreController : Initializable
             {
                 if (anchor.id == id.toString())
                 {
-                    val rect = anchor.lookup("#buttonRect") as Rectangle
                     val text = anchor.lookup("#buttonText") as Text
-
+                    val rect = anchor.lookup("#buttonRect") as Rectangle
                     rect.isVisible = false
                     text.text = arg
                 }
@@ -747,6 +759,9 @@ class CoreController : Initializable
             if (sel != null)
             {
                 val aid = sel.id.toInt()
+
+                // TODO: Taskkill
+
                 removeAddon(aid)
                 setDownloadableAddon(aid)
                 Platform.runLater {
@@ -774,6 +789,7 @@ class CoreController : Initializable
     @FXML
     fun topbar_closeWIndow_onMouseClicked(event: MouseEvent)
     {
+        closeAllAddons()
         System.exit(0)
     }
 
@@ -1070,6 +1086,21 @@ class CoreController : Initializable
         }
     }
 
+    fun showDownloadPopup(name: String)
+    {
+        showPopup = false
+        Platform.runLater {
+            anchorDownloadpopup.isVisible = true
+
+            addonDescImg.image = GlobalData.noIcon
+            imgViewDownloadPopup.image = GlobalData.noIcon
+
+            textDownloadPopup.text = "Downloading: $name"
+            anchorDownloadpopup.opacity = 1.0
+            timerDeletePopup(5.0)
+        }
+    }
+
     fun startDownload(download_url: String, aid: Int, image: Image?)
     {
         showPopup = false
@@ -1095,7 +1126,7 @@ class CoreController : Initializable
         GlobalScope.launch {
             val fd = FileDownloader()
             //TODO: Change to GlobalData temp folder
-            fd.downloadFile(URL(download_url), GlobalData.temp_down_folder, 1024, addonDescImg.image, aid)
+            fd.downloadFileAndInstall(URL(download_url), GlobalData.temp_down_folder, 1024, addonDescImg.image, aid)
         }
     }
 
@@ -1581,7 +1612,31 @@ class CoreController : Initializable
         Platform.runLater {
             SettingsExternalAnchor.isVisible = false
         }
+    }
 
+    fun saveExternal(external: PAL_External_Addon)
+    {
+        val c = countExternalAddon()
+        external.eid = c + 1
+
+        when
+        {
+            c == 0 ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+            c+1 > external.eid -> updateExternalAddon(external)
+            else ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+        }
+
+        Platform.runLater {
+            SettingsExternalAnchor.isVisible = false
+        }
     }
 
     fun createExternal(): PAL_External_Addon
@@ -1688,6 +1743,7 @@ class CoreController : Initializable
             SettingsExternalAnchor.isVisible = true
             name_textfield.text = ea.name
             path_textfield.text = ea.path
+            websource_textfield.text = ea.webSource
         }
     }
 
