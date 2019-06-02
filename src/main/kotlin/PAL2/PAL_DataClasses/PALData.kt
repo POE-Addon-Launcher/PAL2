@@ -6,14 +6,26 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import javafx.beans.property.SimpleStringProperty
-import java.io.File
-import java.lang.StringBuilder
 import java.time.LocalDate
 import java.util.*
 
 /**
  * PAL Data Classes; mimic database entries.
  */
+data class PAL_External_Addon
+(
+        var eid: Int,
+        var name: String,
+        var checksum: String,
+        var newCheckSum: String,
+        var iconUrl: String?,
+        var lastCheck: String,
+        var webSource: String,
+        var launchCMD: String,
+        var path: String,
+        var runOnLaunch: Boolean
+)
+
 data class PAL_Addon
 (
         var id: Int,

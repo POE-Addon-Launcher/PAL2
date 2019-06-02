@@ -1,9 +1,9 @@
 package SystemHandling
 
+import GlobalData
 import mu.KotlinLogging
 import net.lingala.zip4j.core.ZipFile
 import java.io.File
-import java.net.URL
 
 private val logger = KotlinLogging.logger {}
 
@@ -43,11 +43,20 @@ fun checkForUseableDownloads(download_urls: Array<String>, aid: Int): Array<Stri
     when (aid)
     {
         2 -> return usableDownloadsWithExtension(download_urls, "zip")
-        5 -> return usableDownloadsWithExtension(download_urls, "exe")
+        5 -> return usableDownloadsWithExtension(download_urls, "zip")
         8 -> return usableDownloadsWithExtension(download_urls, "exe")
         10 -> return usableDownloadsWithExtension(download_urls, "exe")
         11 -> return usableDownloadsWithExtension(download_urls, "exe")
         else -> return defaultUsableDownloads(download_urls)
+    }
+}
+
+fun removeTempDownloads()
+{
+    if (GlobalData.temp_down_folder.exists() && GlobalData.temp_down_folder.isDirectory)
+    {
+        deleteFile(GlobalData.temp_down_folder)
+        GlobalData.temp_down_folder.mkdir()
     }
 }
 

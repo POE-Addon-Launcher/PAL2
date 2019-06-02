@@ -2,15 +2,19 @@ package PAL2.GUI
 
 import GUI.DownloadsAnchor
 import GUI.PopUp.Updated_HTML_Popup
+import GlobalData
+import PAL2.Addons.Externals
 import PAL2.Database.*
 import PAL2.GUI.Loader.Loader
 import PAL2.SystemHandling.FileDownloader
-import PAL2.SystemHandling.launchAddons
+import PAL2.SystemHandling.closeAllAddons
 import PAL2.SystemHandling.removeAddon
 import PAL2.SystemHandling.updateAddon
 import PAL_DataClasses.PAL_AddonTableRow
+import PAL_DataClasses.PAL_External_Addon
 import SystemHandling.checkForUseableDownloads
 import SystemHandling.init
+import SystemHandling.removeTempDownloads
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
@@ -20,8 +24,10 @@ import javafx.fxml.Initializable
 import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
+import javafx.scene.input.DragEvent
 import javafx.scene.input.MouseButton
 import javafx.scene.input.MouseEvent
+import javafx.scene.input.TransferMode
 import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
@@ -29,7 +35,10 @@ import javafx.scene.text.Text
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
 import java.awt.Desktop
 import java.io.File
@@ -45,6 +54,8 @@ import java.util.regex.Pattern
 /**
  *
  */
+private val logger = KotlinLogging.logger {}
+
 class CoreController : Initializable
 {
     override fun initialize(location: URL?, resources: ResourceBundle?)
@@ -55,12 +66,37 @@ class CoreController : Initializable
             init()
             setSettings()
             showMOTD()
+            verifyDB()
             if (GlobalData.launchPOEonLaunch)
             {
                 PAL2.SystemHandling.launchPoE()
             }
+
+            removeTempDownloads()
+
+            GlobalScope.launch {
+                Externals.checkForUpdatesAndUpdateExternals()
+                populateExternalsList()
+                Externals.syncAHKsWithExternals()
+            }
         }
+        //addExternalAnchor(ExternalAnchor(-1, null, "Test", "ABD123", "ABD123", "no", "hurr"))
         core_tabpane.tabs.remove(addonDescTab)
+    }
+
+    private fun populateExternalsList()
+    {
+        val list = retreiveExternalsFromDB() ?: return
+
+        for (arr in list)
+        {
+            val aid = Externals.isMajorAddon(arr.webSource)
+
+            if (aid != 0)
+                setInstalled(aid)
+
+            addExternalAnchor(ExternalAnchor(arr))
+        }
     }
 
     private fun showMOTD()
@@ -69,6 +105,11 @@ class CoreController : Initializable
         {
             showUpdates()
         }
+    }
+
+    fun addExternalAnchor(externalAnchor: ExternalAnchor)
+    {
+        Platform.runLater { listViewExternalAddons.items.add(externalAnchor.anchorPane) }
     }
 
     fun addInstalledAnchor(installedAnchor: InstalledAnchor)
@@ -125,9 +166,8 @@ class CoreController : Initializable
             {
                 if (anchor.id == id.toString())
                 {
-                    val rect = anchor.lookup("#buttonRect") as Rectangle
                     val text = anchor.lookup("#buttonText") as Text
-
+                    val rect = anchor.lookup("#buttonRect") as Rectangle
                     rect.isVisible = false
                     text.text = arg
                 }
@@ -235,7 +275,34 @@ class CoreController : Initializable
      * FXML STUFF  *
      ***************/
     @FXML
+    private lateinit var SettingsExternalAnchor: AnchorPane
+
+    @FXML
+    private lateinit var eid_textfield: TextField
+
+    @FXML
+    private lateinit var name_textfield: TextField
+
+    @FXML
+    private lateinit var checksum_textfield: TextField
+
+    @FXML
+    private lateinit var iconurl_textfield: TextField
+
+    @FXML
+    private lateinit var path_textfield: TextField
+
+    @FXML
+    private lateinit var websource_textfield: TextField
+
+    @FXML
+    private lateinit var cmd_textfield: TextField
+
+    @FXML
     private lateinit var listViewInstalledAddons: ListView<AnchorPane>
+
+    @FXML
+    private lateinit var listViewExternalAddons: ListView<AnchorPane>
 
     @FXML
     private lateinit var core_tabpane: TabPane
@@ -610,9 +677,9 @@ class CoreController : Initializable
         if (event.button == MouseButton.SECONDARY)
         {
             GlobalData.launch_addons = true
+            GlobalData.launch_externals = true
         }
         PAL2.SystemHandling.launchPoE()
-
     }
 
     @FXML
@@ -675,6 +742,15 @@ class CoreController : Initializable
         }
     }
 
+    fun removeExternalSelected()
+    {
+        Platform.runLater {
+            val selection = listViewExternalAddons.selectionModel.selectedItem
+            listViewExternalAddons.selectionModel.clearSelection()
+            listViewExternalAddons.items.remove(selection)
+        }
+    }
+
     @FXML
     fun removeClick(event: MouseEvent)
     {
@@ -685,6 +761,9 @@ class CoreController : Initializable
             if (sel != null)
             {
                 val aid = sel.id.toInt()
+
+                // TODO: Taskkill
+
                 removeAddon(aid)
                 setDownloadableAddon(aid)
                 Platform.runLater {
@@ -712,6 +791,7 @@ class CoreController : Initializable
     @FXML
     fun topbar_closeWIndow_onMouseClicked(event: MouseEvent)
     {
+        closeAllAddons()
         System.exit(0)
     }
 
@@ -1008,6 +1088,21 @@ class CoreController : Initializable
         }
     }
 
+    fun showDownloadPopup(name: String)
+    {
+        showPopup = false
+        Platform.runLater {
+            anchorDownloadpopup.isVisible = true
+
+            addonDescImg.image = GlobalData.noIcon
+            imgViewDownloadPopup.image = GlobalData.noIcon
+
+            textDownloadPopup.text = "Downloading: $name"
+            anchorDownloadpopup.opacity = 1.0
+            timerDeletePopup(5.0)
+        }
+    }
+
     fun startDownload(download_url: String, aid: Int, image: Image?)
     {
         showPopup = false
@@ -1033,7 +1128,7 @@ class CoreController : Initializable
         GlobalScope.launch {
             val fd = FileDownloader()
             //TODO: Change to GlobalData temp folder
-            fd.downloadFile(URL(download_url), GlobalData.temp_down_folder, 1024, addonDescImg.image, aid)
+            fd.downloadFileAndInstall(URL(download_url), GlobalData.temp_down_folder, 1024, addonDescImg.image, aid)
         }
     }
 
@@ -1489,6 +1584,209 @@ class CoreController : Initializable
             up.start(Stage())
         }
     }
+
+    fun testRunExternal(actionEvent: ActionEvent)
+    {
+        GlobalScope.launch { Runtime.getRuntime().exec(cmd_textfield.text) }
+    }
+
+    fun saveExternal(actionEvent: ActionEvent)
+    {
+        val external = createExternal()
+
+        val c = countExternalAddon()
+
+        when
+        {
+            c == 0 ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+            c+1 > external.eid -> updateExternalAddon(external)
+            else ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+        }
+
+        Platform.runLater {
+            SettingsExternalAnchor.isVisible = false
+        }
+    }
+
+    fun saveExternal(external: PAL_External_Addon)
+    {
+        val c = countExternalAddon()
+        external.eid = c + 1
+
+        when
+        {
+            c == 0 ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+            c+1 > external.eid -> updateExternalAddon(external)
+            else ->
+            {
+                insertExternalAddonIntoDB(external)
+                addExternalAnchor(ExternalAnchor(external))
+            }
+        }
+
+        Platform.runLater {
+            SettingsExternalAnchor.isVisible = false
+        }
+    }
+
+    fun createExternal(): PAL_External_Addon
+    {
+        return PAL_External_Addon(
+                eid_textfield.text.toInt(),
+                name_textfield.text,
+                checksum_textfield.text,
+                "",
+                iconurl_textfield.text,
+                "Just now",
+                websource_textfield.text,
+                cmd_textfield.text,
+                path_textfield.text, false
+                                 )
+    }
+
+
+    fun changeRectColorOnMouseEnter(mouseEvent: MouseEvent)
+    {
+        Platform.runLater { rectDrag.stroke = Color(1.0, 0.0, 1.0, 1.0) }
+    }
+
+    fun changeRectColorOnExit(mouseEvent: MouseEvent)
+    {
+        Platform.runLater { rectDrag.stroke = Color.WHITE }
+    }
+
+    fun handleDragDetect(event: DragEvent)
+    {
+        val db = rectDrag.startDragAndDrop(*TransferMode.ANY)
+        event.consume()
+    }
+
+    fun handleDragOver(event: DragEvent)
+    {
+        event.acceptTransferModes(*TransferMode.COPY_OR_MOVE)
+    }
+
+    fun handleDragDrop(event: DragEvent)
+    {
+        val db = event.dragboard
+        val file = db.files[0]
+
+        println(file.path)
+
+        if (file.isDirectory)
+            return
+
+        when (file.extension)
+        {
+            "exe" -> showExternalSettings(file)
+            "ahk" -> showExternalSettings(file)
+            "jar" -> showExternalSettings(file)
+            else -> logger.error { "Unsupported Extension! Request Support for it!" }
+        }
+    }
+
+    fun showExternalSettings(file: File)
+    {
+        GlobalScope.launch {
+            GlobalScope.launch {
+                val result = Externals.calcCRC32(file)
+                Platform.runLater { checksum_textfield.text = result }
+            }
+            GlobalScope.launch {
+                val result = Externals.determineCMD(file)
+                Platform.runLater { cmd_textfield.text = result }
+            }
+            GlobalScope.launch {
+                val result = Externals.determineDBID()
+                Platform.runLater { eid_textfield.text = result.toString()}
+            }
+        }
+        Platform.runLater {
+            SettingsExternalAnchor.isVisible = true
+            name_textfield.text = file.nameWithoutExtension
+            path_textfield.text = file.path
+        }
+
+    }
+
+    fun onExitSettingsExternalButton(mouseEvent: MouseEvent)
+    {
+        changeImage(mouseEvent.source as ImageView, "/icons/cancel0.png")
+    }
+
+    fun onEnterSettingsExternalButton(mouseEvent: MouseEvent)
+    {
+        changeImage(mouseEvent.source as ImageView, "/icons/cancel.png")
+    }
+
+    fun onClickSettingsExternalImg()
+    {
+        SettingsExternalAnchor.isVisible = false
+    }
+
+    fun showSettingsOfExternal(ea: PAL_External_Addon)
+    {
+        Platform.runLater {
+            checksum_textfield.text = ea.checksum
+            cmd_textfield.text = ea.launchCMD
+            eid_textfield.text = ea.eid.toString()
+            SettingsExternalAnchor.isVisible = true
+            name_textfield.text = ea.name
+            path_textfield.text = ea.path
+            websource_textfield.text = ea.webSource
+        }
+    }
+
+    fun AddExternalAddonClick(mouseEvent: MouseEvent)
+    {
+        if (mouseEvent.button == MouseButton.PRIMARY)
+        {
+            val file = browseFile("Browse for a file!") ?: return
+            if (file.exists())
+            {
+                if (file.isDirectory)
+                    return
+
+                when (file.extension)
+                {
+                    "exe" -> showExternalSettings(file)
+                    "ahk" -> showExternalSettings(file)
+                    "jar" -> showExternalSettings(file)
+                    else -> logger.error { "Unsupported Extension! Request Support for it!" }
+                }
+            }
+
+        }
+        else if (mouseEvent.button == MouseButton.SECONDARY)
+        {
+            SettingsExternalAnchor.isVisible = !SettingsExternalAnchor.isVisible
+        }
+    }
+
+
+    @FXML
+    private lateinit var external_anchorpane: AnchorPane
+
+    @FXML
+    private lateinit var txtDrag: Text
+
+    @FXML
+    private lateinit var rectDrag: Rectangle
+
+    @FXML
+    private lateinit var anchorDrag: AnchorPane
 
     @FXML
     private lateinit var anchorLog: AnchorPane

@@ -1,5 +1,6 @@
 package PAL2.SystemHandling
 
+import GlobalData
 import SystemHandling.checkForUseableDownloads
 import javafx.scene.image.Image
 import kotlinx.coroutines.GlobalScope
@@ -19,7 +20,7 @@ fun updateAddon(aid: Int, image: Image)
         if (download_urls.size == 1)
         {
             val fd = FileDownloader()
-            fd.downloadFile(URL(download_urls[0]), GlobalData.temp_down_folder, 1024, image, aid)
+            fd.downloadFileAndInstall(URL(download_urls[0]), GlobalData.temp_down_folder, 1024, image, aid)
         }
     }
 }
@@ -29,9 +30,8 @@ fun closeAllAddons()
     taskKill("autohotkey.exe")
     taskKill("Path of Maps Client.exe")
     taskKill("TraderForPoe.exe")
-    //taskKill("javaw.exe")
-    //taskKill("java.exe")
-    taskKill("Path of Building.exe")
+    taskKill("javaw.exe")
+    taskKill("java.exe")
     taskKill("POE-Trades-Companion.exe")
     taskKill("XenonTrade.exe")
     taskKill("LabCompass.exe")
@@ -41,7 +41,12 @@ fun closeAllAddons()
 
 }
 
-fun taskKill(name: String)
+fun taskKill(name: String): Process
 {
-    Runtime.getRuntime().exec("taskkill /IM \"$name\"")
+    if (name == "java")
+    {
+        taskKill("javaw.exe").waitFor()
+        return taskKill("java.exe")
+    }
+    return Runtime.getRuntime().exec("taskkill /IM \"$name\"")
 }

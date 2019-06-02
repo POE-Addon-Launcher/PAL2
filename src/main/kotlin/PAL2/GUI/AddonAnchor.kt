@@ -1,10 +1,9 @@
 package PAL2.GUI
 
+import GlobalData
+import PAL2.Addons.Externals
 import PAL_DataClasses.PAL_AddonFullData
-import PAL2.SystemHandling.FileDownloader
-import PAL2.SystemHandling.launchAddon
 import SystemHandling.checkForUseableDownloads
-import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -14,11 +13,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
-import java.io.File
-import java.net.URL
 
 /**
  *
@@ -182,29 +177,44 @@ class AddonAnchor(var name: String, var version: String, var repo: String, var i
         {
             if(it.button == MouseButton.PRIMARY)
             {
-                val a = GlobalData.getAddonByID(addonID)
-                if (a != null)
+                rectButtonLeft.isVisible = false
+                buttonLeftText.text = "Downloading"
+                if (Externals.isExternal(addonID))
                 {
-                    val download_urls = checkForUseableDownloads(a.download_urls, addonID)
-                    if (download_urls.size == 1)
+                    // TODO: Hide download button
+                    when (addonID)
                     {
-                        CoreApplication.controller.startDownload(download_urls[0], a.aid, icon.image)
+                        17 -> Externals.addSIC()
+                        9 -> Externals.addLutBot()
                     }
-                    else
+                    buttonLeftText.text = "Installed"
+                }
+                else
+                {
+                    val a = GlobalData.getAddonByID(addonID)
+                    if (a != null)
                     {
-                        var desc = "No description has been set, sorry."
-
-                        if (a.description != null)
+                        val download_urls = checkForUseableDownloads(a.download_urls, addonID)
+                        if (download_urls.size == 1)
                         {
-                            if (a.description is String)
+                            CoreApplication.controller.startDownload(download_urls[0], a.aid, icon.image)
+                        }
+                        else
+                        {
+                            var desc = "No description has been set, sorry."
+
+                            if (a.description != null)
                             {
-                                desc = a.description!!
+                                if (a.description is String)
+                                {
+                                    desc = a.description!!
+                                }
+
                             }
 
+                            CoreApplication.controller.setDescInfo(icon.image, name, desc, addonID)
+                            CoreApplication.controller.showDownloadsPage(download_urls)
                         }
-
-                        CoreApplication.controller.setDescInfo(icon.image, name, desc, addonID)
-                        CoreApplication.controller.showDownloadsPage(download_urls)
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package PAL2.SystemHandling
 
 import GUI.DownloadsAnchor
+import GlobalData
 import SystemHandling.deleteFile
 import javafx.scene.image.Image
 import kotlinx.coroutines.GlobalScope
@@ -23,7 +24,62 @@ class FileDownloader
     private lateinit var downloadBar: DownloadsAnchor
     private var blockSize = 128
 
-    fun downloadFile(url: URL, temp_download_dir: File, block: Int, image: Image, aid: Int)
+    fun downloadFile(url: URL, temp_download_dir: File, block: Int, image: Image): File
+    {
+        var store_location = temp_download_dir
+        if (store_location.isDirectory)
+        {
+            val splits = url.file.split("/")
+            store_location = File("${store_location.path}${File.separator}${splits[splits.size-1]}")
+        }
+
+        if (store_location.exists())
+            deleteFile(store_location)
+
+        blockSize = block
+
+        val httpConnection = url.openConnection() as HttpURLConnection
+        httpConnection.addRequestProperty("User-Agent", "Mozilla/4.0")
+        val filesize = httpConnection.contentLength
+        maxSize = filesize
+
+        val input = BufferedInputStream(httpConnection.inputStream)
+        val output = FileOutputStream(store_location)
+
+        val buff = BufferedOutputStream(output, blockSize)
+
+        val data = ByteArray(blockSize)
+        var downloadedFileSize = 0
+        var x: Int
+
+        val splits = url.file.split("/")
+        downloadBar = DownloadsAnchor(splits[splits.size-1])
+        downloadBar.setImg(image)
+        downloadBar.attachToListView()
+        updateProgress(0, maxSize, 0.0)
+        functionCallerOnDelay()
+
+        while (true)
+        {
+            x = input.read(data, 0, blockSize)
+
+            if (x < 0)
+                break
+
+            downloadedFileSize += x
+            currSize = downloadedFileSize
+
+            buff.write(data, 0, x)
+        }
+
+        input.close()
+        buff.close()
+        output.close()
+
+        return store_location
+    }
+
+    fun downloadFileAndInstall(url: URL, temp_download_dir: File, block: Int, image: Image, aid: Int)
     {
         var store_location = temp_download_dir
         if (store_location.isDirectory)

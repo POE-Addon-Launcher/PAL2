@@ -1,13 +1,20 @@
 package PAL2.GUI
 
 import GlobalData
-import PAL2.Database.getRunAddonOnLaunch
-import PAL2.Database.updateRunAddonWhenLaunching
-import PAL2.SystemHandling.launchAddon
-import PAL2.SystemHandling.updateAddon
+import PAL2.Addons.Externals
+import PAL2.Database.hideExternalAddon
+import PAL2.Database.updateExternalAddon
+import PAL2.Database.updateRunOnLaunchExternal
+import PAL2.SystemHandling.FileDownloader
+import PAL2.SystemHandling.taskKill
+import PAL_DataClasses.PAL_External_Addon
+import SystemHandling.deleteFile
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.control.CheckBox
+import javafx.scene.control.ContextMenu
+import javafx.scene.control.MenuItem
+import javafx.scene.effect.Lighting
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.input.MouseButton
@@ -16,14 +23,21 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import javafx.scene.text.TextAlignment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
+import java.io.BufferedInputStream
+import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
+import java.nio.file.Files
 
 /**
  *
  */
 private val logger = KotlinLogging.logger {}
 
-class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String, var version: String, var newestVersion: String, var lastCheck: String, var website: String)
+class ExternalAnchor(val externalAddon: PAL_External_Addon)
 {
     var anchorPane = AnchorPane()
     var displayImage = ImageView()
@@ -44,26 +58,96 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
     var rectButton = Rectangle(75.0, 25.0)
     var textButton = Text()
 
+    // Context Menu
+    val cUpdate = MenuItem("Check for update")
+    val update = MenuItem("Update")
+    val settings = MenuItem("Settings")
+    val remove = MenuItem("Remove")
+    val editMenu = ContextMenu(cUpdate, update, settings, remove)
+
     init
     {
-        anchorPane.id = aid.toString()
+        anchorPane.id = externalAddon.eid.toString()
         initImg()
         initTopText()
         initBottomText()
         initButton()
         initCheckBox()
+        initEditMenu()
 
-        // Check up to date
-        if (version == newestVersion)
+        setListners()
+        updateChecker()
+    }
+
+    private fun initEditMenu()
+    {
+        editMenu.onHidden = EventHandler{GlobalData.contextMenuOpen = false}
+        cUpdate.onAction = EventHandler{ GlobalScope.launch { updateChecker() } }
+        settings.onAction = EventHandler { CoreApplication.controller.showSettingsOfExternal(externalAddon) }
+        update.onAction = EventHandler { updateExternal() }
+        remove.onAction = EventHandler {
+            val aid = Externals.isMajorAddon(externalAddon.webSource)
+            if (aid != 0)
+                CoreApplication.controller.setDownloadableAddon(aid)
+            hideExternalAddon(externalAddon.eid)
+            CoreApplication.controller.removeExternalSelected()
+        }
+    }
+
+    private fun updateExternal()
+    {
+        // TaskKill
+        val ext = File(externalAddon.path).extension
+
+        when (ext)
         {
-            this.isUpToDate()
+            "ahk" -> taskKill("autohotkey.exe").waitFor()
+            "jar" -> taskKill("java").waitFor()
+            "exe" -> taskKill(File(externalAddon.path).name).waitFor()
+        }
+
+
+        GlobalScope.launch {
+            CoreApplication.controller.showDownloadPopup(File(externalAddon.webSource).name)
+            val location = FileDownloader().downloadFile(URL(externalAddon.webSource), GlobalData.temp_down_folder, 1024, GlobalData.noIcon)
+            val dest = File(externalAddon.path)
+            deleteFile(dest)
+            Files.copy(location.toPath(), dest.toPath())
+
+            // Set new CRC32
+            GlobalScope.launch {
+                val crc32 = Externals.calcCRC32(dest)
+                externalAddon.checksum = crc32
+                bTextNewVersion.text = crc32
+                updateExternalAddon(externalAddon)
+            }
+
+
+            // Set Icon to green
+            Platform.runLater { displayImage.effect = LightningEffects.noUpdateLighting() }
+        }
+    }
+
+    private fun updateChecker()
+    {
+        if (externalAddon.webSource.isEmpty())
+            return
+
+        Platform.runLater { displayImage.effect = Lighting() }
+
+        val httpConnection = URL(externalAddon.webSource).openConnection() as HttpURLConnection
+        httpConnection.addRequestProperty("User-Agent", "Mozilla/4.0")
+        val input = BufferedInputStream(httpConnection.inputStream)
+        val crc32 = Externals.calcCRC32(input.readBytes())
+
+        if (crc32 == externalAddon.checksum)
+        {
+            Platform.runLater { displayImage.effect = LightningEffects.noUpdateLighting() }
         }
         else
         {
-            this.canBeUpdated()
+            Platform.runLater { displayImage.effect = LightningEffects.updateAvailLighting() }
         }
-
-        setListners()
     }
 
     private fun initCheckBox()
@@ -72,7 +156,7 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         anchorPane.children.add(checkBox)
         checkBox.layoutX = 542.5
         checkBox.layoutY = 20.0
-        checkBox.isSelected = getRunAddonOnLaunch(aid)
+        checkBox.isSelected = externalAddon.runOnLaunch
     }
 
     private fun setListners()
@@ -86,26 +170,46 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
     {
         checkBox.onMouseClicked = EventHandler()
         {
-            updateRunAddonWhenLaunching(checkBox.isSelected, aid)
+            updateRunOnLaunchExternal(externalAddon.eid, checkBox.isSelected)
         }
     }
 
+
     fun anchorListner()
     {
+        // TODO: Update
+        // TODO: Create Rollbock Update Option
+        // TODO: Lutbot = External
+        // TODO: Synthesised = external
+
+        // TODO: Upon launch grab any AHKs users had saved and add them to to Externals.
+
         anchorPane.onMouseClicked = EventHandler()
         {
             if (it.button == MouseButton.PRIMARY)
             {
                 if (it.clickCount == 2)
                 {
-                    launchAddon(aid)
+                    // TODO: If no launch command show a popup that says that there is no launch command.
+                    GlobalScope.launch {
+                        Runtime.getRuntime().exec(externalAddon.launchCMD)
+                    }
                 }
+            }
+        }
+        anchorPane.onContextMenuRequested = EventHandler()
+        {
+            if (!GlobalData.contextMenuOpen)
+            {
+                GlobalData.contextMenuOpen = true
+                editMenu.show(anchorPane, it.screenX, it.screenY)
             }
         }
     }
 
     fun setDownloadUpdateListner()
     {
+
         rectButton.onMouseEntered = EventHandler()
         {
             rectButton.stroke = Color(1.0, 0.0, 1.0, 1.0)
@@ -116,66 +220,18 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         }
         rectButton.onMouseClicked = EventHandler()
         {
-            // TODO: Start Update Downloading.
             Platform.runLater {
-                rectButton.isVisible = false
-                textButton.text = "Downloading"
-                updateAddon(aid, displayImage.image)
+                CoreApplication.controller.showSettingsOfExternal(externalAddon)
             }
         }
     }
 
-    fun checkUpdateAble()
-    {
-        val most_recent = GlobalData.getAddonByID(aid)?: return
-        if (most_recent.version_text != version)
-        {
-            canBeUpdated()
-        }
-        else
-        {
-            isUpToDate()
-        }
-    }
-
-    fun isUpToDate()
-    {
-        Platform.runLater {
-            rectButton.isVisible = false
-            textButton.text = "Up-to-date"
-            textButton.textAlignment = TextAlignment.CENTER
-            textButton.layoutY = 25.0
-        }
-    }
-
-    fun canBeUpdated()
-    {
-        Platform.runLater {
-            rectButton.isVisible = true
-            textButton.text = "Update"
-            textButton.layoutY = 25.0
-        }
-    }
-    /*
-    fun isGGGAproved()
-    {
-        Platform.runLater {
-            imageViewInfo.image = Image(javaClass.getResource("/icons/gggAprove.png").openStream())
-        }
-    }
-
-    fun isGGGunknown()
-    {
-        Platform.runLater {
-            imageViewInfo.image = Image(javaClass.getResource("/icons/gggAproveQ.png").openStream())
-        }
-    }*/
 
     private fun initButton()
     {
         textButton.id = "textButton"
         rectButton.id = "rectButton"
-        initButton("Update", anchorButton, textButton, rectButton)
+        initButton("Settings", anchorButton, textButton, rectButton)
         anchorPane.children.add(anchorButton)
     }
 
@@ -199,15 +255,41 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         rect.fill = Color(1.0, 1.0, 1.0, 0.0)
     }
 
+    // Drive letter :/ FileName.ext
+    fun shortner(maxChars: Int, string: String): String
+    {
+        if (string.length < maxChars)
+            return string
+
+        val f = File(string)
+        val splits = string.split(File.separator)
+
+        return if (splits[0].length + splits[splits.size-1].length < maxChars - 5)
+        {
+            "${splits[0]}${File.separator}...${File.separator}${splits[splits.size-1]}"
+        }
+        else
+        {
+            when
+            {
+                f.name.length < maxChars -> f.name
+                f.nameWithoutExtension.length < maxChars -> f.nameWithoutExtension
+                else -> ""
+            }
+        }
+
+    }
+
     private fun initBottomText()
     {
-        bTextVersion = bottomTextFactory(version, 40.0, 200.0)
+        // TODO: middle ... for x size
+        bTextVersion = bottomTextFactory(shortner(50, externalAddon.path), 40.0, 200.0)
         bTextVersion.textAlignment = TextAlignment.LEFT
         bTextVersion.id = "bTextVersion"
-        bTextLastCheck = bottomTextFactory(monthToNum(lastCheck), 425.0, 100.0)
+        bTextLastCheck = bottomTextFactory(monthToNum(externalAddon.eid.toString()), 425.0, 100.0)
         bTextLastCheck.id = "bTextLastCheck"
 
-        bTextNewVersion = bottomTextFactory(newestVersion, 325.0, 100.0)
+        bTextNewVersion = bottomTextFactory(externalAddon.checksum, 325.0, 100.0)
 
         anchorPane.children.addAll(bTextVersion, bTextLastCheck, bTextNewVersion)
     }
@@ -235,11 +317,11 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
 
     private fun initTopText()
     {
-        textAddonName = textTopFactory(addonName, 40.0, 200.0)
+        textAddonName = textTopFactory(externalAddon.name, 40.0, 200.0)
         textAddonName.id = "textAddonName"
         textAddonName.textAlignment = TextAlignment.LEFT
-        textNewestVersion = textTopFactory("Newest Version", 325.0, 100.0)
-        textLastCheck = textTopFactory("Last Check", 425.0, 100.0)
+        textNewestVersion = textTopFactory("CRC32", 325.0, 100.0)
+        textLastCheck = textTopFactory("EID", 425.0, 100.0)
         textEnabled = textTopFactory("Enabled", 525.0, 50.0)
 
         anchorPane.children.addAll(textAddonName, textNewestVersion, textLastCheck, textEnabled)
@@ -286,23 +368,11 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         displayImage.fitHeight = 35.0
         displayImage.id = "imageInfo"
 
-        logger.debug{"$addonName | $iconUrl"}
+        logger.debug{"${externalAddon.name} | ${externalAddon.iconUrl}"}
 
-        if (iconUrl == null)
-        {
-            displayImage.image = Image(javaClass.getResource("/icons/NoIcon.png").openStream())
-        }
-        else
-        {
-            if (iconUrl == "")
-            {
-                displayImage.image = Image(javaClass.getResource("/icons/NoIcon.png").openStream())
-            }
-            else
-            {
-                displayImage.image = Image(iconUrl)
-            }
-        }
+        // TODO: Use IconURL
+
+        displayImage.image = Image(javaClass.getResource("/icons/NoIcon.png").openStream())
         anchorPane.children.add(displayImage)
     }
 }

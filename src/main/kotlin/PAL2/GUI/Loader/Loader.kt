@@ -1,11 +1,9 @@
 package PAL2.GUI.Loader
 
-import PAL2.GUI.CoreController
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
-import javafx.fxml.Initializable
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.ProgressBar

@@ -1,16 +1,9 @@
 import PAL2.GUI.CoreApplication
 import SystemHandling.deleteFile
-import SystemHandling.verifyFolder
 import javafx.application.Application
-import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
-import org.kohsuke.github.GitHubBuilder
-import java.io.BufferedOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.io.PrintStream
-import java.util.Locale
-import kotlin.Exception
+import java.util.*
 
 /**
  * Reads Data

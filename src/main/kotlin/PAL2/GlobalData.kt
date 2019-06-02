@@ -1,4 +1,5 @@
 import PAL_DataClasses.PAL_AddonFullData
+import javafx.scene.image.Image
 import java.io.File
 
 /**
@@ -9,7 +10,7 @@ class GlobalData
     companion object
     {
         var version = "1.0.9"
-        var debugging = false
+        var debugging = true
         var install_dir = ""
         var github_token = ""
         var list_of_addons = ArrayList<PAL_AddonFullData>()
@@ -24,10 +25,12 @@ class GlobalData
         var primaryPoEFile: File? = null
         var poeLocations = ArrayList<String>()
         var logFile = ""
+        val noIcon = Image(GlobalData::class.java.getResource("/icons/NoIcon.png").openStream())
 
         var loot_filter_path = ""
         var show_update_note = false
         var launch_addons = true
+        var contextMenuOpen = false
 
         /**
          * DB Data
@@ -43,6 +46,7 @@ class GlobalData
         var temp_down_folder = File("${pal_folder.path}${File.separator}temp_downloads")
         var launchList = ArrayList<File>()
         var steam_poe = false
+        var launch_externals = true
 
         fun addToListOfAddons(arr: Array<PAL_AddonFullData>)
         {
