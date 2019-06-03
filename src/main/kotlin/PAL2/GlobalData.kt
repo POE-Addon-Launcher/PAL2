@@ -49,6 +49,7 @@ class GlobalData
         var launchList = ArrayList<File>()
         var steam_poe = false
         var launch_externals = true
+        var allowTaskKill = true
 
         fun addToListOfAddons(arr: Array<PAL_AddonFullData>)
         {

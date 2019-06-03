@@ -80,6 +80,17 @@ class CoreController : Initializable
         }
 
         GlobalScope.launch {
+            if (GlobalData.db_file.exists())
+                if(doesTableExist("Settings"))
+                    if (checkSettingExist("tkOnClose"))
+                    {
+                        val setting = getSetting("tkOnClose")
+                        GlobalData.allowTaskKill = setting == "1"
+                        Platform.runLater { closeAddonsWhenPALCloses.isSelected = GlobalData.allowTaskKill }
+                    }
+        }
+
+        GlobalScope.launch {
             init()
             setSettings()
             showMOTD()
@@ -2039,6 +2050,20 @@ class CoreController : Initializable
             stringBuilder.append(" MB per hour.")
             Platform.runLater { FilterstxtInfo.text = stringBuilder.toString() }
         }
+    }
+
+    @FXML
+    private lateinit var closeAddonsWhenPALCloses: CheckBox
+
+    fun dbSyncOnCloseKill(actionEvent: ActionEvent)
+    {
+        if (!checkSettingExist("tkOnClose"))
+            insSetting("tkOnClose", "0")
+
+        val state = closeAddonsWhenPALCloses.isSelected
+        GlobalData.allowTaskKill = state
+        val db_state = if (state) "1" else "0"
+        putSetting("tkOnClose", db_state)
     }
 
     @FXML

@@ -635,6 +635,11 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
+                  <CheckBox fx:id="closeAddonsWhenPALCloses" onAction="#dbSyncOnCloseKill" layoutX="14.0" layoutY="243.0" mnemonicParsing="false" selected="true" text="Close addons when PAL closes">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </CheckBox>
                </children>
             </AnchorPane>
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">

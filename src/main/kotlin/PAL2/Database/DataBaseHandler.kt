@@ -539,6 +539,23 @@ fun putSetting(name: String, value: String)
     connection.close()
 }
 
+fun insSetting(name: String, value: String)
+{
+    val connection = connectToDB()
+    val sql = "INSERT into Settings values (\'$name\', \'$value\')"
+    connection.createStatement().execute(sql)
+    connection.close()
+}
+
+fun checkSettingExist(name: String): Boolean
+{
+    val connection = connectToDB()
+    var rs = connection.createStatement().executeQuery("SELECT COUNT(*) FROM Settings WHERE name = \'$name\'")
+    val c = rs.getInt(1)
+    connection.close()
+    return (c != 0)
+}
+
 fun filterSettingsCheck(): FilterSettings
 {
     val connection = connectToDB()

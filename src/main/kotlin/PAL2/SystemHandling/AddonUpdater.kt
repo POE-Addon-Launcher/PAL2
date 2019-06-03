@@ -27,18 +27,20 @@ fun updateAddon(aid: Int, image: Image)
 
 fun closeAllAddons()
 {
-    taskKill("autohotkey.exe /F")
-    taskKill("Path of Maps Client.exe")
-    taskKill("TraderForPoe.exe")
-    taskKill("javaw.exe")
-    taskKill("java.exe")
-    taskKill("POE-Trades-Companion.exe")
-    taskKill("XenonTrade.exe")
-    taskKill("LabCompass.exe")
-    taskKill("Exilence.exe")
-    taskKill("CurrencyCop.exe")
-    taskKill("PoE Custom Soundtrack.exe")
-
+    if (GlobalData.allowTaskKill)
+    {
+        taskKill("autohotkey.exe /F")
+        taskKill("Path of Maps Client.exe")
+        taskKill("TraderForPoe.exe")
+        taskKill("javaw.exe")
+        taskKill("java.exe")
+        taskKill("POE-Trades-Companion.exe")
+        taskKill("XenonTrade.exe")
+        taskKill("LabCompass.exe")
+        taskKill("Exilence.exe")
+        taskKill("CurrencyCop.exe")
+        taskKill("PoE Custom Soundtrack.exe")
+    }
 }
 
 fun taskKill(name: String): Process
