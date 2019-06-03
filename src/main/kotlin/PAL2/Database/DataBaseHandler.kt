@@ -512,7 +512,7 @@ fun countAHKs(): Int
 fun insertExternalAddonIntoDB(ea: PAL_External_Addon)
 {
     val connection = connectToDB()
-    val sql = "INSERT into ExternalAddon values (${ea.eid}, \"${ea.name}\", \"${ea.path}\", \"${ea.checksum}\", \"${ea.webSource}\", \"${ea.iconUrl}\", \"${ea.launchCMD}\", ${ea.runOnLaunch});"
+    val sql = "INSERT into ExternalAddon values (${ea.eid}, \"${ea.name}\", \"${ea.path}\", \"${ea.checksum}\", \"${ea.webSource}\", \"${ea.iconUrl}\", \'${ea.launchCMD}\', ${ea.runOnLaunch});"
     println(sql)
     connection.createStatement().execute(sql)
     connection.close()
@@ -737,7 +737,7 @@ fun updateExternalAddon(ea: PAL_External_Addon)
             "crc32 = \"${ea.checksum}\"," +
             "website_source = \"${ea.webSource}\"," +
             "icon_url = \"${ea.iconUrl}\"," +
-            "launch_command = \"${ea.launchCMD}\"" +
+            "launch_command = \'${ea.launchCMD}\'" +
             "WHERE eid = ${ea.eid};"
 
     val connection = connectToDB()
