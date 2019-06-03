@@ -116,7 +116,6 @@ class InstalledAnchor(var aid: Int, var iconUrl: String?, var addonName: String,
         }
         rectButton.onMouseClicked = EventHandler()
         {
-            // TODO: Start Update Downloading.
             Platform.runLater {
                 rectButton.isVisible = false
                 textButton.text = "Downloading"

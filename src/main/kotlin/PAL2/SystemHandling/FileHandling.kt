@@ -24,6 +24,10 @@ fun verifyFolder(file: File)
  */
 fun deleteFile(file: File)
 {
+    if (file.isDirectory)
+        logger.debug { "Deleting: ${file.path} and all ${file.listFiles().size} files within" }
+    else
+        logger.debug { "Deleting: ${file.path}"}
     if (file.exists())
     {
         if (file.isDirectory)
@@ -33,7 +37,6 @@ fun deleteFile(file: File)
                 deleteFile(f)
             }
         }
-        logger.debug { "Deleting: ${file.path}" }
         file.delete()
     }
 }

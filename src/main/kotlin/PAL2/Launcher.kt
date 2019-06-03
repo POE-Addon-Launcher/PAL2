@@ -18,7 +18,6 @@ class Launcher2
         fun main(args: Array<String>)
         {
             // TODO: Allow users to add existing addons
-            // TODO: Allow users to add custom programs
 
             // Set Locale to US to avoid any locale issues.
             Locale.setDefault(Locale.US)

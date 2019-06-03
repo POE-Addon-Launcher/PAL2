@@ -12,6 +12,24 @@ import java.util.*
 /**
  * PAL Data Classes; mimic database entries.
  */
+data class FilterSettings
+(
+        var updateEvery: Int,
+        var dontCheckWhenPoERunning: Boolean,
+        var autoUpdateFilters: Boolean
+)
+
+
+data class Filter
+(
+        var fid: Int,
+        val name: String,
+        var crc32: String,
+        val webSource: String,
+        val path: String,
+        val variation: String
+)
+
 data class PAL_External_Addon
 (
         var eid: Int,

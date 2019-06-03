@@ -5,6 +5,10 @@ import GUI.PopUp.Updated_HTML_Popup
 import GlobalData
 import PAL2.Addons.Externals
 import PAL2.Database.*
+import PAL2.Filters.FilterBlast
+import PAL2.Filters.FilterBlastFilter
+import PAL2.Filters.FilterContainer
+import PAL2.Filters.FilterDownloader
 import PAL2.GUI.Loader.Loader
 import PAL2.SystemHandling.FileDownloader
 import PAL2.SystemHandling.closeAllAddons
@@ -42,6 +46,7 @@ import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
 import java.awt.Desktop
 import java.io.File
+import java.lang.Exception
 import java.net.URI
 import java.net.URL
 import java.nio.file.Files
@@ -49,6 +54,7 @@ import java.nio.file.Paths
 import java.time.LocalDate
 import java.util.*
 import java.util.regex.Pattern
+import javax.swing.event.ChangeListener
 
 
 /**
@@ -61,12 +67,26 @@ class CoreController : Initializable
     override fun initialize(location: URL?, resources: ResourceBundle?)
     {
         Loader().start(Stage())
-        populateSettingsList()
+
+        GlobalScope.launch {
+            populateSettingsList()
+        }
+
+        GlobalScope.launch {
+            if (GlobalData.db_file.exists())
+                if (doesTableExist("Filters"))
+                    if (countFilters() > 0)
+                        populateFiltersList()
+        }
+
         GlobalScope.launch {
             init()
             setSettings()
             showMOTD()
             verifyDB()
+
+            shouldTutorialshow()
+
             if (GlobalData.launchPOEonLaunch)
             {
                 PAL2.SystemHandling.launchPoE()
@@ -79,6 +99,23 @@ class CoreController : Initializable
                 populateExternalsList()
                 Externals.syncAHKsWithExternals()
             }
+        }
+        GlobalScope.launch {
+            try
+            {
+                val filters = FilterBlast.downloadListOfFilters()
+                if (!filters.isEmpty())
+                {
+                    FilterContainer.filters.addAll(filters)
+                }
+                logger.debug { "Retrieved ${filters.size} filters from the FilterBlast API" }
+                fillCombo()
+            }
+            catch (ex: Exception)
+            {
+                logger.error { "Error occured with retreiving filters from the FilterBlast API, it's probably offline." }
+            }
+            GlobalData.filterblastApiInProgress = false
         }
         //addExternalAnchor(ExternalAnchor(-1, null, "Test", "ABD123", "ABD123", "no", "hurr"))
         core_tabpane.tabs.remove(addonDescTab)
@@ -96,6 +133,16 @@ class CoreController : Initializable
                 setInstalled(aid)
 
             addExternalAnchor(ExternalAnchor(arr))
+        }
+    }
+
+    private fun populateFiltersList()
+    {
+        val list = retreiveFiltersFromDB() ?: return
+
+        for (arr in list)
+        {
+            addFilterAnchor(FilterAnchor(arr), true)
         }
     }
 
@@ -1224,6 +1271,9 @@ class CoreController : Initializable
     @FXML
     private lateinit var sGeneral: AnchorPane
 
+    @FXML
+    private lateinit var sFilters: AnchorPane
+
 
     val settingsArray = arrayOf("About", "AutoHotKey", "General Settings", "Folders", "Log", "Disclaimer")
     fun populateSettingsList()
@@ -1238,6 +1288,32 @@ class CoreController : Initializable
             SETAHKSettings()
             SETGeneralSettings()
             SETFolders()
+            SETFilters()
+        }
+    }
+
+    @FXML
+    private lateinit var inputMinutes: TextField
+
+    @FXML
+    private lateinit var FilterstxtInfo: Text
+
+    @FXML
+    private lateinit var cNotCheckWhenPoERunning: CheckBox
+
+    @FXML
+    private lateinit var cAutoUpdateFilters: CheckBox
+
+    private fun SETFilters()
+    {
+        GlobalScope.launch {
+            val settings = filterSettingsCheck()
+            Platform.runLater {
+                inputMinutes.text = settings.updateEvery.toString()
+                cNotCheckWhenPoERunning.isSelected = settings.dontCheckWhenPoERunning
+                cAutoUpdateFilters.isSelected = settings.autoUpdateFilters
+                inputMinutes.focusedProperty().addListener { _, _, _ -> updateInputMinutesFilter() }
+            }
         }
     }
 
@@ -1326,6 +1402,7 @@ class CoreController : Initializable
                     "AutoHotKey" -> showAHK()
                     "General Settings" -> showGeneralSettings()
                     "Folders" -> showFolders()
+                    "Filters" -> showFilters()
                     "Log" -> showLog()
                     "Disclaimer" -> showDisclaimer()
                 }
@@ -1373,6 +1450,12 @@ class CoreController : Initializable
         Platform.runLater { anchorLog.isVisible = true }
     }
 
+    private fun showFilters()
+    {
+        hideAll()
+        Platform.runLater { sFilters.isVisible = true }
+    }
+
     private fun hideAll()
     {
         Platform.runLater {
@@ -1382,6 +1465,7 @@ class CoreController : Initializable
             sAbout.isVisible = false
             anchorLog.isVisible = false
             disclaimer.isVisible = false
+            sFilters.isVisible = false
         }
     }
 
@@ -1530,7 +1614,10 @@ class CoreController : Initializable
         val file = browse("Select your loot filter folder")
         if (file != null)
         {
-            Platform.runLater { sLootFilterFolder.text = file.path }
+            Platform.runLater {
+                sLootFilterFolder.text = file.path
+                GlobalData.loot_filter_path = file.path
+            }
         }
     }
 
@@ -1693,6 +1780,7 @@ class CoreController : Initializable
             "exe" -> showExternalSettings(file)
             "ahk" -> showExternalSettings(file)
             "jar" -> showExternalSettings(file)
+            "filter" -> showExternalSettings(file)
             else -> logger.error { "Unsupported Extension! Request Support for it!" }
         }
     }
@@ -1775,6 +1863,198 @@ class CoreController : Initializable
         }
     }
 
+    @FXML
+    private lateinit var tutorialLink: Hyperlink
+
+    fun shouldTutorialshow()
+    {
+        // TODO
+        if (true)
+        {
+            Platform.runLater { tutorialLink.isVisible = false }
+        }
+        else
+        {
+            Platform.runLater { tutorialLink.isVisible = false }
+        }
+    }
+
+    fun showFilterAdder(mouseEvent: MouseEvent)
+    {
+        Platform.runLater { showAddFilter.isVisible = true }
+    }
+
+    fun showVariations()
+    {
+        fillComboVariations()
+    }
+
+    fun dlFilter(actionEvent: ActionEvent)
+    {
+        val lootFilter = File(GlobalData.loot_filter_path)
+
+        if (!lootFilter.exists())
+        {
+            logger.error { "Error Loot Filter not set" }
+            return
+        }
+
+        if (lootFilter.isFile)
+        {
+            logger.error { "Loot filter is set to a file" }
+            return
+        }
+
+
+        val sel_key = comboFilterName.selectionModel.selectedItem ?: return
+        val sel_var = comboFilterVariation.selectionModel.selectedItem ?: return
+
+        if (sel_var == "All Presets")
+        {
+            GlobalScope.launch {
+                for (f in sel_key.variations)
+                {
+                    val filter = FilterDownloader.downloadFilter(f.key, sel_key.name, sel_key)
+                    addFilterAnchor(FilterAnchor(filter), false)
+                }
+            }
+
+        }
+        else
+        {
+            GlobalScope.launch {
+                val filter = FilterDownloader.downloadFilter(sel_var, sel_key.name, sel_key)
+                addFilterAnchor(FilterAnchor(filter), false)
+            }
+        }
+        hideFilterAdder()
+    }
+
+    fun hideFilterAdder()
+    {
+        Platform.runLater {
+            showAddFilter.isVisible = false
+            comboFilterVariation.isVisible = false
+            comboFilterVariation.selectionModel.clearSelection()
+            comboFilterName.selectionModel.clearSelection()
+        }
+    }
+
+    fun fillCombo()
+    {
+        GlobalScope.launch {
+            val list = FXCollections.observableArrayList<FilterBlastFilter>()
+            //FilterContainer.filters.shuffle() Shuffle to make a fair list?
+            list.addAll(FilterContainer.filters)
+            Platform.runLater {
+                comboFilterName.items = list
+            }
+        }
+    }
+
+    fun fillComboVariations()
+    {
+        GlobalScope.launch {
+            val list = FXCollections.observableArrayList<String>()
+            val sel = comboFilterName.selectionModel.selectedItem ?: return@launch
+            if (sel.variations.size != 1)
+                list.add("All Presets")
+
+            for (preset in comboFilterName.selectionModel.selectedItem.variations)
+                list.add(preset.key)
+            Platform.runLater { comboFilterVariation.items = list ; comboFilterVariation.isVisible = true}
+        }
+    }
+
+    fun addFilterAnchor(fa: FilterAnchor, checkForUpdate: Boolean)
+    {
+        if (checkForUpdate)
+               fa.updateExternal()
+        Platform.runLater { listViewFilters.items.add(fa.anchorPane) }
+    }
+
+    fun removeFilterAnchor()
+    {
+        Platform.runLater {
+            val selected = listViewFilters.selectionModel.selectedItem ?: return@runLater
+            listViewFilters.selectionModel.clearSelection()
+            listViewFilters.items.remove(selected)
+        }
+    }
+
+    fun updateAutoUpdateFilters(actionEvent: ActionEvent)
+    {
+        GlobalScope.launch {
+            val v = cAutoUpdateFilters.isSelected
+            var z = "0"
+            if (v)
+                z = "1"
+            putSetting("auto_f_update", z)
+        }
+    }
+
+    fun updateNotCheckWhenPoERunning(actionEvent: ActionEvent)
+    {
+        GlobalScope.launch {
+            val v = cNotCheckWhenPoERunning.isSelected
+            var z = "0"
+            if (v)
+                z = "1"
+            putSetting("not_f_update_during_poe", z)
+        }
+    }
+
+    fun updateInputMinutesFilter()
+    {
+        GlobalScope.launch {
+            var sanatized = inputMinutes.text.toDouble()
+            sanatized = Math.floor(sanatized)
+            if (sanatized < 0)
+                sanatized *= -1
+
+            var san = sanatized.toInt()
+
+            Platform.runLater { inputMinutes.text = san.toString() }
+
+            putSetting("f_min", san.toString())
+
+            var update_cyle = san
+            if (update_cyle < 0)
+                update_cyle = 0
+            val fc = countFilters()
+            val mbs = 0.3 * fc
+            var calc = update_cyle / 60.0
+            var res = 0.0
+            if (calc != 0.0)
+                res = mbs / calc
+
+            // Update Text
+            val stringBuilder = StringBuilder()
+            stringBuilder.append("You currently have ")
+            stringBuilder.append(countFilters())
+            stringBuilder.append(" filters, which avarage to ")
+            stringBuilder.append("%.2f".format(mbs))
+            stringBuilder.append(" MB\n checking these would cost you: ")
+            stringBuilder.append("%.2f".format(res))
+            stringBuilder.append(" MB per hour.")
+            Platform.runLater { FilterstxtInfo.text = stringBuilder.toString() }
+        }
+    }
+
+    @FXML
+    private lateinit var listViewFilters: ListView<AnchorPane>
+
+    @FXML
+    private lateinit var comboFilterName: ComboBox<FilterBlastFilter>
+
+    @FXML
+    private lateinit var comboFilterVariation: ComboBox<String>
+
+    @FXML
+    private lateinit var showAddFilter: AnchorPane
+
+    @FXML
+    private lateinit var hiddenFilterAnchor: AnchorPane
 
     @FXML
     private lateinit var external_anchorpane: AnchorPane

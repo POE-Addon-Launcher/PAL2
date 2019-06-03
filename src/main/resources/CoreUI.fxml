@@ -15,6 +15,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -25,15 +26,6 @@
          <children>
             <TabPane fx:id="core_tabpane" layoutY="30.0" prefHeight="430.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
                <tabs>
-                  <Tab text="Addons">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <ListView fx:id="addonListView" prefHeight="400.0" prefWidth="600.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
                   <Tab fx:id="core_tab_installed" text="Installed">
                      <content>
                         <AnchorPane fx:id="installed_anchorpane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
@@ -119,6 +111,15 @@
                         </AnchorPane>
                      </content>
                   </Tab>
+                  <Tab text="Addons">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ListView fx:id="addonListView" prefHeight="400.0" prefWidth="600.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
                   <Tab fx:id="core_tab_external" text="External">
                      <content>
                         <AnchorPane fx:id="external_anchorpane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
@@ -187,6 +188,37 @@
                                           <Image url="@icons/cancel0.png" />
                                        </image>
                                     </ImageView>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="core_tab_filters" text="Filters">
+                     <content>
+                        <AnchorPane fx:id="filters_anchorpane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="600.0" style="-fx-background-color: #3C3F41;">
+                           <children>
+                              <ListView fx:id="listViewFilters" layoutY="20.0" prefHeight="380.0" prefWidth="600.0" />
+                              <AnchorPane fx:id="hiddenFilterAnchor" onMouseClicked="#showFilterAdder" prefHeight="20.0" prefWidth="600.0" style="-fx-background-color: #1b1b1b;">
+                                 <children>
+                                    <Text fill="WHITE" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click here to add a filter!" textAlignment="CENTER" wrappingWidth="600.0">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font>
+                                    </Text>
+                                    <Rectangle fx:id="rectShowFilterAdder" arcHeight="5.0" arcWidth="5.0" fill="#ffffff03" height="20.0" onMouseClicked="#showFilterAdder" stroke="#ffffff03" strokeType="INSIDE" width="600.0" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="showAddFilter" prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: #1b1b1b;" visible="false">
+                                 <children>
+                                    <ComboBox fx:id="comboFilterName" layoutX="12.0" layoutY="8.0" onAction="#showVariations" prefHeight="25.0" prefWidth="230.0" />
+                                    <ComboBox fx:id="comboFilterVariation" layoutX="255.0" layoutY="8.0" prefHeight="25.0" prefWidth="230.0" visible="false" />
+                                    <Button fx:id="btnAddFilter" layoutX="494.0" layoutY="8.0" mnemonicParsing="false" onAction="#dlFilter" text="Add Filter" />
+                                    <Text fx:id="closeAnchorBtn" fill="WHITE" layoutX="573.0" layoutY="29.0" onMouseClicked="#hideFilterAdder" strokeType="OUTSIDE" strokeWidth="0.0" text="X" wrappingWidth="19.230768084526062">
+                                       <font>
+                                          <Font name="System Bold" size="23.0" />
+                                       </font>
+                                    </Text>
                                  </children>
                               </AnchorPane>
                            </children>
@@ -404,6 +436,11 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Text>
+            <Hyperlink fx:id="tutorialLink" layoutX="103.0" layoutY="-3.0" prefHeight="33.0" prefWidth="380.0" text="Lost? Need a tutorial on how to use PAL? Click here!" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Hyperlink>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorDownloadpopup" layoutY="400.0" onMouseClicked="#mouseClickedPopupAnchor" opacity="0.0" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #1b1b1b;" visible="false">
@@ -630,7 +667,45 @@
                         <Font size="16.0" />
                      </font></Text>
                </children></AnchorPane>
-            <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
+            <AnchorPane fx:id="sFilters" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
+               <children>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filters">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check for updates to filters every: ">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="inputMinutes" alignment="CENTER" layoutX="255.0" layoutY="49.0" prefHeight="25.0" prefWidth="45.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </TextField>
+                  <Text fill="WHITE" layoutX="305.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="minute(s)">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="FilterstxtInfo" fill="WHITE" layoutX="14.0" layoutY="101.0" onMouseClicked="#updateInputMinutesFilter" strokeType="OUTSIDE" strokeWidth="0.0" text="You currently have %fc filters, which account for %tc MB&#10; checking these would cost you: %fcost MB per hour&#10;" wrappingWidth="420.00001072883606">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <CheckBox fx:id="cNotCheckWhenPoERunning" layoutX="14.0" layoutY="139.0" mnemonicParsing="false" onAction="#updateNotCheckWhenPoERunning" text="Don't check for filter updates when PoE is running">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </CheckBox>
+                  <Line endX="449.0" layoutY="133.0" stroke="WHITE" />
+                  <CheckBox fx:id="cAutoUpdateFilters" layoutX="14.0" layoutY="166.0" mnemonicParsing="false" onAction="#updateAutoUpdateFilters" text="Automatically Update Filters">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </CheckBox>
+               </children></AnchorPane>
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />

@@ -1,6 +1,7 @@
 import PAL_DataClasses.PAL_AddonFullData
 import javafx.scene.image.Image
 import java.io.File
+import javax.swing.filechooser.FileSystemView
 
 /**
  *
@@ -9,7 +10,7 @@ class GlobalData
 {
     companion object
     {
-        var version = "1.0.10"
+        var version = "1.11"
         var debugging = false
         var install_dir = ""
         var github_token = ""
@@ -27,10 +28,11 @@ class GlobalData
         var logFile = ""
         val noIcon = Image(GlobalData::class.java.getResource("/icons/NoIcon.png").openStream())
 
-        var loot_filter_path = ""
+        var loot_filter_path = FileSystemView.getFileSystemView().defaultDirectory.path + File.separator + "My Games" + File.separator + "Path of Exile"
         var show_update_note = false
         var launch_addons = true
         var contextMenuOpen = false
+        var filterblastApiInProgress = true
 
         /**
          * DB Data

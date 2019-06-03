@@ -1,12 +1,11 @@
 package PAL2.GUI
 
-import GlobalData
 import PAL2.Addons.Externals
-import PAL2.Database.hideExternalAddon
-import PAL2.Database.updateExternalAddon
-import PAL2.Database.updateRunOnLaunchExternal
+import PAL2.Database.*
+import PAL2.Filters.FilterDownloader
 import PAL2.SystemHandling.FileDownloader
 import PAL2.SystemHandling.taskKill
+import PAL_DataClasses.Filter
 import PAL_DataClasses.PAL_External_Addon
 import SystemHandling.deleteFile
 import javafx.application.Platform
@@ -37,20 +36,17 @@ import java.nio.file.Files
  */
 private val logger = KotlinLogging.logger {}
 
-class ExternalAnchor(val externalAddon: PAL_External_Addon)
+class FilterAnchor(val filter: Filter)
 {
     var anchorPane = AnchorPane()
     var displayImage = ImageView()
     lateinit var textAddonName: Text
     lateinit var textNewestVersion: Text
     lateinit var textLastCheck: Text
-    lateinit var textEnabled: Text
 
     lateinit var bTextVersion: Text
     lateinit var bTextLastCheck: Text
     lateinit var bTextNewVersion: Text
-
-    lateinit var checkBox: CheckBox
 
     //var imageViewInfo = ImageView()
 
@@ -61,18 +57,16 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
     // Context Menu
     val cUpdate = MenuItem("Check for update")
     val update = MenuItem("Update")
-    val settings = MenuItem("Settings")
     val remove = MenuItem("Remove")
-    val editMenu = ContextMenu(cUpdate, update, settings, remove)
+    val editMenu = ContextMenu(cUpdate, update, remove)
 
     init
     {
-        anchorPane.id = externalAddon.eid.toString()
+        anchorPane.id = filter.fid.toString()
         initImg()
         initTopText()
         initBottomText()
         initButton()
-        initCheckBox()
         initEditMenu()
 
         setListners()
@@ -83,43 +77,23 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
     {
         editMenu.onHidden = EventHandler{GlobalData.contextMenuOpen = false}
         cUpdate.onAction = EventHandler{ GlobalScope.launch { updateChecker() } }
-        settings.onAction = EventHandler { CoreApplication.controller.showSettingsOfExternal(externalAddon) }
         update.onAction = EventHandler { updateExternal() }
-        remove.onAction = EventHandler {
-            val aid = Externals.isMajorAddon(externalAddon.webSource)
-            if (aid != 0)
-                CoreApplication.controller.setDownloadableAddon(aid)
-            hideExternalAddon(externalAddon.eid)
-            CoreApplication.controller.removeExternalSelected()
-        }
+        remove.onAction = EventHandler { removeFilter() }
     }
 
-    private fun updateExternal()
+    fun updateExternal()
     {
-        // TaskKill
-        val ext = File(externalAddon.path).extension
-
-        when (ext)
-        {
-            "ahk" -> taskKill("autohotkey.exe").waitFor()
-            "jar" -> taskKill("java").waitFor()
-            "exe" -> taskKill(File(externalAddon.path).name).waitFor()
-        }
-
-
+        logger.debug { "Syncing ${filter.name} - ${filter.variation}" }
         GlobalScope.launch {
-            CoreApplication.controller.showDownloadPopup(File(externalAddon.webSource).name)
-            val location = FileDownloader().downloadFile(URL(externalAddon.webSource), GlobalData.temp_down_folder, 1024, GlobalData.noIcon)
-            val dest = File(externalAddon.path)
-            deleteFile(dest)
-            Files.copy(location.toPath(), dest.toPath())
+            CoreApplication.controller.showDownloadPopup(File(filter.path).name)
+
+            val dest = FilterDownloader.updateFilter(filter) ?: return@launch
 
             // Set new CRC32
             GlobalScope.launch {
                 val crc32 = Externals.calcCRC32(dest)
-                externalAddon.checksum = crc32
-                bTextNewVersion.text = crc32
-                updateExternalAddon(externalAddon)
+                filter.crc32 = crc32
+                updateFilter(filter)
             }
 
 
@@ -130,17 +104,17 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
 
     private fun updateChecker()
     {
-        if (externalAddon.webSource.isEmpty())
+        if (filter.webSource.isEmpty())
             return
 
         Platform.runLater { displayImage.effect = Lighting() }
 
-        val httpConnection = URL(externalAddon.webSource).openConnection() as HttpURLConnection
+        val httpConnection = URL(filter.webSource).openConnection() as HttpURLConnection
         httpConnection.addRequestProperty("User-Agent", "Mozilla/4.0")
         val input = BufferedInputStream(httpConnection.inputStream)
         val crc32 = Externals.calcCRC32(input.readBytes())
 
-        if (crc32 == externalAddon.checksum)
+        if (crc32 == filter.crc32)
         {
             Platform.runLater { displayImage.effect = LightningEffects.noUpdateLighting() }
         }
@@ -150,35 +124,17 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         }
     }
 
-    private fun initCheckBox()
-    {
-        checkBox = CheckBox("")
-        anchorPane.children.add(checkBox)
-        checkBox.layoutX = 542.5
-        checkBox.layoutY = 20.0
-        checkBox.isSelected = externalAddon.runOnLaunch
-    }
 
     private fun setListners()
     {
         anchorListner()
         setDownloadUpdateListner()
-        checkBoxListener()
-    }
-
-    private fun checkBoxListener()
-    {
-        checkBox.onMouseClicked = EventHandler()
-        {
-            updateRunOnLaunchExternal(externalAddon.eid, checkBox.isSelected)
-        }
     }
 
 
     fun anchorListner()
     {
-        // TODO: Create Rollbock Update Option
-
+        /*
         anchorPane.onMouseClicked = EventHandler()
         {
             if (it.button == MouseButton.PRIMARY)
@@ -191,7 +147,7 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
                     }
                 }
             }
-        }
+        }*/
         anchorPane.onContextMenuRequested = EventHandler()
         {
             if (!GlobalData.contextMenuOpen)
@@ -215,10 +171,24 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         }
         rectButton.onMouseClicked = EventHandler()
         {
-            Platform.runLater {
-                CoreApplication.controller.showSettingsOfExternal(externalAddon)
-            }
+            removeFilter()
         }
+    }
+
+    private fun removeFilter()
+    {
+        // Delete from DB
+        deleteFilterFromDB(filter.fid)
+
+        // Delete from Harddrive
+        val file = File(filter.path)
+        if (file.isDirectory)
+            logger.error { "SEVERE ERROR, FILTER PATH IS A DIRECTORY!" }
+        else if (file.isFile)
+            deleteFile(File(filter.path))
+
+        // Delete from UI
+        CoreApplication.controller.removeFilterAnchor()
     }
 
 
@@ -226,13 +196,13 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
     {
         textButton.id = "textButton"
         rectButton.id = "rectButton"
-        initButton("Settings", anchorButton, textButton, rectButton)
+        initButton("Remove", anchorButton, textButton, rectButton)
         anchorPane.children.add(anchorButton)
     }
 
     private fun initButton(arg: String, anchor: AnchorPane, text: Text, rect: Rectangle)
     {
-        anchor.layoutX = 240.0
+        anchor.layoutX = 490.0
         anchor.layoutY = 0.0
 
         text.text = arg
@@ -278,13 +248,13 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
     private fun initBottomText()
     {
         // TODO: middle ... for x size
-        bTextVersion = bottomTextFactory(shortner(50, externalAddon.path), 40.0, 200.0)
+        bTextVersion = bottomTextFactory(shortner(50, filter.path), 40.0, 300.0)
         bTextVersion.textAlignment = TextAlignment.LEFT
         bTextVersion.id = "bTextVersion"
-        bTextLastCheck = bottomTextFactory(monthToNum(externalAddon.eid.toString()), 425.0, 100.0)
+        bTextLastCheck = bottomTextFactory(monthToNum(filter.fid.toString()), 395.0, 100.0)
         bTextLastCheck.id = "bTextLastCheck"
 
-        bTextNewVersion = bottomTextFactory(externalAddon.checksum, 325.0, 100.0)
+        bTextNewVersion = bottomTextFactory(filter.crc32, 325.0, 100.0)
 
         anchorPane.children.addAll(bTextVersion, bTextLastCheck, bTextNewVersion)
     }
@@ -312,14 +282,13 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
 
     private fun initTopText()
     {
-        textAddonName = textTopFactory(externalAddon.name, 40.0, 200.0)
+        textAddonName = textTopFactory(filter.name + " - " + filter.variation, 40.0, 300.0)
         textAddonName.id = "textAddonName"
         textAddonName.textAlignment = TextAlignment.LEFT
         textNewestVersion = textTopFactory("CRC32", 325.0, 100.0)
-        textLastCheck = textTopFactory("EID", 425.0, 100.0)
-        textEnabled = textTopFactory("Enabled", 525.0, 50.0)
+        textLastCheck = textTopFactory("FID", 395.0, 100.0)
 
-        anchorPane.children.addAll(textAddonName, textNewestVersion, textLastCheck, textEnabled)
+        anchorPane.children.addAll(textAddonName, textNewestVersion, textLastCheck)
     }
 
     fun bottomTextFactory(arg: String, x: Double, ww: Double): Text
@@ -362,10 +331,6 @@ class ExternalAnchor(val externalAddon: PAL_External_Addon)
         displayImage.fitWidth = 35.0
         displayImage.fitHeight = 35.0
         displayImage.id = "imageInfo"
-
-        logger.debug{"${externalAddon.name} | ${externalAddon.iconUrl}"}
-
-        // TODO: Use IconURL
 
         displayImage.image = Image(javaClass.getResource("/icons/NoIcon.png").openStream())
         anchorPane.children.add(displayImage)

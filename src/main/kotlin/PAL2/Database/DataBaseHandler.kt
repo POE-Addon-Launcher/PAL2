@@ -1,17 +1,19 @@
 package PAL2.Database
 
 import GlobalData
+import PAL2.FunStuff.FunStuff
 import PAL2.GUI.Configurator.Configurator
 import PAL2.GUI.CoreApplication
 import PAL2.GUI.InstalledAnchor
-import PAL_DataClasses.PAL_AddonFullData
-import PAL_DataClasses.PAL_External_Addon
-import PAL_DataClasses.createDate
+import PAL_DataClasses.*
 import mu.KotlinLogging
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 private val logger = KotlinLogging.logger {}
 
@@ -35,23 +37,24 @@ fun syncGlobalWithDB()
 {
     val connection = connectToDB()
     connection.createStatement().executeUpdate("update Flags set launch_poe_on_pal_launch = ${GlobalData.launchPOEonLaunch}, Steam_POE = ${GlobalData.steam_poe}, GitHub_API = ${GlobalData.gitHubAPIEnabled}, show_motd = ${GlobalData.showUpdateNotesOnUpdate}")
-    connection.createStatement().executeUpdate("update Addons_Folder set location = \'${GlobalData.addonFolder}\', `primary` = 1;")
+    connection.createStatement().executeUpdate("update Addons_Folder set location = \"${GlobalData.addonFolder}\", `primary` = 1;")
     connection.createStatement().executeUpdate("update Meta set " +
-            "ahk_folder = \'${GlobalData.ahkFolder.path}\', " +
-            "github_API_token = \'${GlobalData.github_token}\', " +
-            "temp_down_folder = \'${GlobalData.temp_down_folder}\';")
+            "loot_filter_folder = \"${GlobalData.loot_filter_path}\"," +
+            "ahk_folder = \"${GlobalData.ahkFolder.path}\", " +
+            "github_API_token = \"${GlobalData.github_token}\", " +
+            "temp_down_folder = \"${GlobalData.temp_down_folder}\";")
 
     val primaryPoE = GlobalData.primaryPoEFile
     if (primaryPoE != null)
     {
         connection.createStatement().execute("delete from PoE_Locations where `primary` = true")
-        val rs = connection.createStatement().executeQuery("select count(*) from PoE_Locations where location = \'${primaryPoE.path}\';")
+        val rs = connection.createStatement().executeQuery("select count(*) from PoE_Locations where location = \"${primaryPoE.path}\";")
         val c = rs.getInt(1)
         if (c > 0)
         {
-            connection.createStatement().execute("delete from PoE_Locations where location = \'${primaryPoE.path}\'")
+            connection.createStatement().execute("delete from PoE_Locations where location = \"${primaryPoE.path}\"")
         }
-        connection.createStatement().execute("insert into PoE_Locations values (\'${primaryPoE.path}\', true);")
+        connection.createStatement().execute("insert into PoE_Locations values (\"${primaryPoE.path}\", true);")
     }
 
     syncAHKScripts(connection)
@@ -65,11 +68,11 @@ fun syncPoEFolders(connection: Connection)
     val poe = GlobalData.poeLocations
     for (s in poe)
     {
-        val rs = connection.createStatement().executeQuery("select count(*) from PoE_Locations where location = \'$s\';")
+        val rs = connection.createStatement().executeQuery("select count(*) from PoE_Locations where location = \"$s\";")
         val c = rs.getInt(1)
         if (c == 0)
         {
-            connection.createStatement().execute("insert into PoE_Locations values (\'$s\', false);")
+            connection.createStatement().execute("insert into PoE_Locations values (\"$s\", false);")
         }
     }
 }
@@ -80,11 +83,11 @@ fun syncAHKScripts(connection: Connection)
 
     for (s in scripts)
     {
-        val rs = connection.createStatement().executeQuery("select count(*) from AHK_Scripts where location = \'$s\';")
+        val rs = connection.createStatement().executeQuery("select count(*) from AHK_Scripts where location = \"$s\";")
         val c = rs.getInt(1)
         if (c == 0)
         {
-            connection.createStatement().execute("insert into AHK_Scripts values (\'$s\', true);")
+            connection.createStatement().execute("insert into AHK_Scripts values (\"$s\", true);")
         }
     }
 }
@@ -92,11 +95,11 @@ fun syncAHKScripts(connection: Connection)
 fun removeAHKscript(string: String)
 {
     val connection = connectToDB()
-    val rs = connection.createStatement().executeQuery("select count(*) from AHK_Scripts where location = \'$string\';")
+    val rs = connection.createStatement().executeQuery("select count(*) from AHK_Scripts where location = \"$string\";")
     val c = rs.getInt(1)
     if (c > 0)
     {
-        connection.createStatement().execute("delete from AHK_Scripts where location = \'$string\'")
+        connection.createStatement().execute("delete from AHK_Scripts where location = \"$string\"")
     }
     connection.close()
 }
@@ -104,11 +107,11 @@ fun removeAHKscript(string: String)
 fun removePoELoc(string: String)
 {
     val connection = connectToDB()
-    val rs = connection.createStatement().executeQuery("select count(*) from PoE_Locations where location = \'$string\';")
+    val rs = connection.createStatement().executeQuery("select count(*) from PoE_Locations where location = \"$string\";")
     val c = rs.getInt(1)
     if (c > 0)
     {
-        connection.createStatement().execute("delete from PoE_Locations where location = \'$string\';")
+        connection.createStatement().execute("delete from PoE_Locations where location = \"$string\";")
     }
     connection.close()
 }
@@ -125,10 +128,10 @@ fun updateAddonConfig(lc: String, installDir: String, aid: Int, addonName: Strin
 {
     val connection = connectToDB()
     connection.createStatement().executeUpdate("update InstalledAddon set name = \"$addonName\", " +
-            "install_location = \'$installDir\', " +
-            "version = \'$version\', " +
+            "install_location = \"$installDir\", " +
+            "version = \"$version\", " +
             "last_update = \"${createDate(LocalDate.now())}\", " +
-            "launch_command = \'$lc\', " +
+            "launch_command = \"$lc\", " +
             "run_on_launch = $runOnLaunch " +
             "WHERE aid = $aid;")
     connection.close()
@@ -196,7 +199,7 @@ fun getLaunchCommand(aid: Int): String
 fun updateLaunchCommandInstalledAddon(launch_command: String, aid: Int)
 {
     val connection = connectToDB()
-    connection.createStatement().execute("UPDATE InstalledAddon set launch_command = \'$launch_command\' where aid = $aid;")
+    connection.createStatement().execute("UPDATE InstalledAddon set launch_command = \"$launch_command\" where aid = $aid;")
     connection.close()
 }
 
@@ -222,6 +225,7 @@ fun getInstalledAddons()
     val connection = connectToDB()
     val statement = connection.createStatement()
     var rs = statement.executeQuery("select count(*) from InstalledAddon")
+
     val c = rs.getInt(1)
     if (c != 0)
     {
@@ -232,7 +236,6 @@ fun getInstalledAddons()
             val addon = GlobalData.getAddonByID(aid) ?: break
 
             val ia = InstalledAnchor(rs.getInt(1), addon.icon_url, addon.name, rs.getString(4), addon.version_text, LocalDate.now().toString(), "https://www.github.com/${addon.name}/${addon.gh_reponame}")
-            logger.debug { "$ia" }
             CoreApplication.controller.addInstalledAnchor(ia)
             CoreApplication.controller.setInstalled(addon.aid)
         }
@@ -320,6 +323,15 @@ fun getExternalsOnLaunchCommands(): Array<String>?
     return null
 }
 
+fun doesTableExist(table: String): Boolean
+{
+    val connection = connectToDB()
+    val rs = connection.createStatement().executeQuery("SELECT COUNT(*) FROM sqlite_master WHERE name =\"$table\" and type='table'; ")
+    val res = rs.getInt(1)
+    connection.close()
+    return res != 0
+}
+
 fun getRunOnLaunchCommands(): Array<String>?
 {
     val connection = connectToDB()
@@ -364,7 +376,7 @@ fun retreiveConfig()
         logger.debug { "No new update since last launch!" }
     }
     GlobalData.github_token = rs.getString(3)
-    logger.debug { "Github Token: ${GlobalData.github_token}" }
+    logger.debug { "Github Token: <OMITTED>" }
 
     val temp_down = rs.getString(4)
     if (temp_down != "")
@@ -450,7 +462,7 @@ fun insertConfiguratorData(config: Configurator)
     }
     connection.createStatement().execute("INSERT into Addons_Folder values (\"$addonFolder\", true);")
     connection.createStatement().execute("INSERT into Flags values (${config.launchPOEonLaunch}, ${config.useSteamPoE}, ${config.githubAPIenabled}, ${config.showUpdateNotesOnUpdate});")
-    connection.createStatement().execute("INSERT into Meta values (\'\', \'${ahkFolder}\', \'${GlobalData.version}\', \'${config.githubToken}\', \'${config.tempDownFolder}\');")
+    connection.createStatement().execute("INSERT into Meta values (\"\", \"${ahkFolder}\", \"${GlobalData.version}\", \"${config.githubToken}\", \"${config.tempDownFolder}\");")
     connection.close()
 
     GlobalData.addonFolder = File(addonFolder)
@@ -458,6 +470,25 @@ fun insertConfiguratorData(config: Configurator)
     GlobalData.gitHubAPIEnabled = config.githubAPIenabled
     GlobalData.showUpdateNotesOnUpdate = config.showUpdateNotesOnUpdate
     GlobalData.github_token = config.githubToken
+}
+
+fun addFilter(f: Filter): Filter
+{
+    val id = assignIDToFilter()
+    val connection = connectToDB()
+    connection.createStatement().execute("INSERT INTO Filters VALUES ($id, \"${f.name}\", \"${f.path}\", \"${f.crc32}\", \"${f.webSource}\", \"${f.variation}\");")
+    connection.close()
+    f.fid = id
+    return f
+}
+
+fun countFilters(): Int
+{
+    val connection = connectToDB()
+    val rs = connection.createStatement().executeQuery("SELECT COUNT(*) FROM Filters")
+    val count = rs.getInt(1)
+    connection.close()
+    return count
 }
 
 fun countExternalAddon(): Int
@@ -481,10 +512,109 @@ fun countAHKs(): Int
 fun insertExternalAddonIntoDB(ea: PAL_External_Addon)
 {
     val connection = connectToDB()
-    val sql = "INSERT into ExternalAddon values (${ea.eid}, \'${ea.name}\', \'${ea.path}\', \'${ea.checksum}\', \'${ea.webSource}\', \'${ea.iconUrl}\', \'${ea.launchCMD}\', ${ea.runOnLaunch});"
+    val sql = "INSERT into ExternalAddon values (${ea.eid}, \"${ea.name}\", \"${ea.path}\", \"${ea.checksum}\", \"${ea.webSource}\", \"${ea.iconUrl}\", \"${ea.launchCMD}\", ${ea.runOnLaunch});"
     println(sql)
     connection.createStatement().execute(sql)
     connection.close()
+}
+
+/**
+ * Assumes the setting exists.
+ */
+fun getSetting(string: String): String
+{
+    val connection = connectToDB()
+    val sql = "SELECT value from Settings WHERE name = \"$string\";"
+    val rs =  connection.createStatement().executeQuery(sql)
+    val res = rs.getString(1)
+    connection.close()
+    return res
+}
+
+fun putSetting(name: String, value: String)
+{
+    val connection = connectToDB()
+    val sql = "UPDATE Settings set value = \"$value\" WHERE name = \"$name\";"
+    connection.createStatement().execute(sql)
+    connection.close()
+}
+
+fun filterSettingsCheck(): FilterSettings
+{
+    val connection = connectToDB()
+    var rs = connection.createStatement().executeQuery("SELECT COUNT(*) FROM Settings WHERE name = \"f_min\"")
+    val c = rs.getInt(1)
+
+    if (c == 0)
+    {
+        // Create initial values
+        var sql = "INSERT into Settings values (\"f_min\", 60);"
+        connection.createStatement().execute(sql)
+        sql = "INSERT into Settings values(\"not_f_update_during_poe\", 1);"
+        connection.createStatement().execute(sql)
+        sql = "INSERT into Settings values(\"auto_f_update\", 0)"
+        connection.createStatement().execute(sql)
+        connection.close()
+        return FilterSettings(60, true, false)
+    }
+
+    connection.close()
+
+    val mins = getSetting("f_min").toInt()
+    val nfudp = getSetting("not_f_update_during_poe") == "1"
+    val afu = getSetting("auto_f_update") == "1"
+
+    return FilterSettings(mins, nfudp, afu)
+}
+
+fun deleteFilterFromDB(fid: Int)
+{
+    val count = countFilters()
+
+    if (count == 0)
+        return
+
+    val connection = connectToDB()
+    connection.createStatement().execute("DELETE FROM Filters WHERE fid = $fid;")
+    connection.close()
+}
+
+fun assignIDToFilter(): Int
+{
+    val count = countFilters()
+
+    if (count == 0)
+        return 1
+
+    val connection = connectToDB()
+    val rs = connection.createStatement().executeQuery("SELECT fid from Filters order by fid DESC LIMIT 1")
+    val id = rs.getInt(1) + 1
+    connection.close()
+    return id
+}
+
+fun retreiveFiltersFromDB(): ArrayList<Filter>?
+{
+    val c = countFilters()
+
+    if (c == 0)
+        return null
+
+    val arr = ArrayList<Filter>()
+    val connection = connectToDB()
+    val rs = connection.createStatement().executeQuery("SELECT fid, name, path, crc32, website_source, variation FROM Filters")
+    while (rs.next())
+    {
+        arr.add(
+                Filter(
+                        rs.getInt("fid"),
+                        rs.getString("name"),
+                        rs.getString("crc32"),
+                        rs.getString("website_source"),
+                        rs.getString("path"),
+                        rs.getString("variation")))
+    }
+    return arr
 }
 
 fun retreiveExternalsFromDB(): ArrayList<PAL_External_Addon>?
@@ -553,7 +683,7 @@ fun hideExternalAddon(eid: Int)
         return
 
     val connection = connectToDB()
-    connection.createStatement().executeUpdate("UPDATE ExternalAddon set name = \'3c484944453e\' WHERE eid = $eid;")
+    connection.createStatement().executeUpdate("UPDATE ExternalAddon set name = \"3c484944453e\" WHERE eid = $eid;")
     connection.close()
     updateRunOnLaunchExternal(eid, false)
 }
@@ -576,6 +706,22 @@ fun updateRunOnLaunchExternal(eid: Int, run_on_launch: Boolean)
     connection.close()
 }
 
+fun updateFilter(filter: Filter)
+{
+    val count = countFilters()
+
+    if (count == 0)
+    {
+        logger.error { "Attempting to update a filter when there's no filters in the DB!" }
+        return
+    }
+
+    val sql = "UPDATE Filters set crc32 = \"${filter.crc32}\" where fid = ${filter.fid};"
+    val connection = connectToDB()
+    connection.createStatement().executeUpdate(sql)
+    connection.close()
+}
+
 fun updateExternalAddon(ea: PAL_External_Addon)
 {
     val c = countExternalAddon()
@@ -586,16 +732,16 @@ fun updateExternalAddon(ea: PAL_External_Addon)
         return
     }
 
-    val sql = "UPDATE ExternalAddon set name = \'${ea.name}\'," +
-            "path = \'${ea.path}\'," +
-            "crc32 = \'${ea.checksum}\'," +
-            "website_source = \'${ea.webSource}\'," +
-            "icon_url = \'${ea.iconUrl}\'," +
-            "launch_command = \'${ea.launchCMD}\'" +
+    val sql = "UPDATE ExternalAddon set name = \"${ea.name}\"," +
+            "path = \"${ea.path}\"," +
+            "crc32 = \"${ea.checksum}\"," +
+            "website_source = \"${ea.webSource}\"," +
+            "icon_url = \"${ea.iconUrl}\"," +
+            "launch_command = \"${ea.launchCMD}\"" +
             "WHERE eid = ${ea.eid};"
 
     val connection = connectToDB()
-    logger.debug { "Connected to DB executing SQL: \'$sql\'" }
+    logger.debug { "Connected to DB executing SQL: \"$sql\"" }
     connection.createStatement().executeUpdate(sql)
     connection.close()
 }
@@ -691,5 +837,20 @@ fun createTables(connection: Connection)
             "    launch_command text NOT NULL,\n" +
             "    run_on_launch boolean NOT NULL\n" +
             ");")
+
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS Filters (\n" +
+            "    fid integer NOT NULL PRIMARY KEY,\n" +
+            "    name text NOT NULL,\n" +
+            "    path text NOT NULL,\n" +
+            "    crc32 text NOT NULL,\n" +
+            "    website_source text NOT NULL,\n" +
+            "    variation text NOT NULL\n" +
+            ");")
+
+    connection.createStatement().execute("CREATE TABLE IF NOT EXISTS Settings (\n" +
+            "    name text NOT NULL,\n" +
+            "    value text NOT NULL\n" +
+            ");")
+
 
 }

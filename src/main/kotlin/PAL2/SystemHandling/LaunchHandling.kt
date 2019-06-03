@@ -173,7 +173,6 @@ fun launchAddons()
 @Deprecated("Uses different method to launch AHKs now.")
 fun launchAHKScripts()
 {
-    // TODO: Convert current AHKs users have to externals.
     var arr = GlobalData.ahk_scripts
     for (ahk in arr)
     {

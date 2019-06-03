@@ -14,6 +14,7 @@ import java.net.URL
  *
  */
 private val logger = KotlinLogging.logger {}
+var attempts = 0
 
 fun connect(): GitHub
 {
@@ -26,11 +27,33 @@ fun connect(): GitHub
         }
         catch (ex: Exception)
         {
-            logger.error { "Malformed Github OAuth Token, please change the token!" }
-            GitHub.connectAnonymously()
+            if (attempts == 3)
+            {
+                logger.error { "GitHub API is offline" }
+                // TODO: Use fallback
+            }
+            attempts++
+            logger.error { "Github API is likely offline, retrying in 5 seconds!" }
+            Thread.sleep(5 * 1000)
+            return connect()
         }
     }
-    return GitHub.connectAnonymously()
+    return try
+    {
+        GitHub.connectAnonymously()
+    }
+    catch (ex: Exception)
+    {
+        if (attempts == 3)
+        {
+            logger.error { "GitHub API is offline" }
+            // TODO: Use fallback
+        }
+        attempts++
+        logger.error { "Github API is likely offline, retrying in 5 seconds!" }
+        Thread.sleep(5 * 1000)
+        return connect()
+    }
 }
 
 /**
