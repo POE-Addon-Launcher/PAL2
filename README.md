@@ -5,7 +5,7 @@
 ![](https://i.imgur.com/QvZYFkM.png "")
 
 # HOW DO I DOWNLOAD THIS?
-# Go to the releases tab or click on this useful link: [v1.11](https://github.com/POE-Addon-Launcher/PAL2/releases/download/1.11/PAL2.zip)
+# Go to the releases tab or click on this useful link: [v1.11.1]https://github.com/POE-Addon-Launcher/PAL2/releases/download/1.11.1/PAL2.zip)
 
 # HOW DO I USE THIS?
 # [User-Guide v1.11](https://docs.google.com/document/d/1iV6BpndAaENhWc6hcCYI3hINjxi1FAa8bdbeSUXrKFo/edit?usp=sharing)
