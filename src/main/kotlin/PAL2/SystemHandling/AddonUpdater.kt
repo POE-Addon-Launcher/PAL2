@@ -27,7 +27,7 @@ fun updateAddon(aid: Int, image: Image)
 
 fun closeAllAddons()
 {
-    taskKill("autohotkey.exe")
+    taskKill("autohotkey.exe /F")
     taskKill("Path of Maps Client.exe")
     taskKill("TraderForPoe.exe")
     taskKill("javaw.exe")
