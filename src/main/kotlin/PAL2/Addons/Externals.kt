@@ -41,7 +41,7 @@ object Externals
 
     fun determineCMD(file: File): String
     {
-        return when (file.extension)
+        return when (file.extension.toLowerCase())
         {
             "exe" -> InstallHandlerHelpers.createExeLaunchCommandWithElevation(file.path)
             "ahk" -> InstallHandlerHelpers.createAHKLaunchCommand(file.path)

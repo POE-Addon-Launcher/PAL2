@@ -1775,7 +1775,7 @@ class CoreController : Initializable
         if (file.isDirectory)
             return
 
-        when (file.extension)
+        when (file.extension.toLowerCase())
         {
             "exe" -> showExternalSettings(file)
             "ahk" -> showExternalSettings(file)
