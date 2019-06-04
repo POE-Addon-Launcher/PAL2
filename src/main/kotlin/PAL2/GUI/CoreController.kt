@@ -103,7 +103,8 @@ class CoreController : Initializable
                 PAL2.SystemHandling.launchPoE()
             }
 
-            removeTempDownloads()
+            // TODO: Disabled until changed.
+            //removeTempDownloads()
 
             GlobalScope.launch {
                 Externals.checkForUpdatesAndUpdateExternals()
