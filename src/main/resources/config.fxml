@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="100.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PoE_Level_Buddy.UI.ConfigController">
+   <children>
+      <Text fill="WHITE" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PoE Level Buddy">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="3.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, to start we need to know where &quot;Client.txt&quot; is located&#10;It's inside of your Path of Exile's Log Folder, please browse to it.">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Button fx:id="bBrowse" layoutX="163.0" layoutY="70.0" mnemonicParsing="false" onAction="#browseAndVerify" prefHeight="25.0" prefWidth="75.0" text="Browse" />
+   </children>
+</AnchorPane>

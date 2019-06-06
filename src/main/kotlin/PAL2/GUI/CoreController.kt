@@ -10,6 +10,7 @@ import PAL2.Filters.FilterBlastFilter
 import PAL2.Filters.FilterContainer
 import PAL2.Filters.FilterDownloader
 import PAL2.GUI.Loader.Loader
+import PAL2.Github.ReadMeConverter
 import PAL2.SystemHandling.FileDownloader
 import PAL2.SystemHandling.closeAllAddons
 import PAL2.SystemHandling.removeAddon
@@ -36,6 +37,7 @@ import javafx.scene.layout.AnchorPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
+import javafx.scene.web.WebView
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
 import javafx.stage.Stage
@@ -270,11 +272,16 @@ class CoreController : Initializable
     var currentAIDdesc = 0
     fun setDescInfo(image: Image, name: String, desc: String, aid: Int)
     {
+        val a = GlobalData.getAddonByID(aid)?: return
+
+
         currentAIDdesc = aid
         Platform.runLater {
+            addonDescShower.engine.loadContent(ReadMeConverter.convert(a))
             addonDescImg.image = image
             addonDescName.text = name
             addonDescTextDesc.text = desc
+
             activateDescInfoPage()
         }
     }
@@ -2066,6 +2073,9 @@ class CoreController : Initializable
         val db_state = if (state) "1" else "0"
         putSetting("tkOnClose", db_state)
     }
+
+    @FXML
+    private lateinit var addonDescShower: WebView
 
     @FXML
     private lateinit var listViewFilters: ListView<AnchorPane>

@@ -19,6 +19,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane maxHeight="500.0" maxWidth="600.0" minHeight="500.0" minWidth="600.0" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PAL2.GUI.CoreController">
    <children>
@@ -229,113 +230,110 @@
                      <content>
                         <AnchorPane fx:id="addonDescAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ScrollPane prefHeight="400.0" prefWidth="600.0">
-                                 <content>
-                                    <AnchorPane fx:id="addonDescInnerAnchor" maxWidth="580.0" minWidth="580.0" prefHeight="574.0" prefWidth="580.0">
+                              <AnchorPane fx:id="addonDescInnerAnchor" maxWidth="600.0" minWidth="580.0" prefHeight="402.0" prefWidth="600.0">
+                                 <children>
+                                    <Text fx:id="addonDescName" fill="WHITE" layoutX="59.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon Name Here Pretty Long Allowed I guess&#10;also some more text here" textAlignment="CENTER" wrappingWidth="336.99999153614044">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <AnchorPane fx:id="addonDescAnchorDownloadButton" layoutX="399.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #2b2b2b;">
                                        <children>
-                                          <ImageView fx:id="addonDescImg" fitHeight="150.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/trayIcon.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Rectangle fx:id="addonDescRectImg" arcHeight="5.0" arcWidth="5.0" fill="#0084ff00" height="150.0" layoutX="13.0" layoutY="13.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" width="150.0" />
-                                          <AnchorPane fx:id="addonDescAnchorDownloadButton" layoutX="174.0" layoutY="79.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #2b2b2b;">
-                                             <children>
-                                                <Text fx:id="addonDescDownloadText" fill="WHITE" layoutX="1.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Download" textAlignment="CENTER" wrappingWidth="199.99999701976776">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Text>
-                                                <Rectangle fx:id="addonDescDownloadButtonRect" arcHeight="5.0" arcWidth="5.0" fill="#0084ff00" height="50.0" onMouseEntered="#downEnter" onMouseExited="#downExit" onMousePressed="#downclick" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
-                                             </children>
-                                          </AnchorPane>
-                                          <Text fx:id="addonDescName" fill="WHITE" layoutX="174.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon Name Here Pretty Long Allowed I guess&#10;also some more text here" wrappingWidth="421.0888671875">
+                                          <Text fx:id="addonDescDownloadText" fill="WHITE" layoutX="1.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Download" textAlignment="CENTER" wrappingWidth="199.99999701976776">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font name="System Bold" size="22.0" />
                                              </font>
                                           </Text>
-                                          <ProgressBar fx:id="addonDescProgressbar" layoutX="174.0" layoutY="145.0" prefHeight="18.0" prefWidth="200.0" progress="0.0" visible="false" />
-                                          <Text fx:id="addonDescInfoText" fill="WHITE" layoutX="394.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="downloads:     101101&#10;          likes:&#9;100&#10;      dislikes:      0" visible="false">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Text>
-                                          <Text fx:id="addonDescDesc" fill="WHITE" layoutX="14.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
-                                             <font>
-                                                <Font name="System Bold" size="30.0" />
-                                             </font>
-                                          </Text>
-                                          <Text fx:id="addonDescTextDesc" fill="WHITE" layoutX="14.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to POE-TradeMacro!&#10;&#10;PoE TradeMacro is an Autohotkey (AHK) script that provides several convenient QoL features for Path of Exile Trading.&#10;&#10;This builds on top of PoE-ItemInfo which provides very useful item information on ctrl+c. With TradeMacro, price checking is added via ctrl+d, ctrl+alt+d or ctrl+i. You can also open the items wiki page via ctrl+w or open the item search on poe.trade instead via ctrl+q.&#10;TradeMacro will be updated to always have the latest PoE-ItemInfo code, you don't have to run their script since it's included here.&#10;Warning&#10;&#10;Never completely trust any price checking tool. Inform yourself about what this tool can do and what not (FAQ for example). Use the tools average and median prices to quickly judge if the first results could be accurate or totally wrong. When in doubt ask other people or do some manual checks." wrappingWidth="580.13671875">
-                                             <font>
-                                                <Font size="16.0" />
-                                             </font>
-                                          </Text>
-                                          <AnchorPane fx:id="anchorDownload" layoutY="170.0" prefHeight="230.0" prefWidth="585.0" visible="false">
-                                             <children>
-                                                <ListView fx:id="listViewDownloadSelect" onMouseClicked="#updateDownload" prefHeight="233.0" prefWidth="590.0" />
-                                             </children>
-                                          </AnchorPane>
-                                          <Text fx:id="selectDownload" fill="WHITE" layoutX="184.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, select what to download:" visible="false">
-                                             <font>
-                                                <Font name="System Bold" size="21.0" />
-                                             </font>
-                                          </Text>
-                                          <AnchorPane fx:id="anchorModifyConfig" layoutY="170.0" prefHeight="230.0" prefWidth="585.0" style="-fx-background-color: #1b1b1b;" visible="false">
-                                             <children>
-                                                <CheckBox fx:id="runAddonOnLaunch" layoutX="305.0" layoutY="7.0" mnemonicParsing="false" text="Run Addon when launching PoE">
-                                                   <font>
-                                                      <Font size="17.0" />
-                                                   </font>
-                                                </CheckBox>
-                                                <Text fill="WHITE" layoutX="1.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Config">
-                                                   <font>
-                                                      <Font size="40.0" />
-                                                   </font>
-                                                </Text>
-                                                <Button fx:id="bSaveConfig" layoutX="540.0" layoutY="200.0" mnemonicParsing="false" onAction="#saveConfig" text="Save" />
-                                                <TextField fx:id="inputLaunchCommand" layoutY="60.0" prefHeight="25.0" prefWidth="585.0" />
-                                                <TextField fx:id="inputInstallDir" layoutY="110.0" prefHeight="25.0" prefWidth="585.0" />
-                                                <Text fill="WHITE" layoutX="3.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Launch Command:">
-                                                   <font>
-                                                      <Font name="System Italic" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                                <Text fill="WHITE" layoutX="3.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Install Directory:">
-                                                   <font>
-                                                      <Font name="System Italic" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                                <Text fill="WHITE" layoutX="3.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon ID:">
-                                                   <font>
-                                                      <Font name="System Italic" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                                <TextField fx:id="inputAddonID" layoutY="159.0" prefHeight="25.0" prefWidth="85.0" />
-                                                <Text fill="WHITE" layoutX="101.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon Name:">
-                                                   <font>
-                                                      <Font name="System Italic" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                                <TextField fx:id="inputAddonName" layoutX="98.0" layoutY="158.0" prefHeight="25.0" prefWidth="110.0" />
-                                                <Text fill="WHITE" layoutX="221.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version:">
-                                                   <font>
-                                                      <Font name="System Italic" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                                <TextField fx:id="inputVersion" layoutX="219.0" layoutY="159.0" prefHeight="25.0" prefWidth="64.0" />
-                                                <Text fill="WHITE" layoutX="295.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Update:">
-                                                   <font>
-                                                      <Font name="System Italic" size="18.0" />
-                                                   </font>
-                                                </Text>
-                                                <TextField fx:id="inputLastUpdate" layoutX="293.0" layoutY="158.0" prefHeight="25.0" prefWidth="100.0" />
-                                                <Button fx:id="bForceUpdateCheck" layoutX="427.0" layoutY="158.0" mnemonicParsing="false" text="Force Update Check" />
-                                             </children>
-                                          </AnchorPane>
+                                          <Rectangle fx:id="addonDescDownloadButtonRect" arcHeight="5.0" arcWidth="5.0" fill="#0084ff00" height="50.0" onMouseEntered="#downEnter" onMouseExited="#downExit" onMousePressed="#downclick" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" width="200.0" />
                                        </children>
                                     </AnchorPane>
-                                 </content>
-                              </ScrollPane>
+                                    <ImageView fx:id="addonDescImg" fitHeight="53.0" fitWidth="50.0" layoutX="5.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@icons/trayIcon.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Rectangle fx:id="addonDescRectImg" arcHeight="5.0" arcWidth="5.0" fill="#0084ff00" height="53.0" layoutX="3.0" layoutY="2.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="2.0" width="55.0" />
+                                    <WebView fx:id="addonDescShower" layoutY="58.0" prefHeight="345.0" prefWidth="600.0" />
+                                 </children>
+                              </AnchorPane>
+                              <ProgressBar fx:id="addonDescProgressbar" prefHeight="18.0" prefWidth="200.0" progress="0.0" visible="false" />
+                              <Text fx:id="addonDescInfoText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="downloads:     101101&#10;          likes:&#9;100&#10;      dislikes:      0" visible="false">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="addonDescDesc" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="30.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="addonDescTextDesc" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to POE-TradeMacro!&#10;&#10;PoE TradeMacro is an Autohotkey (AHK) script that provides several convenient QoL features for Path of Exile Trading.&#10;&#10;This builds on top of PoE-ItemInfo which provides very useful item information on ctrl+c. With TradeMacro, price checking is added via ctrl+d, ctrl+alt+d or ctrl+i. You can also open the items wiki page via ctrl+w or open the item search on poe.trade instead via ctrl+q.&#10;TradeMacro will be updated to always have the latest PoE-ItemInfo code, you don't have to run their script since it's included here.&#10;Warning&#10;&#10;Never completely trust any price checking tool. Inform yourself about what this tool can do and what not (FAQ for example). Use the tools average and median prices to quickly judge if the first results could be accurate or totally wrong. When in doubt ask other people or do some manual checks." visible="false" wrappingWidth="580.13671875">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <AnchorPane fx:id="anchorDownload" prefHeight="230.0" prefWidth="585.0" visible="false">
+                                 <children>
+                                    <ListView fx:id="listViewDownloadSelect" onMouseClicked="#updateDownload" prefHeight="233.0" prefWidth="590.0" />
+                                 </children>
+                              </AnchorPane>
+                              <Text fx:id="selectDownload" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Please, select what to download:" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="21.0" />
+                                 </font>
+                              </Text>
+                              <AnchorPane fx:id="anchorModifyConfig" prefHeight="230.0" prefWidth="585.0" style="-fx-background-color: #1b1b1b;" visible="false">
+                                 <children>
+                                    <CheckBox fx:id="runAddonOnLaunch" layoutX="305.0" layoutY="7.0" mnemonicParsing="false" text="Run Addon when launching PoE">
+                                       <font>
+                                          <Font size="17.0" />
+                                       </font>
+                                    </CheckBox>
+                                    <Text fill="WHITE" layoutX="1.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Config">
+                                       <font>
+                                          <Font size="40.0" />
+                                       </font>
+                                    </Text>
+                                    <Button fx:id="bSaveConfig" layoutX="540.0" layoutY="200.0" mnemonicParsing="false" onAction="#saveConfig" text="Save" />
+                                    <TextField fx:id="inputLaunchCommand" layoutY="60.0" prefHeight="25.0" prefWidth="585.0" />
+                                    <TextField fx:id="inputInstallDir" layoutY="110.0" prefHeight="25.0" prefWidth="585.0" />
+                                    <Text fill="WHITE" layoutX="3.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Launch Command:">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fill="WHITE" layoutX="3.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Install Directory:">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <Text fill="WHITE" layoutX="3.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon ID:">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="inputAddonID" layoutY="159.0" prefHeight="25.0" prefWidth="85.0" />
+                                    <Text fill="WHITE" layoutX="101.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Addon Name:">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="inputAddonName" layoutX="98.0" layoutY="158.0" prefHeight="25.0" prefWidth="110.0" />
+                                    <Text fill="WHITE" layoutX="221.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version:">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="inputVersion" layoutX="219.0" layoutY="159.0" prefHeight="25.0" prefWidth="64.0" />
+                                    <Text fill="WHITE" layoutX="295.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Update:">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="inputLastUpdate" layoutX="293.0" layoutY="158.0" prefHeight="25.0" prefWidth="100.0" />
+                                    <Button fx:id="bForceUpdateCheck" layoutX="427.0" layoutY="158.0" mnemonicParsing="false" text="Force Update Check" />
+                                 </children>
+                              </AnchorPane>
                            </children>
                         </AnchorPane>
                      </content>
@@ -472,7 +470,8 @@
                   <Text fill="WHITE" layoutX="15.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PoE Addon Launcher was created by me (Rizlim)&#10;&#10;I'm not affiliated with GGG in anyway.&#10;&#10;None of the addons in this Launcher were made by me so I can't guarentee the content in the addons, you should always download these addons at your own risk!" wrappingWidth="420.0">
                      <font>
                         <Font size="18.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="225.0" layoutY="308.0" onMouseClicked="#discord" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@settings/discord.jpg" />
@@ -512,7 +511,8 @@
                   <Hyperlink fx:id="hyperlinkVersion" alignment="CENTER_RIGHT" layoutX="324.0" onAction="#showUpdates" prefHeight="23.0" prefWidth="126.0" text="1.0.0" textAlignment="RIGHT" textFill="#0066cc">
                      <font>
                         <Font size="16.0" />
-                     </font></Hyperlink>
+                     </font>
+                  </Hyperlink>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="sFolders" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
@@ -525,7 +525,8 @@
                   <Text fill="WHITE" layoutX="15.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In order for PAL to work properly it will need to know specific folders and where to find it, you can configure that here." wrappingWidth="420.0000100135803">
                      <font>
                         <Font size="15.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <TextField fx:id="sAddonFolder" layoutX="10.0" layoutY="118.0" prefHeight="25.0" prefWidth="380.0" />
                   <Button fx:id="bBrowseMainAddonFolder" layoutX="393.0" layoutY="118.0" mnemonicParsing="false" onAction="#browseAddonFolder" text="Browse" />
                   <Text fill="WHITE" layoutX="12.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Addon Folder">
@@ -552,7 +553,8 @@
                   <Text fill="WHITE" layoutX="16.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Path of Exile Locations:">
                      <font>
                         <Font size="16.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <ListView fx:id="poeLocations" layoutX="16.0" layoutY="252.0" prefHeight="210.0" prefWidth="370.0" />
                   <Button fx:id="bAddPoELocation" layoutX="393.0" layoutY="252.0" mnemonicParsing="false" onAction="#addPoELocation" text="+" />
                   <Button fx:id="bRemovePoELocation" layoutX="393.0" layoutY="284.0" mnemonicParsing="false" onAction="#removePoELocation" prefWidth="25.0" text="-" />
@@ -568,7 +570,8 @@
                   <Text fill="WHITE" layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A lot of addons are AHK scripts which require AutoHotKey to run, as such it is useful to have it installed and configured." wrappingWidth="420.0">
                      <font>
                         <Font size="14.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <TextField fx:id="sAHKFolder" layoutX="11.0" layoutY="141.0" prefHeight="25.0" prefWidth="380.0" />
                   <Text fill="WHITE" layoutX="14.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AutoHotKey Folder">
                      <font>
@@ -584,7 +587,8 @@
                   <Text fill="WHITE" layoutX="14.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Custom AHK Scripts:" visible="false">
                      <font>
                         <Font size="14.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <ListView fx:id="sListViewAHKScripts" layoutX="12.0" layoutY="191.0" prefHeight="275.0" prefWidth="380.0" visible="false" />
                   <Button fx:id="bAddAHKScript" layoutX="395.0" layoutY="192.0" mnemonicParsing="false" onAction="#addAHK" text="+" visible="false" />
                   <Button fx:id="bRemoveAHKScript" layoutX="395.0" layoutY="223.0" mnemonicParsing="false" onAction="#removeAHK" prefHeight="25.0" prefWidth="25.0" text="-" visible="false" />
@@ -622,7 +626,8 @@
                   <Text fill="WHITE" layoutX="14.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GitHub OAuth Token">
                      <font>
                         <Font size="16.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <Hyperlink fx:id="howDoIGetAGithubToken" layoutX="242.0" layoutY="200.0" prefHeight="23.0" prefWidth="185.0" text="How do I get a github API token?" textAlignment="CENTER" />
                   <ComboBox fx:id="sComboPoE" disable="true" layoutX="260.0" layoutY="53.0" prefHeight="25.0" prefWidth="185.0" />
                   <Text fill="WHITE" layoutX="264.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this Path of Exile">
@@ -635,7 +640,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <CheckBox fx:id="closeAddonsWhenPALCloses" onAction="#dbSyncOnCloseKill" layoutX="14.0" layoutY="243.0" mnemonicParsing="false" selected="true" text="Close addons when PAL closes">
+                  <CheckBox fx:id="closeAddonsWhenPALCloses" layoutX="14.0" layoutY="243.0" mnemonicParsing="false" onAction="#dbSyncOnCloseKill" selected="true" text="Close addons when PAL closes">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -659,7 +664,8 @@
                         <Font size="29.0" />
                      </font>
                   </Text>
-               </children></AnchorPane>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="disclaimer" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
                <children>
                   <Text fill="WHITE" layoutX="3.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Disclaimer">
@@ -670,8 +676,10 @@
                   <Text fill="WHITE" layoutX="5.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="I can't and will not guarentee the contents of the addons that are available for download, I only guarentee the workings of MY PROGRAM&#10;&#10;Anything you download through here should be done at your own risk and after inspecting the code for these respective programs on their respecitve github / bitbucket pages.&#10;&#10;I am not affiliated with any of the programs downloadable thorugh those program, nor will I check any of these programs for their past, current and future content.&#10;&#10;I give no guarentees that a program downloaded through here is safe for use nor do I endorse any of the programs downloadable as their content can change throughout updates.&#10;&#10;By using this program you agree with what I've written above and are aware of the risks involved with downloading software from 3rd party creators." wrappingWidth="440.13671875">
                      <font>
                         <Font size="16.0" />
-                     </font></Text>
-               </children></AnchorPane>
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="sFilters" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
                <children>
                   <Text fill="WHITE" layoutX="14.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filters">
@@ -710,8 +718,44 @@
                         <Font size="16.0" />
                      </font>
                   </CheckBox>
-               </children></AnchorPane>
-            <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="poelevelbuddyanchor" layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false">
+               <children>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PoE_Level_Buddy">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PAL now comes precompiled with PoE Level Buddy!">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="14.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hotkey Show/Hide:">
+                     <font>
+                        <Font name="System Italic" size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="hotkey" fill="WHITE" layoutX="14.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CTRL + =" textAlignment="CENTER" wrappingWidth="131.53906054794788">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="changeHotKey" layoutX="156.0" layoutY="99.0" mnemonicParsing="false" text="Change Hotkey" />
+                  <Text fill="WHITE" layoutX="14.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Specify your Client.txt">
+                     <font>
+                        <Font name="System Italic" size="16.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="hotkey1" fill="WHITE" layoutX="15.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CTRL + =" wrappingWidth="379.9999952316284">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="changeHotKey1" layoutX="381.0" layoutY="170.0" mnemonicParsing="false" text="Browse" />
+               </children>
+            </AnchorPane>
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
             <AnchorPane layoutX="150.0" prefHeight="470.0" prefWidth="450.0" visible="false" />
          </children>
