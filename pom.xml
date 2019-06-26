@@ -6,7 +6,7 @@
 
     <groupId>RizlimDev</groupId>
     <artifactId>PoE-Addon-Launcher-Core</artifactId>
-    <version>1.11.4</version>
+    <version>1.12</version>
 
     <properties>
         <kotlin.version>1.3.0</kotlin.version>
@@ -25,6 +25,9 @@
                             <addClasspath>true</addClasspath>
                             <mainClass>Launcher2</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>.</Class-Path>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -33,8 +36,12 @@
                 <configuration>
                     <archive>
                         <manifest>
+                            <addClasspath>true</addClasspath>
                             <mainClass>Launcher2</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>.</Class-Path>
+                        </manifestEntries>
                     </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>

@@ -4,49 +4,60 @@ import Github.connect
 import SystemHandling.deleteFile
 import SystemHandling.unzip
 import SystemHandling.verifyFolder
+import mu.KotlinLogging
 import org.apache.commons.io.FileUtils
 import java.io.File
 import java.net.URL
 
+private val logger = KotlinLogging.logger {}
+
 /**
  *
  */
-fun getUpdate(install: String)
+fun checkUpdate()
+{
+    if (!GlobalData.debugging)
+    {
+        val gh = connect()
+        if (gh.rateLimit.remaining > 3)
+        {
+            val repo = gh.getRepository("")
+        }
+    }
+}
+
+fun getUpdate()
 {
     // Get Token from DB if DB exists and if token is != ""
     if (!GlobalData.debugging)
     {
         val gh = connect()
-        if (gh.rateLimit.remaining > 5)
+        if (gh.rateLimit.remaining > 3)
         {
-            val repo = gh.getRepository("POE-Addon-Launcher/PAL2")
+            val repo = gh.getRepository("POE-Addon-Launcher/PALRelease")
             val latest = repo.latestRelease
             val latest_tag = latest.tagName
             if(latest_tag != GlobalData.version)
             {
                 val down_folder = File("${GlobalData.pal_folder}")
-
-                val temp_update = File("$install${File.separator}latest")
-
                 verifyFolder(down_folder)
-                verifyFolder(temp_update)
 
-                val dest = File("${down_folder.path}${File.separator}pal.zip")
+                val dest = File("${GlobalData.install_dir}${File.separator}new${File.separator}PAL2.jar")
+                val destFolder = File("${GlobalData.install_dir}${File.separator}new")
                 if (dest.exists())
-                {
                     deleteFile(dest)
-                }
+
+                if (!destFolder.exists())
+                    destFolder.mkdir()
 
                 val download_url = latest.assets[0].browserDownloadUrl
                 FileUtils.copyURLToFile(URL(download_url), dest)
 
-                println("Unzipping: ${dest.path} in ${temp_update.path}")
-                unzip(dest, temp_update)
+                logger.debug { "Downloaded update [$latest_tag] to: $dest" }
 
-                val stateONE = File("${GlobalData.pal_folder.path}${File.separator}1.state")
-                stateONE.createNewFile()
-                // Launch the newest version instead.
-                Runtime.getRuntime().exec("\"$temp_update${File.separator}PAL2.exe\"")
+                //rundll32 url.dll,FileProtocolHandler
+                println(">>> \"${GlobalData.install_dir}${File.separator}PAL2.exe\" <<")
+                Runtime.getRuntime().exec("\"${GlobalData.install_dir}${File.separator}PAL2.exe\"")
 
                 System.exit(99)
             }

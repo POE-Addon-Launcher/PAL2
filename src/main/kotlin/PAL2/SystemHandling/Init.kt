@@ -6,6 +6,7 @@ import PAL2.Database.*
 import PAL2.GUI.Configurator.ConfiguratorApplication
 import PAL2.GUI.CoreApplication
 import PAL2.GUI.Loader.Loader
+import PAL2.Github.checkUpdate
 import PAL2.Github.getUpdate
 import PAL_DataClasses.PAL_AddonFullData
 import PAL_DataClasses.initObjectMapper
@@ -106,7 +107,10 @@ fun moreInit()
     }
 
     loader("Checking for Updates to PAL", 0.5)
-    getUpdate(GlobalData.install_dir)
+    //getUpdate(GlobalData.install_dir)
+
+    getUpdate()
+
     loader("No updates to PAL!", 0.6)
 
 

@@ -32,6 +32,21 @@ class Launcher2
                 }
                 GlobalData.install_dir = fInstall.path
 
+
+            }
+
+
+            /*
+            if (!GlobalData.debugging)
+            {
+                var fInstall = File(Launcher2::class.java.protectionDomain.codeSource.location.toURI())
+
+                if (fInstall.isFile)
+                {
+                    fInstall = fInstall.parentFile
+                }
+                GlobalData.install_dir = fInstall.path
+
                 val stateONE = File("${GlobalData.pal_folder.path}${File.separator}1.state")
                 val stateTWO = File("${GlobalData.pal_folder.path}${File.separator}2.state")
                 val newest_update = File("${GlobalData.install_dir}${File.separator}latest")
@@ -52,7 +67,7 @@ class Launcher2
                     deleteFile(newest_update)
                     deleteFile(stateTWO)
                 }
-            }
+            }*/
 
             try
             {
